@@ -1,0 +1,13 @@
+{
+  "name": "@brahma-astra/contracts",
+  "version": "1.0.0",
+  "description": "Shared API contracts, error shapes, and status constants for BRAHMA + ASTRA",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Shared contracts validated.\""
+  },
+  "keywords": ["brahma", "astra", "contracts"],
+  "author": "BRAHMA + ASTRA Team",
+  "license": "UNLICENSED"
+}

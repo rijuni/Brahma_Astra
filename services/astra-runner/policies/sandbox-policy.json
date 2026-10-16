@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "policy_name": "ASTRA Runner Execution Boundary Baseline",
+  "limits": {
+    "default_timeout_seconds": 10,
+    "max_timeout_seconds": 30,
+    "max_memory_mb": 256,
+    "max_output_bytes": 32768,
+    "max_workspace_files": 100,
+    "max_file_size_bytes": 1048576
+  },
+  "filesystem": {
+    "root_restriction": "ephemeral_temp_directory_only",
+    "host_mounts_allowed": false,
+    "cleanup_policy": "guaranteed_post_execution_purge"
+  },
+  "environment": {
+    "host_env_inheritance": false,
+    "allowed_env_keys": ["PATH", "SYSTEMROOT", "TMP", "TEMP", "LANG", "LC_ALL"],
+    "blocked_env_patterns": ["*KEY*", "*SECRET*", "*TOKEN*", "*PASS*", "*DATABASE*", "*PRISMA*"]
+  },
+  "network": {
+    "default_egress": "blocked",
+    "allowlisted_hosts": []
+  },
+  "process": {
+    "allow_root": false,
+    "blocked_commands": [
+      "sudo", "su", "chown", "chmod", "iptables", "ufw",
+      "shutdown", "reboot", "rm -rf /", "rmdir /s /q c:\\",
+      "mkfs", "dd", "format", "powershell -enc", "curl", "wget"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "brahma-astra-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BRAHMA + ASTRA Intelligence and Coding Workspace Monorepo",
+  "workspaces": [
+    "services/api",
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:api": "npm --workspace=services/api run dev",
+    "test:api": "npm --workspace=services/api test",
+    "prisma:generate": "npm --workspace=services/api run prisma:generate",
+    "prisma:migrate:dev": "npm --workspace=services/api run prisma:migrate:dev",
+    "test": "npm --workspace=services/api test"
+  },
+  "author": "BRAHMA + ASTRA Team",
+  "license": "UNLICENSED"
+}

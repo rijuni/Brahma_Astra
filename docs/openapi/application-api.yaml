@@ -1,0 +1,426 @@
+openapi: 3.1.0
+info:
+  title: BRAHMA + ASTRA Application API
+  version: 1.0.0
+  description: Application API for the BRAHMA intelligence platform and ASTRA coding workspace.
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required:
+            - code
+            - message
+            - requestId
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "Invalid request payload"
+            details:
+              type: array
+              items:
+                type: object
+            requestId:
+              type: string
+              example: "req_f81d4fae-7dec-11d0-a765-00a0c91e6bf6"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    ProjectResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ConversationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        projectId:
+          type: string
+          nullable: true
+        userId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    MessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        conversationId:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    AiTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        prompt:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed, cancelled]
+        result:
+          type: object
+          nullable: true
+        provider:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    AstraWorkspaceResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        projectId:
+          type: string
+        repositoryUrl:
+          type: string
+          nullable: true
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    AstraTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        workspaceId:
+          type: string
+        title:
+          type: string
+        instruction:
+          type: string
+        status:
+          type: string
+          enum: [proposed, approved, running, completed, failed, cancelled]
+        patchProposal:
+          type: object
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+paths:
+  /health/live:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: Process is alive
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+                  timestamp:
+                    type: string
+
+  /health/ready:
+    get:
+      summary: Readiness probe
+      responses:
+        '200':
+          description: Service and database ready
+        '503':
+          description: Service not ready
+
+  /api/v1/auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                name:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Invalid input or email already registered
+
+  /api/v1/auth/login:
+    post:
+      summary: Authenticate user and receive JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+        '401':
+          description: Invalid credentials
+
+  /api/v1/auth/me:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get current authenticated user profile
+      responses:
+        '200':
+          description: Current user profile
+        '401':
+          description: Unauthorized
+
+  /api/v1/projects:
+    get:
+      security:
+        - bearerAuth: []
+      summary: List user projects
+      responses:
+        '200':
+          description: List of projects
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Project created
+
+  /api/v1/conversations:
+    get:
+      security:
+        - bearerAuth: []
+      summary: List conversations
+      responses:
+        '200':
+          description: List of conversations
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                projectId:
+                  type: string
+      responses:
+        '201':
+          description: Conversation created
+
+  /api/v1/conversations/{conversationId}/messages:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Append message to conversation
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                role:
+                  type: string
+                  default: "user"
+      responses:
+        '201':
+          description: Message stored
+
+  /api/v1/ai/tasks:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create an AI orchestration task (delegates to Brahma Core)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [prompt]
+              properties:
+                prompt:
+                  type: string
+                conversationId:
+                  type: string
+                taskType:
+                  type: string
+                  default: "general"
+      responses:
+        '202':
+          description: AI task initiated
+
+  /api/v1/astra/workspaces:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create or connect an ASTRA workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, projectId]
+              properties:
+                name:
+                  type: string
+                projectId:
+                  type: string
+                repositoryUrl:
+                  type: string
+      responses:
+        '201':
+          description: Workspace initialized
+
+  /api/v1/astra/tasks:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a coding task in ASTRA workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workspaceId, instruction]
+              properties:
+                workspaceId:
+                  type: string
+                title:
+                  type: string
+                instruction:
+                  type: string
+      responses:
+        '202':
+          description: Coding task created (proposed)
+
+  /api/v1/astra/tasks/{taskId}/approve:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Approve coding task for execution
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task approved for runner execution

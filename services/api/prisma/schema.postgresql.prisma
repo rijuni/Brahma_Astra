@@ -1,0 +1,192 @@
+// Prisma Schema for PostgreSQL (Integration Testing & Production Target)
+// Maintained separately from SQLite to guarantee provider-specific migration history integrity
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id @default(uuid())
+  email        String          @unique
+  passwordHash String
+  name         String?
+  role         String          @default("user")
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  sessions     Session[]
+  projects     Project[]       @relation("ProjectOwner")
+  memberships  ProjectMember[]
+  conversations Conversation[]
+  aiTasks      AiTask[]
+  auditEvents  AuditEvent[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     ProjectMember[]
+  conversations Conversation[]
+  workspaces  AstraWorkspace[]
+
+  @@index([ownerId])
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  projectId String
+  userId    String
+  role      String   @default("member")
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  title     String
+  projectId String?
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  project   Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  aiTasks   AiTask[]
+
+  @@index([userId])
+  @@index([projectId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  role           String       // user, assistant, system
+  content        String
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@map("messages")
+}
+
+model AiTask {
+  id             String       @id @default(uuid())
+  userId         String
+  conversationId String?
+  prompt         String
+  taskType       String       @default("general")
+  status         String       @default("pending") // pending, running, completed, failed, cancelled
+  result         String?      // serialized JSON result or output text
+  provider       String       @default("mock")
+  error          String?
+  createdAt      DateTime     @default(now())
+  completedAt    DateTime?
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@map("ai_tasks")
+}
+
+model AstraWorkspace {
+  id            String        @id @default(uuid())
+  projectId     String
+  name          String
+  repositoryUrl String?
+  status        String        @default("active")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  project       Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  codingTasks   CodingTask[]
+
+  @@index([projectId])
+  @@map("astra_workspaces")
+}
+
+model CodingTask {
+  id            String         @id @default(uuid())
+  workspaceId   String
+  title         String
+  instruction   String
+  status        String         @default("proposed") // proposed, approved, running, completed, failed, cancelled
+  patchProposal String?        // serialized patch/diff
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  workspace     AstraWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  executionJobs ExecutionJob[]
+
+  @@index([workspaceId])
+  @@index([status])
+  @@map("coding_tasks")
+}
+
+model ExecutionJob {
+  id           String     @id @default(uuid())
+  codingTaskId String
+  status       String     @default("queued") // queued, running, succeeded, failed, timed_out, cancelled, blocked
+  output       String?
+  exitCode     Int?
+  createdAt    DateTime   @default(now())
+  completedAt  DateTime?
+
+  codingTask   CodingTask @relation(fields: [codingTaskId], references: [id], onDelete: Cascade)
+
+  @@index([codingTaskId])
+  @@map("execution_jobs")
+}
+
+model AuditEvent {
+  id           String   @id @default(uuid())
+  userId       String?
+  action       String
+  resourceType String
+  resourceId   String?
+  details      String?  // serialized JSON metadata without secrets
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@map("audit_events")
+}
