@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE5A7" />
+      <stop offset="50%" stop-color="#F6C87A" />
+      <stop offset="100%" stop-color="#D49A3E" />
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE5A7" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#F6C87A" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0" />
+    </radialGradient>
+    <filter id="lotusGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="50" cy="50" r="42" fill="url(#centerGlow)" />
+  
+  <!-- Outer Sacred Geometry Ring -->
+  <circle cx="50" cy="50" r="46" stroke="#F6C87A" stroke-width="0.75" stroke-dasharray="2 3" opacity="0.6" />
+  <circle cx="50" cy="50" r="41" stroke="#FFE5A7" stroke-width="0.5" opacity="0.4" />
+
+  <!-- Outer Petals (8 directions) -->
+  <g filter="url(#lotusGlow)">
+    <!-- Cardinal Petals -->
+    <path d="M50 10 C53 26 62 38 50 48 C38 38 47 26 50 10 Z" fill="url(#goldGrad)" opacity="0.9" />
+    <path d="M50 90 C53 74 62 62 50 52 C38 62 47 74 50 90 Z" fill="url(#goldGrad)" opacity="0.9" />
+    <path d="M10 50 C26 53 38 62 48 50 C38 38 26 47 10 50 Z" fill="url(#goldGrad)" opacity="0.9" />
+    <path d="M90 50 C74 53 62 62 52 50 C62 38 74 47 90 50 Z" fill="url(#goldGrad)" opacity="0.9" />
+
+    <!-- Diagonal Petals -->
+    <path d="M22 22 C37 29 45 41 39 49 C31 43 25 33 22 22 Z" fill="url(#goldGrad)" opacity="0.8" />
+    <path d="M78 22 C63 29 55 41 61 49 C69 43 75 33 78 22 Z" fill="url(#goldGrad)" opacity="0.8" />
+    <path d="M22 78 C37 71 45 59 39 51 C31 57 25 67 22 78 Z" fill="url(#goldGrad)" opacity="0.8" />
+    <path d="M78 78 C63 71 55 59 61 51 C69 57 75 67 78 78 Z" fill="url(#goldGrad)" opacity="0.8" />
+  </g>
+
+  <!-- Mid-Layer Lotus Crown -->
+  <path d="M50 18 C52 30 58 40 50 48 C42 40 48 30 50 18 Z" fill="#FFE5A7" />
+  <path d="M32 30 C42 36 47 45 42 50 C35 46 31 38 32 30 Z" fill="#F6C87A" />
+  <path d="M68 30 C58 36 53 45 58 50 C65 46 69 38 68 30 Z" fill="#F6C87A" />
+  
+  <path d="M50 82 C52 70 58 60 50 52 C42 60 48 70 50 82 Z" fill="#FFE5A7" />
+  <path d="M32 70 C42 64 47 55 42 50 C35 54 31 62 32 70 Z" fill="#F6C87A" />
+  <path d="M68 70 C58 64 53 55 58 50 C65 54 69 62 68 70 Z" fill="#F6C87A" />
+
+  <!-- Inner Mandala Core -->
+  <circle cx="50" cy="50" r="14" stroke="#FFE5A7" stroke-width="1.2" fill="#0B0F1A" />
+  <circle cx="50" cy="50" r="9" fill="url(#goldGrad)" />
+  <circle cx="50" cy="50" r="4.5" fill="#FFFFFF" />
+  
+  <!-- Radiating Core Rays -->
+  <line x1="50" y1="36" x2="50" y2="39" stroke="#FFE5A7" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="50" y1="61" x2="50" y2="64" stroke="#FFE5A7" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="36" y1="50" x2="39" y2="50" stroke="#FFE5A7" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="61" y1="50" x2="64" y2="50" stroke="#FFE5A7" stroke-width="1.5" stroke-linecap="round" />
+</svg>

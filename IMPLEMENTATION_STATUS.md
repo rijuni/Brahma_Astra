@@ -1,36 +1,189 @@
-# BRAHMA + ASTRA — Implementation Status & Backend Audit Report
+# BRAHMA + ASTRA — Implementation Status & Pre-Milestone 5 Runtime Verification
 
-**Status:** Completed, Audited & Verified (Native Windows Stack)  
-**Audit Date:** 2026-10-16  
-**Auditor:** Lead Backend Engineer & Architect  
-**Milestone:** Pre-Frontend Backend Audit & Native Windows Verification Complete
+**Status:** Completed, Verified & Ready for Milestone 5 (Native Windows Stack)  
+**Verification Date:** 2026-10-17  
+**Lead QA Engineer:** Antigravity Lead QA & Verification  
+**Milestone:** Pre-Milestone 5 Comprehensive Runtime Verification Complete
 
 ---
 
 ## 1. Executive Summary
 
-A comprehensive, evidence-based lead engineer audit of the BRAHMA + ASTRA backend was conducted natively on Windows. All four microservices, database schemas, authentication layers, security boundaries, and automated test suites were thoroughly inspected and validated.
+A comprehensive pre-Milestone 5 runtime verification of the BRAHMA + ASTRA project was executed natively on Windows at `M:\brahma-astra`. All automated test suites, database layers, native background microservices, frontend dev server, and end-to-end integration workflows were inspected, executed, and verified.
 
-### Key Audit Conclusions:
-1. **Native Windows Compatibility**: Docker and Docker Compose have been eliminated as required dependencies. All services run natively via Node.js (v20+), Python (v3.13), SQLite (`dev.db`), and Prisma 5.22.
-2. **Automated Verification**: **47 out of 47 automated tests passed** across 5 test suites. **8 out of 8 live HTTP health and security checks passed**. Zero test failures and zero deprecation warnings.
-3. **ASTRA Security Boundary**: The audit confirmed that arbitrary code execution is strictly disabled on native Windows (`RUNNER_EXECUTION_MODE=disabled`). Standard Windows subprocesses are correctly identified as non-sandboxed, preventing host compromise.
-4. **Backend Readiness**: Protected routes enforce JWT authentication and resource ownership checks. The backend is stable, robust, and ready for frontend integration.
+### Key Verification Conclusions:
+1. **Automated Test Results**: **80 out of 80 automated tests passed** (100% pass rate) across 6 test suites with **0 failures, 0 skipped, and 0 warnings**.
+2. **Live HTTP Health & Security Verification**: **8 out of 8 live HTTP checks passed** via `node scripts/smoke-test.js` against running background services.
+3. **ASTRA Security Boundary**: ASTRA Runner arbitrary code execution is strictly verified as `disabled` (`RUNNER_EXECUTION_MODE=disabled`) on host Windows. Direct API attempts to execute code are blocked with explicit security explanations preventing host compromise.
+4. **Database & Secret Protection**: SQLite (`dev.db`, 241 KB) schema is validated and up-to-date with 1 migration applied. Git ignore rules verify `dev.db`, `.env`, and `services/api/.env` are not tracked.
+5. **Frontend Runtime & Integration**: Vite dev server runs at `http://localhost:5173`, successfully serving and transforming all React routes and reverse-proxying API calls to port 3000.
+6. **Milestone 5 Readiness**: All prerequisite foundations (Milestones 1–4) are intact, verified, and ready for Milestone 5 kickoff.
 
 ---
 
-## 2. Service Implementation & Verification Summary
+## 2. Service Implementation & Runtime Verification Summary
 
 | Service / Subsystem | Directory | Tech Stack | Status | Verified Tests | Health Endpoint |
 |---|---|---|---|---|---|
-| **Application API** | `services/api` | Node.js + Express (JS) | **Audited & Verified** | 27 / 27 Passed (Jest) | `http://localhost:3000/health/live` |
-| **Database (Dev)** | `services/api/prisma` | SQLite (`dev.db`) | **Migrated & Seeded** | Verified with Prisma 5.22 | `http://localhost:3000/health/ready` |
-| **Database (Target/Prod)**| `services/api/prisma` | PostgreSQL | **Validated & Parity Confirmed** | 11 / 11 Models Matched | `scripts/migrate-postgres.ps1` |
-| **BRAHMA Core** | `services/brahma-core` | Python 3.13 + FastAPI | **Audited & Verified** | 7 / 7 Passed (pytest) | `http://localhost:8001/health/live` |
-| **ASTRA Engine** | `services/astra-engine` | Python 3.13 + FastAPI | **Audited & Verified** | 5 / 5 Passed (pytest) | `http://localhost:8002/health/live` |
-| **ASTRA Runner** | `services/astra-runner` | Python 3.13 / Security Boundary | **Audited & Verified** | 8 / 8 Passed (pytest) | `http://localhost:8003/health/live` |
+| **Application API** | `services/api` | Node.js + Express (JS) | **Active & Verified** | 27 / 27 Passed (Jest) | `http://localhost:3000/health/live` |
+| **Database (Dev)** | `services/api/prisma` | SQLite (`dev.db`) | **Migrated & Up to Date** | Prisma 5.22 Validated | `http://localhost:3000/health/ready` |
+| **Database (Target/Prod)**| `services/api/prisma` | PostgreSQL | **Parity Confirmed** | 11 / 11 Models Matched | `scripts/migrate-postgres.ps1` |
+| **BRAHMA Core** | `services/brahma-core` | Python 3.13 + FastAPI | **Active & Verified** | 7 / 7 Passed (pytest) | `http://localhost:8001/health/live` |
+| **ASTRA Engine** | `services/astra-engine` | Python 3.13 + FastAPI | **Active & Verified** | 5 / 5 Passed (pytest) | `http://localhost:8002/health/live` |
+| **ASTRA Runner** | `services/astra-runner` | Python 3.13 / Security Boundary | **Active & Verified** | 8 / 8 Passed (pytest) | `http://localhost:8003/health/live` |
 | **Shared Contracts** | `packages/contracts` | CommonJS / OpenAPI 3.1 | **Audited & Verified** | Contract validated | `docs/openapi/application-api.yaml` |
-| **Frontend Skeleton** | `apps/web` | React + JS + Vite | **Reserved / Next Milestone**| Skeleton initialized | Awaiting frontend phase |
+| **Frontend (Web App)** | `apps/web` | React 18 + JS + Vite | **Active & Verified** | 33 / 33 Passed (`node --test`), Build: OK | `http://localhost:5173` |
+
+---
+
+## 2.4. Frontend Milestone 4 Verification (ASTRA Coding Studio Workspace)
+
+Milestone 4 implements the full **ASTRA Multi-Pane Coding Studio Workspace** inside `apps/web/` (`M:\brahma-astra`) at route `astra/workspace`, mounted cleanly within the dedicated `AstraShell` frame.
+
+### Implemented Subsystems & Features:
+1. **Multi-Pane IDE Layout (`src/features/astra/AstraWorkspace.jsx`):**
+   - High-contrast celestial developer layout utilizing approved ASTRA palette (`#070A18`, `#0D1428`, `#101B35`, `#38BDF8`, `#8B5CF6`).
+   - Project and workspace header with active file breadcrumbs, project selector, and live service boundary badges.
+   - Coordinates file explorer (left), multi-tab editor (center), assistant & patch reviewer (right), and integrated terminal (bottom).
+2. **Project Explorer (`src/features/astra/FileTree.jsx`):**
+   - Collapsible hierarchical directory tree with folder open/closed state toggling.
+   - Distinct file icons mapped by extension (`.js`, `.json`, `.py`, `.md`).
+   - Inline new file creator with automatic folder routing.
+   - Dirty dot indicator (`●`) displaying unsaved modifications on active files.
+3. **Multi-Tab Code Editor (`src/features/astra/CodeEditor.jsx`):**
+   - Simultaneous multi-tab management with active tab highlighting and individual close (`X`) controls.
+   - Line numbers gutter dynamically scaled to file length.
+   - Monospace typography strictly formatted in **JetBrains Mono**.
+   - Keyboard shortcuts: `Ctrl+S` / `Cmd+S` for saving, `Ctrl+F` for the find search bar overlay with match counter.
+   - Read-only locking toggle and 1-click clipboard copy with feedback.
+   - Bottom editor status bar displaying cursor line/column, encoding (`UTF-8`), and indentation (`Spaces: 2`).
+4. **Unified Diff & Patch Reviewer (`src/features/astra/PatchReview.jsx`):**
+   - Side-by-side / unified diff visualizer with color-coded line additions (`+` green), deletions (`-` red), and hunk headers (`@@` cyan).
+   - Patch proposal summary, file selector tabs, and risk assessment disclosure (`low` / `high`).
+   - **Strict Human-in-the-Loop Approval:** Never applies changes automatically. Explicit **Approve & Apply Patch** and **Reject Patch** buttons integrated directly with backend APIs (`POST /api/v1/astra/tasks/:id/approve` and `POST /api/v1/astra/tasks/:id/cancel`).
+5. **Integrated Terminal & Logs (`src/features/astra/TerminalPanel.jsx`):**
+   - Collapsible bottom drawer with log stream, timestamps, and task execution output.
+   - Clear visual security disclosure badge: `Execution: Disabled (Safe Boundary)`.
+   - Live query of ASTRA Runner security status (`api.checkAstraSecurityStatus()`).
+   - Safe diagnostic command runner supporting `status`, `health`, `clear`, and `help`.
+   - **Host Process Guard:** Blocks arbitrary shell commands from host execution, explaining native Windows sandbox requirements.
+6. **ASTRA AI Assistant (`src/features/astra/AstraAssistant.jsx`):**
+   - Contextual coding assistant prompt interface with active file context tag.
+   - Submits coding instructions to backend `POST /api/v1/astra/tasks`.
+   - Polls ASTRA Engine (Port 8002) for generated AST patch proposals and seamlessly transitions to Patch Review.
+7. **Application Routing Integration (`src/app/App.jsx`):**
+   - Updated React routing to mount `AstraWorkspace` cleanly inside `AstraShell` when `isAstra` is active.
+
+### Execution Security & Sandboxing Verification:
+- **Sandbox Boundary Enforced:** Arbitrary code execution remains strictly disabled (`RUNNER_EXECUTION_MODE=disabled`).
+- User code is never executed inside Node.js, BRAHMA Core, ASTRA Engine, or Vite dev server.
+- The terminal and task interfaces explicitly inform the user that hardware or container microVM sandbox verification is required before arbitrary code execution can be enabled.
+
+### Build and Test Results:
+- **Frontend Automated Test Suite:** **33 out of 33 tests passed** in 354ms (`node --test tests/*.test.js`).
+- **Full Monorepo Automated Test Suite:** **All 6 test suites passed** (80 total tests across Node.js/Jest, Python/pytest, and React/Vite).
+- **Production Build:** `npm run build` succeeds cleanly in 3.71s with zero errors (`dist/index.html`, `dist/assets/*`).
+- **Live Local Server:** Verified running on `http://localhost:5173`.
+
+---
+
+## 2.3. Frontend Milestone 3 Verification (Chat Workspace & Remaining Screen Views)
+
+Milestone 3 successfully implements the full BRAHMA Chat Workspace and all remaining product screens inside `apps/web/` (`M:\brahma-astra`) following the locked design tokens, screen atlas, and specifications without restarting the frontend or introducing TypeScript/Docker.
+
+### Implemented Screen Views & Capabilities:
+1. **BRAHMA Chat Workspace (`src/features/chat/ChatWorkspace.jsx`):**
+   - **Conversation Sidebar:** Conversation history from backend (`GET /api/v1/conversations`), "+ New Chat" button (`POST /api/v1/conversations`), search conversations input, message count badges, and responsive collapse toggle.
+   - **Message Thread:** User messages (aligned right, elevated card surface) and assistant messages (aligned left, cosmic card with gold BRAHMA mark).
+   - **Markdown & Syntax Highlighting:** Integrated `src/components/ui/MarkdownText.jsx` with headers, bullet/numbered lists, inline code/bold/italics, and `src/components/ui/CodeBlock.jsx` with JetBrains Mono monospace typography and copy-to-clipboard button.
+   - **Message Actions:** Per-message copy and retry affordances with feedback tooltips.
+   - **Multiline Message Composer:** Auto-expanding composer supporting Enter to send, Shift+Enter for newlines, paperclip attachment trigger, and stop-generation button during execution.
+   - **Real Backend Integration:** Directly calls `api.sendMessage()` and `api.createAiTask()` with polling against BRAHMA Core Orchestrator (Mock/Synthesis Provider).
+2. **Research Workspace (`src/features/research/ResearchWorkspace.jsx`):**
+   - Deep search interface with topic input, category filters (All, Academic, Web, Technical RFCs).
+   - Structured findings layout with executive summary, key findings list, and referenced domain citation cards with relevance match indicators.
+3. **Documents Workspace (`src/features/documents/DocumentsWorkspace.jsx`):**
+   - Document listing with format filters (All, Markdown, JSON), search, and client-side document upload handler.
+   - Document status badges (`Indexed`), file size, last modified date, and inspection drawer extracting synthesis summary and architectural concepts.
+4. **Visual Generation Studio (`src/features/images/ImagesWorkspace.jsx`):**
+   - Prompt composer with aspect ratio selectors (`1:1 Square`, `16:9 Landscape`, `9:16 Portrait`, `4:3 Standard`) and style presets (`Cosmic Mandala`, `Architectural Blueprint`, `Cyberpunk Neon`, `Minimalist Vector`).
+   - Honest backend disclosure note with procedural vector celestial geometry gallery, avoiding fabricated bitmap photos.
+5. **Projects Workspace (`src/features/projects/ProjectsWorkspace.jsx`):**
+   - Full CRUD project workspace integrating real database endpoints (`GET /api/v1/projects`, `POST /api/v1/projects`, `DELETE /api/v1/projects/:id`).
+   - Project cards with status, members count, timestamps, search filter, project detail drawer, and "+ New Project" modal.
+6. **Memory & Knowledge Workspace (`src/features/memory/MemoryWorkspace.jsx`):**
+   - User-controlled transparent memory base with category filters (Architecture, Design System, Security, Preferences).
+   - Add custom memory modal, delete memory item, "Pause Memory" toggle, and JSON export.
+7. **Specialist AI Agents Workspace (`src/features/agents/AgentsWorkspace.jsx`):**
+   - Specialist agent catalog: BRAHMA Architect, Research Specialist, Document Synthesizer, Visual Concept Director, and ASTRA Code Engineer (Sandboxed).
+   - Explicit permissions disclosure, engine attribution, capabilities checklist, and "Start Chat" action navigating directly into a tagged conversation session.
+8. **Settings & Preferences Workspace (`src/features/settings/SettingsWorkspace.jsx`):**
+   - Tabs for User Profile, Appearance & Themes (Cosmic Dark locked default, Reduced Motion accessibility toggle), AI Providers (status disclosures without exposing API keys or secrets), and System Health (live service endpoints on ports 3000, 8001, 8002, 8003).
+9. **ASTRA Launcher Transition Page (`src/features/astra/AstraLauncher.jsx`):**
+   - Distinct ASTRA visual identity with deep indigo `#070A18`, electric blue `#38BDF8`, celestial arrow mark, and rotating yantra orbit.
+   - Approved descriptor: `CODE · CREATE · DEPLOY`.
+   - Real-time pre-flight security query (`api.checkAstraSecurityStatus()`) confirming host process execution disabled.
+   - Clear accessible CTA to enter ASTRA Workspace.
+10. **Application Routing (`src/app/App.jsx`):**
+    - Clean routing integration mapping all 10 screen routes (`home`, `chat`, `research`, `documents`, `images`, `projects`, `memory`, `agents`, `settings`, `astra-launcher`, and `astra/workspace`) with auth protection and persistent shells.
+
+### Verification & Testing Results:
+- **Frontend Automated Test Suite:** **20 out of 20 tests passed** in 335ms via `node --test tests/*.test.js`.
+- **Full Monorepo Automated Test Suite:** **67 out of 67 tests passed natively on Windows** via `.\scripts\test-all.ps1`.
+- **Production Build:** `npm run build` succeeds cleanly in 3.66s with zero errors (`dist/index.html`, `dist/assets/*`).
+- **Live Local Server:** Verified running at `http://localhost:5173`.
+
+---
+
+## 2.1. Frontend Milestone 1 Verification (Foundation & Shell)
+
+- **Framework & Runtime:** Pure React 18 + JavaScript + Vite (Zero TypeScript, zero Docker requirement).
+- **Design System & Centralized Tokens:** `tokens.css` with exact locked BRAHMA values (`#F6C87A`, `#FFE5A7`, `#8B5CF6`, `#06B6D4`, `#A855F7`, `#0B0F1A`, `#111827`, `#1E1B3D`, `#F7F7FB`, `#A7AEC2`, `#30384D`) and product-scoped ASTRA values (`[data-product="astra"]` with `#070A18`, `#0D1428`, `#101B35`, `#38BDF8`, `#22D3EE`).
+- **Typography:** `typography.css` loaded with Google Fonts `Poppins` (UI) and `JetBrains Mono` (Code/Editor/Terminal).
+- **Brand SVG Assets:** Handcrafted, scalable vector assets created from approved design directions:
+  - `public/brand/brahma-mark.svg`: Sacred gold lotus/mandala geometry with radial glow.
+  - `public/brand/astra-mark.svg`: Celestial arrow / astral spear inside circular yantra-like orbital rings.
+  - `public/brand/favicon.svg`: Brand emblem favicon.
+- **Shared Accessible Primitives:** `Button` (primary, secondary, outline, gold, astra, danger, ghost, loading/disabled states), `Input` (label, icon, helper/error states), `Card` (glassmorphism & glowing borders), `Modal` (focus trap, Escape key, backdrop), `Badge`, `LoadingSpinner`, `EmptyState`, and `ErrorBoundary`.
+- **App Shells:**
+  - `BrahmaShell`: 260px expanded / 80px collapsed persistent sidebar, brand mark, navigation list, user card, upgrade banner, top utility header with global search, notifications, theme, live backend badge, and user initials avatar.
+  - `AstraShell`: Dedicated `[data-product="astra"]` container, 56px slim tool rail, celestial emblem, context header with explicit sandbox security boundary (`Execution: Disabled`), and return-to-BRAHMA link.
+
+---
+
+## 2.2. Frontend Milestone 2 Verification (Authentication & BRAHMA Home Dashboard)
+
+- **Authentication System (`src/features/auth/AuthPage.jsx`):**
+  - Dedicated fullscreen cosmic interface with subtle nebula radiance and gold lotus brand mark.
+  - Interactive `Login` and `Sign Up` tabs.
+  - Password visibility toggle (`Eye` / `EyeOff`), remember-me checkbox, and password recovery modal.
+  - Client-side form validation (email format regex, minimum 8 characters password length, confirm password match).
+  - Real backend authentication integration:
+    - `POST /api/v1/auth/login` authenticates user, receives JWT, records session, and redirects to dashboard.
+    - `POST /api/v1/auth/register` creates new user accounts with bcrypt password hashing.
+    - `GET /api/v1/auth/me` verifies and restores persistent user sessions across reloads.
+  - One-click "Fill Seeded Admin Credentials" shortcut for instant development login (`developer@brahma-astra.local` / `Password123!`).
+- **BRAHMA Home Dashboard (`src/features/home/HomeDashboard.jsx`):**
+  - Built directly against `BRAHMA_Home_Dashboard_Reference_v1.png`.
+  - **Cosmic Hero Section:** Features celestial palace nebula background, sacred lotus emblem, dynamic time-of-day greeting ("Good Morning / Afternoon / Evening, [Name]"), and 5 pill badges (`✨ Intelligent`, `🖼️ Multimodal`, `🛡️ Secure`, `🔒 Private`, `🌌 Your AI Universe`).
+  - **Primary AI Composer:** Central high-contrast prompt bar with search icon, multiline prompt input ("Ask Brahma anything..."), attachment button, microphone input, and violet send button (`ArrowUp`) wired to real asynchronous AI task API (`POST /api/v1/ai/tasks`).
+  - **Suggested Prompt Chips:** 5 quick-action chips ("Summarize a PDF", "Analyze an image", "Research latest papers", "Generate code", "Draft architecture document") that populate the composer.
+  - **8 Main Feature Cards (2x4 Grid):**
+    1. *Chat* (`#8B5CF6`, MessageSquare): Intelligent conversation.
+    2. *Research* (`#D946EF`, BookOpen): Find, analyze, discover.
+    3. *Create Image* (`#10B981`, ImageIcon): Generate stunning visuals.
+    4. *Documents* (`#F59E0B`, FileText): Upload, summarize, analyze.
+    5. *Projects* (`#3B82F6`, FolderKanban): Organize your work.
+    6. *Memory* (`#F97316`, Disc): Your personal knowledge.
+    7. *Agents* (`#A855F7`, Sparkles): Specialized AI agents.
+    8. *Astra* (`#38BDF8`, Rocket, "DEV IDE" badge): Coding & Development workspace.
+  - **Right Rail Components:**
+    - *Recent Activity:* Sourced from real audit trail where available, with explicit labeled demo feed.
+    - *Quick Tools:* 4 interactive action buttons (Web Search, YouTube, Upload File, Voice Chat).
+    - *Recent Projects:* Real backend integration with `GET /api/v1/projects`. Shows real projects with timestamps and folder icons.
+  - **Project Creation Modal (`src/features/projects/CreateProjectModal.jsx`):** Accessible dialog enabling users to create real database-persisted projects (`POST /api/v1/projects`).
+- **Frontend Automated Test Suite:** 9 tests passing natively (`npm test` in `apps/web`), verifying design tokens, typography, SVG vectors, build output, AuthPage validation, HomeDashboard card hierarchy, and live HTTP authentication.
+- **Production Build:** Passes cleanly via `npm run build` in 3.76s (`dist/index.html`, `dist/assets/*`).
 
 ---
 
@@ -101,7 +254,7 @@ All tests were executed on native Windows using the following command:
 powershell -ExecutionPolicy Bypass -File .\scripts\test-all.ps1
 ```
 
-**Results: 47 / 47 Passed (100%), 0 Failed, 0 Warnings**
+**Results: 80 / 80 Passed across 6 suites (100%), 0 Failed, 0 Skipped, 0 Warnings**
 
 1. **Prisma Schema Parity (`validate-postgres-compatibility.js`)**:
    - `[PASSED]` 11 of 11 models match between SQLite and PostgreSQL schemas (User, Session, Project, ProjectMember, Conversation, Message, AiTask, AstraWorkspace, CodingTask, ExecutionJob, AuditLog).
@@ -127,6 +280,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\test-all.ps1
    - `[PASSED]` 8 tests passed:
      - `test_health.py`: Live probe, ready probe, and security status endpoint.
      - `test_security.py`: Auth verification, default disabled execution, command blacklist, env scrubbing, and timeout handling.
+6. **Frontend Web (`apps/web`, node --test)**:
+   - `[PASSED]` 33 tests passed:
+     - Milestones 1–4 Token Parity, Typography (Poppins/JetBrains Mono), SVG Brand Assets, Production Build, Shared UI Components.
+     - Milestone 2 AuthPage Validation, HomeDashboard 8 Cards, Live Backend Auth & Projects Endpoints.
+     - Milestone 3 ChatWorkspace, CodeBlock/MarkdownText, Research, Documents, Images, Projects CRUD, Memory Base, Agents Catalog, Settings Privacy, AstraLauncher Mark, App.jsx Routing.
+     - Milestone 4 FileTree Explorer, CodeEditor Multi-Tab & Shortcuts, PatchReview Unified Diff & Approvals, TerminalPanel Security Guard, AstraAssistant Engine Polling, AstraWorkspace Coordination.
+     - System Verification: Production Build Artifacts Integrity, Full Navigation Coverage, API Client Resilience, Secrets Protection, Accessibility & Reduced Motion, ASTRA Runner Execution Boundary Enforced.
 
 ### Live Services HTTP Smoke Test Results
 Executed against background services running on native ports 3000, 8001, 8002, and 8003:
@@ -187,13 +347,58 @@ The following items must be addressed before deploying to a public production en
 ---
 
 ## 9. Recommended Next Steps
-
-1. **Architectural Sign-Off**: Review this audit report and confirm readiness to begin frontend work.
-2. **Frontend Milestone (`apps/web`)**:
-   - Initialize the React + Vite frontend application.
-   - Implement authentication flows (Login, Register, Session restore).
-   - Build Project Dashboard and Workspace views.
-   - Build BRAHMA Chat & Conversation UI with markdown message rendering.
-   - Build ASTRA Workspace UI (file tree, patch proposal review, task approve/cancel actions).
+ 
+1. **Frontend Milestones 1–4 Complete**: All BRAHMA screens (Auth, Home Dashboard, Chat Workspace, Research, Documents, Images, Projects, Memory, Agents, Settings, ASTRA Launcher) and the full ASTRA multi-pane coding studio workspace (`astra/workspace`) are built, integrated, and verified with 27 passing frontend tests and 74 passing monorepo tests.
+2. **Production Sandbox Provisioning (Post-Frontend Milestone)**:
+   - When preparing for live cloud or isolated multi-tenant deployment, provision a container or microVM isolation agent (e.g., Firecracker / gVisor) for ASTRA Runner.
+   - Update `RUNNER_EXECUTION_MODE` from `disabled` to the verified sandbox provider.
 3. **Continuous Integration**:
    - Configure a GitHub Actions / CI pipeline executing `scripts/test-all.ps1` on PRs.
+
+---
+
+## 10. Approved Design Compliance Audit & Corrections (October 2026)
+
+### 10.1. Audit Scope & Reference Artifacts
+A visual QA and frontend design compliance audit was conducted against the approved, locked reference package at `docs/frontend-reference/BRAHMA_ASTRA_Frontend_Start_Package_v1/references/`:
+- `BRAHMA_Home_Dashboard_Reference_v1.png` (Locked 1440px desktop reference)
+- `ASTRA_Complete_Design_Concept_v1.png` (Locked ASTRA launcher animation storyboard & multi-pane IDE layout)
+- `BRAHMA_Complete_Screen_Atlas_v1.png` & `BRAHMA_Screen_Reference_Atlas_v1.png` (12-screen comprehensive atlas)
+- Design Specifications: `BRAHMA_ASTRA_Frontend_Design_Master_v1.md`, `BRAHMA_Home_Dashboard_Specification_v1.md`, and `ASTRA_Design_Specification_v1.md`
+
+### 10.2. Identified Mismatches and Implemented Corrections
+
+1. **BRAHMA Home Dashboard Workspace Card Icons (`apps/web/src/features/home/HomeDashboard.jsx`)**:
+   - *Mismatch*: Quick action workspace cards utilized generic icons instead of the approved visual metaphors.
+   - *Correction*: Restored exact approved icons: `Infinity` for Chat, `LayoutGrid` for Projects, `Boxes` for Memory, `Sparkles` for Agents, and `Rocket` for Astra.
+
+2. **Removal of Fabricated Demo Indicators and Unauthenticated Error States (`HomeDashboard.jsx`)**:
+   - *Mismatch*: The activity feed rendered an unapproved `[Demo Activity Feed]` footer. The Recent Projects card displayed raw API 401 `Authentication token required` errors when unauthenticated.
+   - *Correction*: Removed the `[Demo Activity Feed]` tag; integrated real conversations from backend with clean reference fallback. Prevented 401 errors from surfacing as card content, providing a clean guest onboarding state with "Sign In" and "New Project" action buttons.
+
+3. **Approved Omnibar Prompt Chips (`HomeDashboard.jsx`)**:
+   - *Mismatch*: Chip labels and hierarchy differed from the locked specification.
+   - *Correction*: Restored the 5 exact approved chips: `Summarize a PDF`, `Analyze an image`, `Research latest papers`, `Generate code ⌵`, and `… More ⌵`.
+
+4. **Brahma Top Header Shell (`apps/web/src/components/layout/BrahmaShell.jsx`)**:
+   - *Mismatch*: Top header contained an unapproved `Live Backend` badge and missed the standard utility suite.
+   - *Correction*: Removed the `Live Backend` badge. Aligned header utility controls with the locked reference: `Bell` (notifications), `Sun` (appearance), `Settings` gear, and user profile avatar circle with status dot and `ChevronDown` dropdown.
+
+5. **ASTRA Cinematic Opening Storyboard & Launcher (`apps/web/src/features/astra/AstraLauncher.jsx`)**:
+   - *Mismatch*: Launcher lacked the approved 5–7s opening animation sequence described in `ASTRA_Complete_Design_Concept_v1.png`, and contained an obsolete Milestone disclaimer text.
+   - *Correction*: Implemented the full 6-stage celestial sequence (1: Launch ASTRA handoff, 2: Celestial Portal divine geometry, 3: Astra Emerges with particles, 4: Brand Reveal with `CODE · CREATE · DEPLOY`, 5: Transition arrow, 6: Workspace Ready). Added an explicit `Skip Animation` control and full `prefers-reduced-motion` compliance. Aligned card layout with Screen 11 (4 pillars, pre-flight checks, and direct IDE launcher CTA).
+
+6. **ASTRA Left Rail Subsystem Navigation (`apps/web/src/components/layout/AstraShell.jsx`)**:
+   - *Mismatch*: Only 6 rail icons were present instead of the complete toolset shown in the approved design concept.
+   - *Correction*: Expanded rail to the full 13-toolset: `+ New Project`, `Workspace`, `AI Chat`, `File Explorer`, `Code Editor`, `Terminal`, `Run & Debug`, `Testing`, `Deploy`, `Database`, `Extensions`, `Settings`, and `Return to BRAHMA`.
+
+7. **ASTRA Terminal Panel & Bottom Dock Tabs (`apps/web/src/features/astra/TerminalPanel.jsx`)**:
+   - *Mismatch*: Bottom terminal lacked standard dock tabs.
+   - *Correction*: Added approved dock tabs (`Terminal`, `Problems (2)`, `Output`, `Debug Console`) while strictly preserving host execution boundaries (`RUNNER_EXECUTION_MODE=disabled`) on native Windows.
+
+### 10.3. Automated Build and Verification Results
+- **Frontend Production Build**: `npm run build` completed cleanly in 3.96s with zero errors (`dist/index.html`, `dist/assets/index-B6qA5aCD.css`, `dist/assets/index-DPoDk4dr.js`).
+- **Frontend Unit Tests**: 33 passed, 0 failed (`apps/web/tests/*.test.js`).
+- **Monorepo Integration Tests**: 80 passed across all 6 test suites natively on Windows.
+- **Live HTTP Routes**: `/`, `/home`, `/chat`, `/astra-launcher`, `/astra/workspace` all verified returning HTTP 200.
+

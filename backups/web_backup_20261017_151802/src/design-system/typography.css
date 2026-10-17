@@ -1,0 +1,96 @@
+/**
+ * BRAHMA + ASTRA Typography System
+ * UI: Poppins
+ * Code/Editor/Terminal: JetBrains Mono
+ */
+
+body {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .display-title {
+  font-family: var(--font-ui);
+  font-size: clamp(28px, 3.5vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+h2, .page-title {
+  font-family: var(--font-ui);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+h3, .section-title {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+h4, .card-title {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+p, .body-text {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.caption, .text-metadata {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-code);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.text-gold {
+  color: var(--brand-gold);
+}
+
+.text-violet {
+  color: var(--brand-violet);
+}
+
+.text-cyan {
+  color: var(--brand-cyan);
+}
+
+.text-blue {
+  color: var(--astra-electric-blue);
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}

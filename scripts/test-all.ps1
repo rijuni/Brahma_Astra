@@ -43,12 +43,20 @@ Pop-Location
 $results += [PSCustomObject]@{ Suite = "ASTRA Engine (FastAPI/pytest)"; Passed = ($engineCode -eq 0) }
 
 # 5. ASTRA Runner (Pytest)
-Write-Host "`n[5/5] Testing ASTRA Runner Security Boundary (pytest)..." -ForegroundColor Yellow
+Write-Host "`n[5/6] Testing ASTRA Runner Security Boundary (pytest)..." -ForegroundColor Yellow
 Push-Location "services\astra-runner"
 ..\..\.venv\Scripts\pytest -v
 $runnerCode = $LASTEXITCODE
 Pop-Location
 $results += [PSCustomObject]@{ Suite = "ASTRA Runner (Security Boundary)"; Passed = ($runnerCode -eq 0) }
+
+# 6. Frontend Web (Node test)
+Write-Host "`n[6/6] Testing Frontend Web Foundation (@brahma-astra/web)..." -ForegroundColor Yellow
+Push-Location "apps\web"
+npm test
+$webCode = $LASTEXITCODE
+Pop-Location
+$results += [PSCustomObject]@{ Suite = "Frontend Web Foundation (Vite/React)"; Passed = ($webCode -eq 0) }
 
 # Summary Report
 Write-Host "`n==========================================================" -ForegroundColor Cyan
