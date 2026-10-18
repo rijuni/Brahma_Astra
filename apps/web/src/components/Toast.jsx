@@ -1,3 +1,0 @@
-import React, {useEffect} from 'react';
-import {CheckCircle2,AlertCircle,Info,X} from 'lucide-react';
-export default function Toast({toast,onClose}) { useEffect(()=>{if(!toast)return;const t=setTimeout(onClose,3600);return()=>clearTimeout(t)},[toast,onClose]); if(!toast)return null; const Icon=toast.type==='error'?AlertCircle:toast.type==='success'?CheckCircle2:Info; return <div className={`toast toast-${toast.type||'info'}`} role="status"><Icon size={17}/><span>{toast.message}</span><button className="icon-button" aria-label="Dismiss notification" onClick={onClose}><X size={15}/></button></div>; }

@@ -1,2 +1,0 @@
-import React from 'react';
-export function Brand({ product='brahma', compact=false }) { const astra=product==='astra'; return <div className={`brand-lockup ${compact?'brand-compact':''} ${astra?'brand-astra':''}`}><img src={astra?'/brand/astra-mark.svg':'/brand/brahma-mark.svg'} alt=""/><div className="brand-wording"><strong>{astra?'ASTRA':'BRAHMA'}</strong><span>{astra?'CODE · CREATE · DEPLOY':'Think Deeper · Create Faster · Build Bigger'}</span></div></div>; }
