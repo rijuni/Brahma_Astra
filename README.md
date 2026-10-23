@@ -68,15 +68,14 @@ npm --workspace=@brahma-astra/web run dev
 ```powershell
 npm run dev:all-backend
 ```
-*Or run the PowerShell script directly:*
-```powershell
-.\scripts\start-all-backend.ps1
-```
-> Automatically spawns all 4 backend microservices in parallel:
-> 1. Node.js Application API (`:3000`)
-> 2. Python BRAHMA Core (`:8001`)
-> 3. Python ASTRA Engine (`:8002`)
-> 4. Python ASTRA Runner (`:8003`)
+> Runs all 4 backend microservices concurrently inside the **same IDE terminal** with live color-coded output:
+> - `[API]` Node.js Application API (`:3000`)
+> - `[CORE]` Python BRAHMA Core (`:8001`)
+> - `[ENGINE]` Python ASTRA Engine (`:8002`)
+> - `[RUNNER]` Python ASTRA Runner (`:8003`)
+> 
+> *Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in this terminal to shut down all 4 services cleanly at once.*
+> *(Optional: If you ever prefer separate detached desktop windows, run `npm run dev:all-backend:windows`)*
 
 ---
 

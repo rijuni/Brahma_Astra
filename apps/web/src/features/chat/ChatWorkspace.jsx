@@ -136,10 +136,15 @@ export default function ChatWorkspace({ initialPrompt }) {
         onProgress: (task) => setActiveTaskId(task.id)
       });
 
+      const rawText = result?.text ?? result?.response ?? result?.summary ?? 'No response generated.';
+      const cleanText = typeof rawText === 'object' && rawText !== null
+        ? (rawText.response || rawText.content || rawText.text || rawText.summary || JSON.stringify(rawText, null, 2))
+        : String(rawText);
+
       const assistantMsg = {
         id: `ai-${Date.now()}`,
         role: 'assistant',
-        content: result.text,
+        content: cleanText,
         createdAt: new Date().toISOString()
       };
 
@@ -147,7 +152,7 @@ export default function ChatWorkspace({ initialPrompt }) {
 
       // Save assistant message to conversation
       try {
-        await conversationService.addMessage(convId, result.text, 'assistant');
+        await conversationService.addMessage(convId, cleanText, 'assistant');
       } catch (err) {
         console.warn('AI message persist notice:', err.message);
       }
@@ -192,16 +197,23 @@ export default function ChatWorkspace({ initialPrompt }) {
 
   // Helper to parse text with embedded code blocks
   const renderMessageContent = (content) => {
+    let text = content;
+    if (typeof content === 'object' && content !== null) {
+      text = content.response || content.content || content.text || content.summary || JSON.stringify(content, null, 2);
+    } else if (typeof content !== 'string') {
+      text = String(content ?? '');
+    }
+
     const codeBlockRegex = /```([a-zA-Z0-9]*)\n([\s\S]*?)```/g;
     const parts = [];
     let lastIndex = 0;
     let match;
 
-    while ((match = codeBlockRegex.exec(content)) !== null) {
+    while ((match = codeBlockRegex.exec(text)) !== null) {
       if (match.index > lastIndex) {
         parts.push({
           type: 'text',
-          content: content.substring(lastIndex, match.index)
+          content: text.substring(lastIndex, match.index)
         });
       }
       parts.push({
@@ -212,15 +224,15 @@ export default function ChatWorkspace({ initialPrompt }) {
       lastIndex = match.index + match[0].length;
     }
 
-    if (lastIndex < content.length) {
+    if (lastIndex < text.length) {
       parts.push({
         type: 'text',
-        content: content.substring(lastIndex)
+        content: text.substring(lastIndex)
       });
     }
 
     if (parts.length === 0) {
-      return <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{content}</p>;
+      return <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{text}</p>;
     }
 
     return parts.map((part, index) => {

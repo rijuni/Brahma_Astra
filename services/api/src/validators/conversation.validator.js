@@ -2,7 +2,7 @@ const { z } = require('zod');
 
 const createConversationSchema = z.object({
   title: z.string().max(200).optional(),
-  projectId: z.string().uuid().optional()
+  projectId: z.string().uuid().nullable().optional()
 });
 
 const addMessageSchema = z.object({

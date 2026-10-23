@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BrahmaSidebar from '../navigation/BrahmaSidebar';
 import BrahmaNavbar from '../navigation/BrahmaNavbar';
+import ErrorBoundary from '../common/ErrorBoundary';
 
 export default function BrahmaShell({
   children,
@@ -77,7 +78,9 @@ export default function BrahmaShell({
           }}
         >
           <div style={{ maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
-            {children}
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
           </div>
         </main>
       </div>

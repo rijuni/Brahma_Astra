@@ -13,12 +13,16 @@
     "dev:core": "powershell -ExecutionPolicy Bypass -File ./scripts/start-brahma-core.ps1",
     "dev:engine": "powershell -ExecutionPolicy Bypass -File ./scripts/start-astra-engine.ps1",
     "dev:runner": "powershell -ExecutionPolicy Bypass -File ./scripts/start-astra-runner.ps1",
-    "dev:all-backend": "powershell -ExecutionPolicy Bypass -File ./scripts/start-all-backend.ps1",
+    "dev:all-backend": "concurrently -k -n \"API,CORE,ENGINE,RUNNER\" -c \"cyan,magenta,yellow,blue\" \"npm run dev:api\" \"npm run dev:core\" \"npm run dev:engine\" \"npm run dev:runner\"",
+    "dev:all-backend:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/start-all-backend.ps1",
     "test:api": "npm --workspace=services/api test",
     "prisma:generate": "npm --workspace=services/api run prisma:generate",
     "prisma:migrate:dev": "npm --workspace=services/api run prisma:migrate:dev",
     "test": "npm --workspace=services/api test"
   },
   "author": "BRAHMA + ASTRA Team",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
 }

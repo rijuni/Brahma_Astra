@@ -34,16 +34,29 @@ export const aiService = {
       }
 
       if (updated.status === 'completed') {
-        let resultText = updated.result;
-        try {
-          const parsed = JSON.parse(updated.result);
-          if (parsed && typeof parsed === 'object') {
-            resultText = parsed.response || parsed.content || parsed.text || JSON.stringify(parsed, null, 2);
+        let resultText = '';
+        if (typeof updated.result === 'object' && updated.result !== null) {
+          resultText = updated.result.response || updated.result.content || updated.result.text || updated.result.summary || JSON.stringify(updated.result, null, 2);
+        } else if (typeof updated.result === 'string') {
+          try {
+            const parsed = JSON.parse(updated.result);
+            if (parsed && typeof parsed === 'object') {
+              resultText = parsed.response || parsed.content || parsed.text || parsed.summary || JSON.stringify(parsed, null, 2);
+            } else {
+              resultText = updated.result;
+            }
+          } catch {
+            resultText = updated.result;
           }
-        } catch {
-          // Keep raw string if not JSON
+        } else {
+          resultText = String(updated.result ?? 'No response generated.');
         }
-        return { ...updated, text: resultText || updated.result || 'No response generated.' };
+
+        if (typeof resultText !== 'string') {
+          resultText = typeof resultText === 'object' ? JSON.stringify(resultText, null, 2) : String(resultText);
+        }
+
+        return { ...updated, text: resultText || 'No response generated.' };
       }
 
       if (updated.status === 'failed') {
