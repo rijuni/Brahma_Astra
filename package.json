@@ -10,6 +10,10 @@
   ],
   "scripts": {
     "dev:api": "npm --workspace=services/api run dev",
+    "dev:core": "powershell -ExecutionPolicy Bypass -File ./scripts/start-brahma-core.ps1",
+    "dev:engine": "powershell -ExecutionPolicy Bypass -File ./scripts/start-astra-engine.ps1",
+    "dev:runner": "powershell -ExecutionPolicy Bypass -File ./scripts/start-astra-runner.ps1",
+    "dev:all-backend": "powershell -ExecutionPolicy Bypass -File ./scripts/start-all-backend.ps1",
     "test:api": "npm --workspace=services/api test",
     "prisma:generate": "npm --workspace=services/api run prisma:generate",
     "prisma:migrate:dev": "npm --workspace=services/api run prisma:migrate:dev",

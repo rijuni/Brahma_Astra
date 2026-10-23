@@ -1,0 +1,107 @@
+@import './tokens.css';
+@import './typography.css';
+@import './glassmorphism.css';
+@import './animations.css';
+
+/* Universal Box Sizing & Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-deep-space);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Custom Glass Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, rgba(11, 15, 26, 0.4));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, rgba(139, 92, 246, 0.3));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover, rgba(139, 92, 246, 0.55));
+}
+
+/* Focus Visibility & Accessibility */
+:focus-visible {
+  outline: 2px solid var(--brand-violet);
+  outline-offset: 2px;
+}
+
+/* Utility Helpers */
+.flex { display: flex; }
+.flex-1 { flex: 1 1 0%; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.cursor-pointer { cursor: pointer; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.text-gold { color: var(--brand-gold); }
+.text-violet { color: var(--brand-violet-light); }
+.text-cyan { color: var(--brand-cyan-light); }
+.text-muted { color: var(--text-muted); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.badge-gold {
+  border-color: var(--glass-border-gold);
+  color: var(--brand-gold);
+  background: rgba(246, 200, 122, 0.1);
+}
+
+.badge-violet {
+  border-color: var(--glass-border-violet);
+  color: var(--brand-violet-light);
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.badge-cyan {
+  border-color: var(--glass-border-cyan);
+  color: var(--brand-cyan-light);
+  background: rgba(6, 182, 212, 0.1);
+}

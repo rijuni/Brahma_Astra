@@ -1,0 +1,130 @@
+/* Animations & Micro-Interactions Stylesheet */
+
+/* 1. Golden Lotus Breathing Luminescence */
+@keyframes goldGlowPulse {
+  0% {
+    filter: drop-shadow(0 0 6px rgba(246, 200, 122, 0.4))
+            drop-shadow(0 0 14px rgba(246, 200, 122, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(246, 200, 122, 0.75))
+            drop-shadow(0 0 28px rgba(246, 200, 122, 0.4));
+  }
+  100% {
+    filter: drop-shadow(0 0 6px rgba(246, 200, 122, 0.4))
+            drop-shadow(0 0 14px rgba(246, 200, 122, 0.15));
+  }
+}
+
+.brahma-logo-gold {
+  animation: goldGlowPulse 3.5s ease-in-out infinite;
+}
+
+/* 2. Glass Shimmer Reflection Sweep on Hover */
+.glass-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  transition: none;
+}
+
+.glass-shimmer:hover::before {
+  left: 150%;
+  transition: left 0.75s ease-in-out;
+}
+
+/* 3. Card Entrance & Staggered Reveal */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-entrance {
+  animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-1 { animation-delay: 40ms; }
+.stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 160ms; }
+.stagger-5 { animation-delay: 200ms; }
+.stagger-6 { animation-delay: 240ms; }
+
+/* 4. AI Thinking Rhythmic Pulse Wave */
+@keyframes aiThinkWave {
+  0%, 80%, 100% {
+    transform: scale(0.65);
+    opacity: 0.35;
+    box-shadow: 0 0 0 rgba(139, 92, 246, 0);
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.85);
+  }
+}
+
+.ai-wave-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--brand-violet-light);
+  display: inline-block;
+}
+
+.ai-wave-dot:nth-child(1) { animation: aiThinkWave 1.4s infinite 0s; }
+.ai-wave-dot:nth-child(2) { animation: aiThinkWave 1.4s infinite 0.2s; }
+.ai-wave-dot:nth-child(3) { animation: aiThinkWave 1.4s infinite 0.4s; }
+
+/* 5. Tactile Button Click Feedback */
+.glass-btn:active, .glass-card-interactive:active {
+  transform: scale(0.975);
+  transition: transform 0.08s ease;
+}
+
+/* 6. Pulse Glow for Status Dots */
+@keyframes statusDotPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.status-live-pulse {
+  animation: statusDotPulse 2s infinite;
+}
+
+/* 7. Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .brahma-logo-gold {
+    filter: drop-shadow(0 0 8px rgba(246, 200, 122, 0.5));
+  }
+}

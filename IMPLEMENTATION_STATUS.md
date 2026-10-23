@@ -397,8 +397,13 @@ A visual QA and frontend design compliance audit was conducted against the appro
    - *Correction*: Added approved dock tabs (`Terminal`, `Problems (2)`, `Output`, `Debug Console`) while strictly preserving host execution boundaries (`RUNNER_EXECUTION_MODE=disabled`) on native Windows.
 
 ### 10.3. Automated Build and Verification Results
-- **Frontend Production Build**: `npm run build` completed cleanly in 3.96s with zero errors (`dist/index.html`, `dist/assets/index-B6qA5aCD.css`, `dist/assets/index-DPoDk4dr.js`).
-- **Frontend Unit Tests**: 33 passed, 0 failed (`apps/web/tests/*.test.js`).
-- **Monorepo Integration Tests**: 80 passed across all 6 test suites natively on Windows.
-- **Live HTTP Routes**: `/`, `/home`, `/chat`, `/astra-launcher`, `/astra/workspace` all verified returning HTTP 200.
+- **Frontend Production Build**: `npm run build` completed cleanly in 8.91s with zero errors (`dist/index.html`, `dist/assets/index-C7TD49gQ.css`, `dist/assets/index-CeZyoAxD.js`).
+- **Phase 1 Frontend Tests**: 11 passed, 0 failed (`apps/web/tests/*.test.js`).
+- **Backend Test Suite (Jest)**: 27 passed across all 7 test suites natively on Windows.
+- **Live Active Services**:
+  - Frontend Dev Server: `http://localhost:5173/` (Vite v5.4, HTTP 200 OK)
+  - Application API: `http://localhost:3000/` (Express v1 API, HTTP 200 OK live health)
+- **Scope Boundary Strictly Enforced**: BRAHMA Phase 1 exclusively implemented (Auth, Dashboard, Chat, Projects, Files, Settings). Phase 2 ASTRA coding studio and runner remain deferred.
+- **Zero Backend Changes**: All backend services, Prisma schema, and databases in `services/api`, `services/brahma-core`, and `packages/contracts` remain completely untouched.
+
 
