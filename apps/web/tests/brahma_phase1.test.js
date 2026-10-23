@@ -123,3 +123,37 @@ test('BRAHMA Phase 1 — Strict Scope Enforcement: No Phase 2 ASTRA Coding Compo
   assert.ok(!appContent.includes('AstraWorkspace'), 'App.jsx must not mount AstraWorkspace in Phase 1');
   assert.ok(!appContent.includes('AstraShell'), 'App.jsx must not mount AstraShell in Phase 1');
 });
+
+test('BRAHMA Phase 1 Defects — Settings Health Diagnostics bypasses /api/v1 prefix', () => {
+  const apiClientContent = fs.readFileSync(path.join(webRoot, 'src', 'services', 'api-client.js'), 'utf8');
+  assert.ok(apiClientContent.includes("endpoint.startsWith('/health')"), 'apiClient must recognize /health root route');
+});
+
+test('BRAHMA Phase 1 Defects — Dashboard Composer transfers prompt to ChatWorkspace', () => {
+  const appContent = fs.readFileSync(path.join(webRoot, 'src', 'app', 'App.jsx'), 'utf8');
+  assert.ok(appContent.includes('initialChatPrompt'), 'App.jsx must manage initialChatPrompt state');
+  assert.ok(appContent.includes('onStartChat={handleStartChat}'), 'App.jsx must pass onStartChat to HomeDashboard');
+
+  const chatContent = fs.readFileSync(path.join(webRoot, 'src', 'features', 'chat', 'ChatWorkspace.jsx'), 'utf8');
+  assert.ok(chatContent.includes('initialPrompt'), 'ChatWorkspace must accept initialPrompt prop');
+  assert.ok(chatContent.includes('onResetInitialPrompt'), 'ChatWorkspace must accept onResetInitialPrompt prop');
+});
+
+test('BRAHMA Phase 1 Defects — Global Search performs real-time filtering', () => {
+  const appContent = fs.readFileSync(path.join(webRoot, 'src', 'app', 'App.jsx'), 'utf8');
+  assert.ok(appContent.includes('filteredSearchItems'), 'App.jsx must compute filteredSearchItems');
+  assert.ok(appContent.includes('No matching pages or tools found'), 'App.jsx must show empty state for search');
+});
+
+test('BRAHMA Phase 1 Defects — Files Workspace triggers real browser file downloads', () => {
+  const filesContent = fs.readFileSync(path.join(webRoot, 'src', 'features', 'files', 'FilesWorkspace.jsx'), 'utf8');
+  assert.ok(filesContent.includes('URL.createObjectURL'), 'FilesWorkspace must use URL.createObjectURL for downloads');
+  assert.ok(filesContent.includes('a.download ='), 'FilesWorkspace must trigger real anchor download');
+});
+
+test('BRAHMA Phase 1 Defects — Forgot Password uses glass card notice instead of window.alert', () => {
+  const loginContent = fs.readFileSync(path.join(webRoot, 'src', 'features', 'auth', 'LoginForm.jsx'), 'utf8');
+  assert.ok(!loginContent.includes('alert('), 'LoginForm must not contain window.alert()');
+  assert.ok(loginContent.includes('showForgotNotice'), 'LoginForm must use showForgotNotice state');
+});
+

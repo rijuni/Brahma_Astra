@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, X } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -7,6 +7,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotNotice, setShowForgotNotice] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
   const validate = () => {
@@ -45,6 +46,35 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
           }}
         >
           {error}
+        </div>
+      )}
+
+      {showForgotNotice && (
+        <div
+          className="glass-card flex items-start justify-between gap-3 animate-entrance"
+          style={{
+            padding: '12px 14px',
+            marginBottom: '16px',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--glass-border-gold)',
+            background: 'rgba(246, 200, 122, 0.08)'
+          }}
+        >
+          <div style={{ fontSize: '12px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
+            <strong style={{ color: 'var(--brand-gold-light)', display: 'block', marginBottom: '2px' }}>
+              Password Reset Notice
+            </strong>
+            Self-service password recovery is disabled in this environment (SMTP email service not configured). Please contact your administrator or use the demo credentials below.
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowForgotNotice(false)}
+            className="glass-btn-ghost"
+            style={{ padding: '2px', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', flexShrink: 0 }}
+            title="Dismiss notice"
+          >
+            <X size={14} />
+          </button>
         </div>
       )}
 
@@ -87,13 +117,21 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
           <input type="checkbox" style={{ accentColor: 'var(--brand-gold)' }} />
           <span>Remember Me</span>
         </label>
-        <span
+        <button
+          type="button"
           className="body-small text-muted"
-          style={{ cursor: 'pointer', color: 'var(--brand-gold-light)', fontSize: '12px' }}
-          onClick={() => alert('Password reset is not configured on the local backend.')}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            color: 'var(--brand-gold-light)',
+            fontSize: '12px'
+          }}
+          onClick={() => setShowForgotNotice(true)}
         >
           Forgot Password?
-        </span>
+        </button>
       </div>
 
       <Button

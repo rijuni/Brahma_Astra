@@ -6,12 +6,19 @@ export default function PromptComposer({
   onCancelGeneration,
   isGenerating,
   disabled,
-  placeholder = 'Ask BRAHMA AI anything...'
+  placeholder = 'Ask BRAHMA AI anything...',
+  initialValue = ''
 }) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(initialValue || '');
   const [attachments, setAttachments] = useState([]);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setContent(initialValue);
+    }
+  }, [initialValue]);
 
   // Auto-expand textarea height up to 160px
   useEffect(() => {

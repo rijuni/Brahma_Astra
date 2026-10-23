@@ -20,7 +20,7 @@ import { conversationService } from '../../services/conversation-service';
 import { aiService } from '../../services/ai-service';
 import { useToast } from '../../components/feedback/Toast';
 
-export default function ChatWorkspace({ initialPrompt }) {
+export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -32,6 +32,18 @@ export default function ChatWorkspace({ initialPrompt }) {
   const [copiedId, setCopiedId] = useState(null);
   const { addToast } = useToast();
   const messagesEndRef = useRef(null);
+  const processedPromptRef = useRef(null);
+
+  // Auto-send initial prompt if transferred from Dashboard
+  useEffect(() => {
+    if (initialPrompt && initialPrompt.trim() && !isLoadingList && processedPromptRef.current !== initialPrompt) {
+      processedPromptRef.current = initialPrompt;
+      handleSendMessage(initialPrompt.trim());
+      if (onResetInitialPrompt) {
+        onResetInitialPrompt();
+      }
+    }
+  }, [initialPrompt, isLoadingList]);
 
   // Load conversation list on mount
   useEffect(() => {
@@ -499,6 +511,7 @@ export default function ChatWorkspace({ initialPrompt }) {
           onSendMessage={handleSendMessage}
           onCancelGeneration={handleCancelGeneration}
           isGenerating={isGenerating}
+          initialValue={initialPrompt || ''}
         />
       </div>
     </div>

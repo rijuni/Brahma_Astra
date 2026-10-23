@@ -28,9 +28,21 @@ class ApiClient {
       }
     }
   }
-
   async request(endpoint, options = {}) {
-    const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+    const isRootRoute = endpoint.startsWith('/health');
+    let url;
+    if (endpoint.startsWith('http')) {
+      url = endpoint;
+    } else if (isRootRoute) {
+      if (this.baseUrl.startsWith('http')) {
+        const urlObj = new URL(this.baseUrl);
+        url = `${urlObj.origin}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+      } else {
+        url = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      }
+    } else {
+      url = `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+    }
 
     const headers = {
       'Content-Type': 'application/json',

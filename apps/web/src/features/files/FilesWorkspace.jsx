@@ -47,7 +47,8 @@ export default function FilesWorkspace() {
         name: file.name,
         size: (file.size / 1024 > 1024) ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` : `${Math.round(file.size / 1024)} KB`,
         type: file.type || 'application/octet-stream',
-        uploadedAt: new Date().toISOString()
+        uploadedAt: new Date().toISOString(),
+        fileBlob: file
       });
     }
 
@@ -77,8 +78,23 @@ export default function FilesWorkspace() {
     addToast(`Removed "${name}" from workspace.`, 'info');
   };
 
-  const handleDownload = (name) => {
-    addToast(`Exporting "${name}" snapshot...`, 'info');
+  const handleDownload = (fileOrName) => {
+    try {
+      const file = typeof fileOrName === 'object' ? fileOrName : (files.find((f) => f.name === fileOrName) || { name: fileOrName });
+      const name = file.name || 'document.txt';
+      const blob = file.fileBlob || new Blob([`BRAHMA Staged Artifact: ${name}\nSize: ${file.size || 'Unknown'}\nType: ${file.type || 'text/plain'}\nUploaded: ${file.uploadedAt || new Date().toISOString()}`], { type: file.type || 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      addToast(`Downloaded "${name}"`, 'success');
+    } catch (err) {
+      addToast(`Download failed: ${err.message}`, 'error');
+    }
   };
 
   return (
@@ -222,7 +238,7 @@ export default function FilesWorkspace() {
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => handleDownload(file.name)}
+                          onClick={() => handleDownload(file)}
                           className="glass-btn-ghost"
                           style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
                           title="Download file snapshot"
