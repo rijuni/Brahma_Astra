@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <!-- Celestial Gold & Violet Gradients -->
+    <linearGradient id="astraArrowGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="45%" stop-color="#38BDF8" />
+      <stop offset="80%" stop-color="#FFE5A7" />
+      <stop offset="100%" stop-color="#FFFFFF" />
+    </linearGradient>
+    <linearGradient id="astraGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE5A7" />
+      <stop offset="50%" stop-color="#F6C87A" />
+      <stop offset="100%" stop-color="#D49A3E" />
+    </linearGradient>
+    <radialGradient id="astraCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.9" />
+      <stop offset="35%" stop-color="#8B5CF6" stop-opacity="0.6" />
+      <stop offset="70%" stop-color="#1E1B3D" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#0B0F1A" stop-opacity="0" />
+    </radialGradient>
+    <filter id="astraGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Ambient Radiant Glow -->
+  <circle cx="50" cy="50" r="45" fill="url(#astraCoreGlow)" />
+
+  <!-- Outer Sacred Geometry Yantra Rings -->
+  <circle cx="50" cy="50" r="46" stroke="#38BDF8" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.6" />
+  <circle cx="50" cy="50" r="42" stroke="#F6C87A" stroke-width="0.6" stroke-dasharray="1 2" opacity="0.75" />
+  <circle cx="50" cy="50" r="38" stroke="#8B5CF6" stroke-width="0.7" opacity="0.45" />
+
+  <!-- Diamond Alignment Nodes (Cardinal & Ordinal) -->
+  <polygon points="50,6 52,10 50,14 48,10" fill="#FFE5A7" />
+  <polygon points="50,86 52,90 50,94 48,90" fill="#FFE5A7" opacity="0.7" />
+  <polygon points="6,50 10,52 14,50 10,48" fill="#38BDF8" opacity="0.7" />
+  <polygon points="86,50 90,52 94,50 90,48" fill="#38BDF8" opacity="0.7" />
+
+  <!-- Tri-Blade Celestial Arrowhead (The ASTRA Weapon of Light) -->
+  <g filter="url(#astraGlow)">
+    <!-- Central Ascension Spearhead -->
+    <path d="M50 12 L61 48 L53 44 L50 82 L47 44 L39 48 Z" fill="url(#astraArrowGrad)" />
+
+    <!-- Left Flanking Energy Wing -->
+    <path d="M47 44 L32 54 L36 68 L46 58 Z" fill="url(#astraGoldGrad)" opacity="0.9" />
+
+    <!-- Right Flanking Energy Wing -->
+    <path d="M53 44 L68 54 L64 68 L54 58 Z" fill="url(#astraGoldGrad)" opacity="0.9" />
+
+    <!-- Outer Energy Stabilizers -->
+    <path d="M30 62 L22 72 L32 74 L37 67 Z" fill="#8B5CF6" opacity="0.7" />
+    <path d="M70 62 L78 72 L68 74 L63 67 Z" fill="#8B5CF6" opacity="0.7" />
+  </g>
+
+  <!-- Central Fusion Core -->
+  <circle cx="50" cy="52" r="5" fill="#FFFFFF" />
+  <circle cx="50" cy="52" r="8" stroke="#FFE5A7" stroke-width="1.2" fill="none" opacity="0.9" />
+
+  <!-- Radiating Horizontal Stabilizer Ray -->
+  <line x1="28" y1="52" x2="72" y2="52" stroke="#38BDF8" stroke-width="0.8" opacity="0.5" stroke-dasharray="2 1" />
+</svg>

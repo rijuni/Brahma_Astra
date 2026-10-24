@@ -7,7 +7,8 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Code2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -22,6 +23,7 @@ export default function BrahmaSidebar({
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'chat', label: 'AI Chat', icon: MessageSquare },
+    { id: 'astra', label: 'ASTRA Studio', icon: Code2, isAstra: true },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'files', label: 'Files', icon: FileText },
     { id: 'settings', label: 'Settings', icon: Settings }

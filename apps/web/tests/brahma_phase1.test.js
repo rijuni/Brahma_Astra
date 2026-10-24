@@ -115,13 +115,13 @@ test('BRAHMA Phase 1 — Core Components & Services Exist', () => {
   }
 });
 
-test('BRAHMA Phase 1 — Strict Scope Enforcement: No Phase 2 ASTRA Coding Components in Phase 1', () => {
+test('BRAHMA Phase 2 — ASTRA Studio Activation and Routing in App', () => {
   const astraFeatureDir = path.join(webRoot, 'src', 'features', 'astra');
-  assert.ok(!fs.existsSync(astraFeatureDir), 'ASTRA feature directory must not exist in Phase 1');
+  assert.ok(fs.existsSync(astraFeatureDir), 'ASTRA feature directory must exist in Phase 2');
 
   const appContent = fs.readFileSync(path.join(webRoot, 'src', 'app', 'App.jsx'), 'utf8');
-  assert.ok(!appContent.includes('AstraWorkspace'), 'App.jsx must not mount AstraWorkspace in Phase 1');
-  assert.ok(!appContent.includes('AstraShell'), 'App.jsx must not mount AstraShell in Phase 1');
+  assert.ok(appContent.includes('AstraWorkspace'), 'App.jsx must mount AstraWorkspace in Phase 2');
+  assert.ok(appContent.includes('AstraLauncher'), 'App.jsx must mount AstraLauncher in Phase 2');
 });
 
 test('BRAHMA Phase 1 Defects — Settings Health Diagnostics bypasses /api/v1 prefix', () => {

@@ -10,6 +10,8 @@ import SettingsWorkspace from '../features/settings/SettingsWorkspace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Modal from '../components/common/Modal';
 import Input from '../components/common/Input';
+import AstraLauncher from '../features/astra/AstraLauncher';
+import AstraWorkspace from '../features/astra/AstraWorkspace';
 import { Search } from 'lucide-react';
 
 export default function App() {
@@ -38,6 +40,7 @@ export default function App() {
 
   const searchItems = [
     { id: 'dashboard', title: 'Home Dashboard', subtitle: 'Overview, recent activity & intelligence status', route: 'dashboard', badge: 'Dashboard' },
+    { id: 'astra', title: 'ASTRA Autonomous IDE Studio', subtitle: 'AI pair programming, code synthesis & devtools', route: 'astra', badge: 'ASTRA' },
     { id: 'chat', title: 'AI Conversations & Chat', subtitle: 'Deep research, code synthesis & reasoning', route: 'chat', badge: 'Chat' },
     { id: 'projects', title: 'Projects & Workflows', subtitle: 'Manage collaborative workspaces and tasks', route: 'projects', badge: 'Projects' },
     { id: 'files', title: 'Document & File Workspace', subtitle: 'Staging, inspection & document management', route: 'files', badge: 'Files' },
@@ -64,6 +67,24 @@ export default function App() {
 
   if (!isAuthenticated) {
     return <AuthPage />;
+  }
+
+  // ASTRA routes take over full screen with dedicated IDE Activity Bar and cosmic glass canvas
+  if (currentRoute === 'astra') {
+    return (
+      <AstraLauncher
+        onEnterWorkspace={() => setCurrentRoute('astra-workspace')}
+        onBackToBrahma={() => setCurrentRoute('dashboard')}
+      />
+    );
+  }
+
+  if (currentRoute === 'astra-workspace') {
+    return (
+      <AstraWorkspace
+        onBackToBrahma={() => setCurrentRoute('dashboard')}
+      />
+    );
   }
 
   const renderContent = () => {

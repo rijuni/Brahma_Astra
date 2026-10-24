@@ -14,7 +14,8 @@ import {
   Lock,
   Clock,
   ExternalLink,
-  Plus
+  Plus,
+  Code2
 } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
@@ -71,11 +72,11 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
   };
 
   const featureCards = [
+    { id: 'astra', title: 'ASTRA STUDIO', subtitle: 'AI Software Development Studio', icon: Code2, variant: 'gold' },
     { id: 'chat', title: 'CHAT', subtitle: 'Start new intelligence session', icon: MessageSquare, variant: 'violet' },
-    { id: 'research', title: 'RESEARCH', subtitle: 'Search knowledge base & citations', icon: Search, variant: 'cyan' },
     { id: 'files', title: 'DOCUMENTS', subtitle: 'Manage & inspect files', icon: FileText, variant: 'default' },
     { id: 'projects', title: 'PROJECTS', subtitle: 'View & organize workflows', icon: FolderKanban, variant: 'gold' },
-    { id: 'memory', title: 'MEMORY', subtitle: 'Explore personal knowledge', icon: Brain, variant: 'default' },
+    { id: 'research', title: 'RESEARCH', subtitle: 'Search knowledge base & citations', icon: Search, variant: 'cyan' },
     { id: 'agents', title: 'AGENTS', subtitle: 'Deploy specialist AI agents', icon: Bot, variant: 'cyan' }
   ];
 
@@ -223,7 +224,7 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
             return (
               <Card
                 key={feat.id}
-                onClick={() => onNavigate(feat.id === 'files' ? 'files' : feat.id === 'projects' ? 'projects' : 'chat')}
+                onClick={() => onNavigate(feat.id === 'astra' ? 'astra' : feat.id === 'files' ? 'files' : feat.id === 'projects' ? 'projects' : 'chat')}
                 className="flex flex-col justify-between"
                 style={{ minHeight: '140px', padding: '20px' }}
               >
