@@ -66,7 +66,7 @@ export default function BrahmaNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
         >
         <Search size={16} color="var(--text-muted)" />
         <span className="body-regular text-muted" style={{ fontSize: '13px' }}>
-          Search anything in BRAHMA...
+          Search anything in FRIDAY...
         </span>
         <kbd
           className="code-inline"

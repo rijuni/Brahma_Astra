@@ -19,7 +19,7 @@ import { useToast } from '../../../components/feedback/Toast';
 const SQL_TEMPLATES = [
   { label: 'Select Users', query: 'SELECT id, name, email, role FROM users LIMIT 10;' },
   { label: 'Select Active Projects', query: "SELECT id, name, owner_id, status FROM projects WHERE status = 'active';" },
-  { label: 'List Astra Workspaces', query: 'SELECT id, project_id, name, status, created_at FROM astra_workspaces ORDER BY created_at DESC;' },
+  { label: 'List EDITH Workspaces', query: 'SELECT id, project_id, name, status, created_at FROM astra_workspaces ORDER BY created_at DESC;' },
   { label: 'Patient Vitals Overview', query: "SELECT id, name, age, gender, admission_status FROM patients WHERE admission_status = 'admitted' LIMIT 15;" },
   { label: 'Task Status Aggregates', query: 'SELECT status, COUNT(*) as count FROM coding_tasks GROUP BY status;' }
 ];
@@ -28,17 +28,17 @@ const MOCK_DATASETS = {
   users: {
     columns: ['id', 'name', 'email', 'role', 'created_at'],
     rows: [
-      ['471e1a65-37d9', 'BRAHMA Astra Lead Developer', 'developer@brahma-astra.local', 'admin', '2026-10-20 09:30:00'],
-      ['928c03e1-88f2', 'Clinical Research Analyst', 'research@brahma-astra.local', 'developer', '2026-10-21 14:15:22'],
-      ['104f98a2-cc31', 'Telemetry Systems Lead', 'telemetry@brahma-astra.local', 'developer', '2026-10-22 08:45:10'],
-      ['883d11b7-492e', 'Security Operations Officer', 'secops@brahma-astra.local', 'auditor', '2026-10-22 18:20:05']
+      ['471e1a65-37d9', 'FRIDAY EDITH Lead Developer', 'developer@friday-ai.local', 'admin', '2026-10-20 09:30:00'],
+      ['928c03e1-88f2', 'Clinical Research Analyst', 'research@friday-ai.local', 'developer', '2026-10-21 14:15:22'],
+      ['104f98a2-cc31', 'Telemetry Systems Lead', 'telemetry@friday-ai.local', 'developer', '2026-10-22 08:45:10'],
+      ['883d11b7-492e', 'Security Operations Officer', 'secops@friday-ai.local', 'auditor', '2026-10-22 18:20:05']
     ]
   },
   projects: {
     columns: ['id', 'name', 'owner_id', 'status', 'created_at'],
     rows: [
       ['proj-001', 'Clinical Trial Telemetry Service', '471e1a65-37d9', 'active', '2026-10-20 10:00:00'],
-      ['proj-002', 'ASTRA Execution Boundary Runner', '471e1a65-37d9', 'active', '2026-10-22 11:30:00'],
+      ['proj-002', 'EDITH Execution Boundary Runner', '471e1a65-37d9', 'active', '2026-10-22 11:30:00'],
       ['proj-003', 'Genomic Data Transformer', '928c03e1-88f2', 'completed', '2026-10-18 16:45:00']
     ]
   },

@@ -40,7 +40,7 @@ export default function App() {
 
   const searchItems = [
     { id: 'dashboard', title: 'Home Dashboard', subtitle: 'Overview, recent activity & intelligence status', route: 'dashboard', badge: 'Dashboard' },
-    { id: 'astra', title: 'ASTRA Autonomous IDE Studio', subtitle: 'AI pair programming, code synthesis & devtools', route: 'astra', badge: 'ASTRA' },
+    { id: 'astra', title: 'EDITH Autonomous IDE Studio', subtitle: 'AI pair programming, code synthesis & devtools', route: 'astra', badge: 'EDITH' },
     { id: 'chat', title: 'AI Conversations & Chat', subtitle: 'Deep research, code synthesis & reasoning', route: 'chat', badge: 'Chat' },
     { id: 'projects', title: 'Projects & Workflows', subtitle: 'Manage collaborative workspaces and tasks', route: 'projects', badge: 'Projects' },
     { id: 'files', title: 'Document & File Workspace', subtitle: 'Staging, inspection & document management', route: 'files', badge: 'Files' },

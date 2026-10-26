@@ -16,7 +16,7 @@ export default function AuthPage({ onSuccess }) {
     setAuthError(null);
     try {
       await login(email, password);
-      addToast('Welcome back to BRAHMA!', 'success');
+      addToast('Welcome back to FRIDAY!', 'success');
       if (onSuccess) onSuccess();
     } catch (err) {
       setAuthError(err.message || 'Invalid email or password');
@@ -30,7 +30,7 @@ export default function AuthPage({ onSuccess }) {
     setAuthError(null);
     try {
       await register(email, password, name);
-      addToast('BRAHMA account created successfully!', 'success');
+      addToast('FRIDAY account created successfully!', 'success');
       if (onSuccess) onSuccess();
     } catch (err) {
       setAuthError(err.message || 'Failed to create account');
@@ -44,7 +44,7 @@ export default function AuthPage({ onSuccess }) {
     setAuthError(null);
     try {
       await quickDemoLogin();
-      addToast('Welcome to BRAHMA, Amlan Nanda!', 'success');
+      addToast('Welcome to FRIDAY, Amlan Nanda!', 'success');
       if (onSuccess) onSuccess();
     } catch (err) {
       setAuthError(err.message || 'Demo initialization failed');
@@ -107,13 +107,13 @@ export default function AuthPage({ onSuccess }) {
           zIndex: 1
         }}
       >
-        {/* Brand Header: Golden Lotus Mandala & Wordmark */}
+        {/* Brand Header: FRIDAY Arc Reactor & Wordmark */}
         <div className="flex flex-col items-center text-center" style={{ marginBottom: '18px' }}>
           <img
-            src="/brand/brahma-mark.svg"
-            alt="BRAHMA"
+            src="/brand/friday-mark.svg"
+            alt="FRIDAY"
             className="brahma-logo-gold"
-            style={{ width: '52px', height: '52px', marginBottom: '8px' }}
+            style={{ width: '56px', height: '56px', marginBottom: '8px' }}
           />
           <h1
             style={{
@@ -127,7 +127,7 @@ export default function AuthPage({ onSuccess }) {
               marginBottom: '4px'
             }}
           >
-            BRAHMA
+            FRIDAY
           </h1>
           <span
             style={{
@@ -139,7 +139,7 @@ export default function AuthPage({ onSuccess }) {
               opacity: 0.85
             }}
           >
-            YOUR INTELLIGENCE CORE
+            YOUR PERSONAL AI PLATFORM
           </span>
         </div>
 

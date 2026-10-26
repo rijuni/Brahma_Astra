@@ -6,7 +6,7 @@ export default function PromptComposer({
   onCancelGeneration,
   isGenerating,
   disabled,
-  placeholder = 'Ask BRAHMA AI anything...',
+  placeholder = 'Ask FRIDAY AI anything...',
   initialValue = ''
 }) {
   const [content, setContent] = useState(initialValue || '');
@@ -173,7 +173,7 @@ export default function PromptComposer({
           Enter sends, Shift + Enter for new lines
         </span>
         <span className="body-small text-muted" style={{ fontSize: '11px' }}>
-          BRAHMA Core AI Orchestration
+          FRIDAY Core AI Orchestration
         </span>
       </div>
     </div>

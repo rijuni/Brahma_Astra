@@ -18,7 +18,7 @@ import { useToast } from '../../components/feedback/Toast';
 
 export default function FilesWorkspace() {
   const [files, setFiles] = useState([
-    { id: 'f-1', name: 'BRAHMA_Architecture_Specification.pdf', size: '2.4 MB', type: 'application/pdf', uploadedAt: new Date(Date.now() - 3600000 * 24).toISOString() },
+    { id: 'f-1', name: 'FRIDAY_Architecture_Specification.pdf', size: '2.4 MB', type: 'application/pdf', uploadedAt: new Date(Date.now() - 3600000 * 24).toISOString() },
     { id: 'f-2', name: 'System_Requirements_v1.md', size: '148 KB', type: 'text/markdown', uploadedAt: new Date(Date.now() - 3600000 * 48).toISOString() },
     { id: 'f-3', name: 'api_contract_schema.json', size: '34 KB', type: 'application/json', uploadedAt: new Date(Date.now() - 3600000 * 72).toISOString() }
   ]);
@@ -82,7 +82,7 @@ export default function FilesWorkspace() {
     try {
       const file = typeof fileOrName === 'object' ? fileOrName : (files.find((f) => f.name === fileOrName) || { name: fileOrName });
       const name = file.name || 'document.txt';
-      const blob = file.fileBlob || new Blob([`BRAHMA Staged Artifact: ${name}\nSize: ${file.size || 'Unknown'}\nType: ${file.type || 'text/plain'}\nUploaded: ${file.uploadedAt || new Date().toISOString()}`], { type: file.type || 'text/plain' });
+      const blob = file.fileBlob || new Blob([`FRIDAY Staged Artifact: ${name}\nSize: ${file.size || 'Unknown'}\nType: ${file.type || 'text/plain'}\nUploaded: ${file.uploadedAt || new Date().toISOString()}`], { type: file.type || 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

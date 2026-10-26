@@ -23,7 +23,7 @@ export default function BrahmaSidebar({
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'chat', label: 'AI Chat', icon: MessageSquare },
-    { id: 'astra', label: 'ASTRA Studio', icon: Code2, isAstra: true },
+    { id: 'astra', label: 'EDITH Studio', icon: Code2, isAstra: true },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
     { id: 'files', label: 'Files', icon: FileText },
     { id: 'settings', label: 'Settings', icon: Settings }
@@ -65,8 +65,8 @@ export default function BrahmaSidebar({
           onClick={() => onNavigate('dashboard')}
         >
           <img
-            src="/brand/brahma-mark.svg"
-            alt="BRAHMA"
+            src="/brand/friday-mark.svg"
+            alt="FRIDAY"
             className="brahma-logo-gold"
             style={{ width: '36px', height: '36px', flexShrink: 0 }}
           />
@@ -83,10 +83,10 @@ export default function BrahmaSidebar({
                   WebkitTextFillColor: 'transparent'
                 }}
               >
-                BRAHMA
+                FRIDAY
               </span>
               <span className="body-small text-muted" style={{ fontSize: '10px', letterSpacing: '0.04em' }}>
-                INTELLIGENCE CORE
+                PERSONAL AI PLATFORM
               </span>
             </div>
           )}

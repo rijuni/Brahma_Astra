@@ -39,7 +39,7 @@ export default function AstraAssistant({
     {
       id: 'm-init',
       role: 'assistant',
-      text: 'ASTRA Autonomous Studio initialized. Ready to generate AST-aware patches, refactor code, run test suites, or automate deployments. Use @ pills to inject context.',
+      text: 'EDITH Autonomous Studio initialized. Ready to generate AST-aware patches, refactor code, run test suites, or automate deployments. Use @ pills to inject context.',
       timestamp: 'Ready'
     }
   ]);
@@ -171,7 +171,7 @@ export default function AstraAssistant({
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
-                Astra Assistant
+                EDITH Assistant
               </span>
               <span
                 className="status-live-pulse"
@@ -202,7 +202,7 @@ export default function AstraAssistant({
               fontWeight: 500
             }}
           >
-            <Cpu size={11} /> brahma-1
+            <Cpu size={11} /> edith-1
           </span>
           <button
             onClick={handleResetSession}
@@ -301,7 +301,7 @@ export default function AstraAssistant({
             <div className="flex items-center gap-2">
               <span className="status-live-pulse" style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
               <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--brand-cyan)' }}>
-                ASTRA Engine synthesizing architecture plan...
+                EDITH Engine synthesizing architecture plan...
               </span>
             </div>
 
@@ -353,8 +353,8 @@ export default function AstraAssistant({
                 <div className="flex items-center justify-between gap-2.5 mb-2">
                   <div className="flex items-center gap-1.5">
                     {!isUser && <Sparkles size={13} color="var(--brand-gold)" />}
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: isUser ? 'var(--brand-cyan)' : 'var(--brand-gold)' }}>
-                      {isUser ? 'You' : 'ASTRA'}
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: isUser ? 'var(--brand-cyan)' : 'var(--brand-cyan)' }}>
+                      {isUser ? 'You' : 'EDITH'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -453,7 +453,7 @@ export default function AstraAssistant({
                 handleSend();
               }
             }}
-            placeholder="Instruct ASTRA (e.g. Implement rate limiting middleware)..."
+            placeholder="Instruct EDITH (e.g. Implement rate limiting middleware)..."
             rows={2}
             style={{
               background: 'transparent',
@@ -483,7 +483,7 @@ export default function AstraAssistant({
               background: prompt.trim() && !isGenerating ? 'linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-cyan) 100%)' : undefined,
               boxShadow: prompt.trim() && !isGenerating ? '0 0 12px rgba(139, 92, 246, 0.5)' : 'none'
             }}
-            title="Send instruction to ASTRA"
+            title="Send instruction to EDITH"
           >
             <Send size={15} />
           </button>

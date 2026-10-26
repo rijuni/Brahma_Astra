@@ -135,7 +135,7 @@ export default function SettingsWorkspace() {
               <h2 className="card-title" style={{ fontSize: '16px' }}>Appearance Theme</h2>
             </div>
             <p className="body-small text-muted" style={{ marginBottom: '16px' }}>
-              Select your preferred visual aesthetic for the BRAHMA intelligence platform.
+              Select your preferred visual aesthetic for the FRIDAY intelligence platform.
             </p>
             <div className="flex gap-3">
               <button
@@ -248,7 +248,7 @@ export default function SettingsWorkspace() {
             </div>
 
             <div className="body-small text-muted" style={{ fontSize: '11px', textAlign: 'center', lineHeight: '1.5' }}>
-              BRAHMA Platform Engine v1.0 • Running natively on Windows
+              FRIDAY Platform Engine v1.0 • Running natively on Windows
             </div>
           </Card>
         </div>

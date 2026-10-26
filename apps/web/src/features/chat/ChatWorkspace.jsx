@@ -370,13 +370,13 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
         >
           <div className="flex items-center gap-3">
             <img
-              src="/brand/brahma-mark.svg"
-              alt="BRAHMA"
+              src="/brand/friday-mark.svg"
+              alt="FRIDAY"
               className="brahma-logo-gold"
               style={{ width: '24px', height: '24px' }}
             />
             <div>
-              <span className="card-title" style={{ fontSize: '15px' }}>BRAHMA Intelligence Chat</span>
+              <span className="card-title" style={{ fontSize: '15px' }}>FRIDAY Intelligence Chat</span>
               <span className="body-small text-muted" style={{ marginLeft: '8px' }}>
                 {conversations.find((c) => c.id === activeConversationId)?.title || 'Active Session'}
               </span>
@@ -384,7 +384,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           </div>
           <div className="flex items-center gap-2">
             <span className="status-live-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--status-success)' }} />
-            <span className="body-small text-muted" style={{ fontSize: '11px' }}>Brahma Core Live</span>
+            <span className="body-small text-muted" style={{ fontSize: '11px' }}>FRIDAY Core Live</span>
           </div>
         </div>
 
@@ -395,7 +395,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           ) : messages.length === 0 ? (
             <EmptyState
               icon={Bot}
-              title="Welcome to BRAHMA Chat"
+              title="Welcome to FRIDAY Chat"
               description="Ask complex research questions, analyze systems, write code, or draft documents."
             />
           ) : (
@@ -422,7 +422,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                         flexShrink: 0
                       }}
                     >
-                      <img src="/brand/brahma-mark.svg" alt="" style={{ width: '18px', height: '18px' }} />
+                      <img src="/brand/friday-mark.svg" alt="" style={{ width: '18px', height: '18px' }} />
                     </div>
                   )}
 
@@ -445,7 +445,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                   >
                     <div className="flex items-center justify-between" style={{ marginBottom: '6px' }}>
                       <span className="body-small" style={{ fontWeight: 600, color: isAssistant ? 'var(--brand-gold)' : 'var(--text-primary)' }}>
-                        {isAssistant ? 'BRAHMA' : 'You'}
+                        {isAssistant ? 'FRIDAY' : 'You'}
                       </span>
                       <button
                         onClick={() => handleCopyMessage(msg.id, msg.content)}
@@ -492,7 +492,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                 }}
               >
                 <span className="body-small text-violet" style={{ fontWeight: 500 }}>
-                  Brahma Core is thinking
+                  FRIDAY Core is thinking
                 </span>
                 <div className="flex items-center gap-1" style={{ marginLeft: '6px' }}>
                   <div className="ai-wave-dot" />

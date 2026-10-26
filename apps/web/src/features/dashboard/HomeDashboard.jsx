@@ -72,7 +72,7 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
   };
 
   const featureCards = [
-    { id: 'astra', title: 'ASTRA STUDIO', subtitle: 'AI Software Development Studio', icon: Code2, variant: 'gold' },
+    { id: 'astra', title: 'EDITH STUDIO', subtitle: 'AI Software Development Studio', icon: Code2, variant: 'gold' },
     { id: 'chat', title: 'CHAT', subtitle: 'Start new intelligence session', icon: MessageSquare, variant: 'violet' },
     { id: 'files', title: 'DOCUMENTS', subtitle: 'Manage & inspect files', icon: FileText, variant: 'default' },
     { id: 'projects', title: 'PROJECTS', subtitle: 'View & organize workflows', icon: FolderKanban, variant: 'gold' },
@@ -101,12 +101,12 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
       >
         <div className="flex items-center gap-2" style={{ marginBottom: '12px' }}>
           <img
-            src="/brand/brahma-mark.svg"
-            alt="BRAHMA"
+            src="/brand/friday-mark.svg"
+            alt="FRIDAY"
             className="brahma-logo-gold"
             style={{ width: '32px', height: '32px' }}
           />
-          <Badge variant="gold">YOUR INTELLIGENCE CORE</Badge>
+          <Badge variant="gold">YOUR PERSONAL AI PLATFORM</Badge>
         </div>
 
         <h1
@@ -122,9 +122,13 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
           Good Evening, {user?.name || 'Amlan'}
         </h1>
 
-        <p className="body-regular text-muted" style={{ marginBottom: '20px' }}>
-          What would you like to explore in BRAHMA today?
+        <p className="body-regular text-muted" style={{ marginBottom: '6px' }}>
+          What would you like to explore in FRIDAY today?
         </p>
+
+        <div style={{ fontSize: '11px', letterSpacing: '0.18em', color: 'var(--brand-gold-light)', textTransform: 'uppercase', marginBottom: '20px', fontWeight: 600 }}>
+          THINK · EXPLORE · CREATE · EVOLVE
+        </div>
 
         {/* Feature Pills */}
         <div className="flex gap-2 flex-wrap justify-center" style={{ marginBottom: '28px' }}>
@@ -159,7 +163,7 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
           <input
             type="text"
             className="body-regular"
-            placeholder="Ask Brahma anything..."
+            placeholder="Ask FRIDAY anything..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             style={{

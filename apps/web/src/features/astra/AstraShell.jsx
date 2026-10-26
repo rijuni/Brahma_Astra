@@ -75,26 +75,26 @@ export default function AstraShell({
           className="flex flex-col items-center w-full px-1 overflow-y-auto flex-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {/* ASTRA Brand Icon */}
+          {/* EDITH Brand Icon */}
           <div
             style={{
               width: '40px',
               height: '40px',
               borderRadius: 'var(--radius-md)',
-              background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(139, 92, 246, 0.22) 100%)',
-              border: '1px solid var(--glass-border-violet)',
+              background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(2, 132, 199, 0.22) 100%)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: '10px',
               cursor: 'pointer',
               flexShrink: 0,
-              boxShadow: '0 0 14px rgba(139, 92, 246, 0.25)'
+              boxShadow: '0 0 14px rgba(56, 189, 248, 0.25)'
             }}
             onClick={() => onSelectNav('workspace')}
-            title="ASTRA Studio Workspace"
+            title="EDITH Studio Workspace"
           >
-            <img src="/brand/astra-mark.svg" alt="ASTRA" style={{ width: '24px', height: '24px' }} />
+            <img src="/brand/edith-mark.svg" alt="EDITH" style={{ width: '24px', height: '24px' }} />
           </div>
 
           {/* Primary Workspace Navigation Group */}
@@ -138,7 +138,7 @@ export default function AstraShell({
           <button
             onClick={() => onSelectNav('settings')}
             className={`astra-activity-btn ${activeNav === 'settings' ? 'active' : ''}`}
-            title="ASTRA Preferences & Settings"
+            title="EDITH Preferences & Settings"
           >
             <Settings size={20} />
           </button>
@@ -147,7 +147,7 @@ export default function AstraShell({
             onClick={onBackToBrahma}
             className="astra-activity-btn"
             style={{ color: 'var(--brand-gold)' }}
-            title="Return to BRAHMA Dashboard"
+            title="Return to FRIDAY Dashboard"
           >
             <ArrowLeft size={20} />
           </button>
@@ -171,8 +171,8 @@ export default function AstraShell({
         >
           {/* Breadcrumb Path */}
           <div className="flex items-center gap-3">
-            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--brand-gold)', letterSpacing: '0.05em' }}>
-              ASTRA
+            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--brand-cyan)', letterSpacing: '0.08em' }}>
+              EDITH
             </span>
             <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>/</span>
             <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 600 }}>
@@ -190,10 +190,10 @@ export default function AstraShell({
 
           {/* Service & Sandbox Status Disclosures */}
           <div className="flex items-center gap-3.5">
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--glass-border)' }}>
-              <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--status-success)' }} />
-              <span className="body-small text-muted" style={{ fontSize: '12px', fontWeight: 500 }}>
-                ASTRA Engine :8002
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+              <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
+              <span className="body-small" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="ASTRA Engine :8002">
+                EDITH Engine :8002
               </span>
             </div>
 
@@ -270,11 +270,14 @@ export default function AstraShell({
                 borderRadius: 'var(--radius-pill)',
                 fontSize: '12px',
                 fontWeight: 500,
-                color: 'var(--text-primary)'
+                color: 'var(--brand-gold-light)',
+                border: '1px solid rgba(246, 200, 122, 0.25)',
+                background: 'rgba(246, 200, 122, 0.06)'
               }}
+              title="Return to FRIDAY Dashboard"
             >
               <ArrowLeft size={13} />
-              <span>BRAHMA Home</span>
+              <span>FRIDAY Home</span>
             </button>
           </div>
         </header>

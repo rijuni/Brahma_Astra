@@ -24,20 +24,20 @@ export default function DeployPanel() {
   const [isDeploying, setIsDeploying] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [activeDeployStep, setActiveDeployStep] = useState(0);
-  const [deployedUrl, setDeployedUrl] = useState('https://astra-preview.brahma-astra.local');
+  const [deployedUrl, setDeployedUrl] = useState('https://edith-preview.friday-ai.local');
 
   const [envVars, setEnvVars] = useState([
     { key: 'NODE_ENV', value: 'production', isSecret: false },
     { key: 'SERVICE_PORT', value: '8000', isSecret: false },
     { key: 'DATABASE_URL', value: 'sqlite:///data/dev.db', isSecret: true },
-    { key: 'JWT_SIGNING_KEY', value: 'astra_cosmic_jwt_secret_key_v1', isSecret: true }
+    { key: 'JWT_SIGNING_KEY', value: 'edith_cosmic_jwt_secret_key_v1', isSecret: true }
   ]);
   const [showSecrets, setShowSecrets] = useState({});
 
   const [deployLogs, setDeployLogs] = useState([
     '[BUILD] Compiling TypeScript AST modules... Done in 1.4s',
     '[TEST] Running automated test suites... 27 passed, 0 failed',
-    '[CONTAINER] Generating OCI container image astra/microservice:latest',
+    '[CONTAINER] Generating OCI container image edith/microservice:latest',
     '[DEPLOY] Routing traffic to blue-green container instances on port 8000',
     '[HEALTH] Live health check returned HTTP 200 OK (22ms). Ready.'
   ]);

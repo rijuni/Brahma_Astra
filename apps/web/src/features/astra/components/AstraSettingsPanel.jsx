@@ -24,9 +24,9 @@ export default function AstraSettingsPanel() {
 
   const [serviceStatus, setServiceStatus] = useState({
     api: { name: 'Node.js Application API (:3000)', status: 'checking', latency: '...' },
-    brahma: { name: 'BRAHMA Core FastAPI (:8001)', status: 'checking', latency: '...' },
-    astraEngine: { name: 'ASTRA Engine FastAPI (:8002)', status: 'checking', latency: '...' },
-    astraRunner: { name: 'ASTRA Runner Execution Boundary (:8003)', status: 'checking', latency: '...' }
+    brahma: { name: 'FRIDAY Core FastAPI (:8001)', status: 'checking', latency: '...' },
+    astraEngine: { name: 'EDITH Engine FastAPI (:8002)', status: 'checking', latency: '...' },
+    astraRunner: { name: 'EDITH Runner Execution Boundary (:8003)', status: 'checking', latency: '...' }
   });
   const [isCheckingServices, setIsCheckingServices] = useState(false);
 
@@ -54,9 +54,9 @@ export default function AstraSettingsPanel() {
 
     setServiceStatus({
       api: { name: 'Node.js Application API (:3000)', ...apiRes },
-      brahma: { name: 'BRAHMA Core FastAPI (:8001)', ...brahmaRes },
-      astraEngine: { name: 'ASTRA Engine FastAPI (:8002)', ...engineRes },
-      astraRunner: { name: 'ASTRA Runner Execution Boundary (:8003)', ...runnerRes }
+      brahma: { name: 'FRIDAY Core FastAPI (:8001)', ...brahmaRes },
+      astraEngine: { name: 'EDITH Engine FastAPI (:8002)', ...engineRes },
+      astraRunner: { name: 'EDITH Runner Execution Boundary (:8003)', ...runnerRes }
     });
     setIsCheckingServices(false);
   };
@@ -82,7 +82,7 @@ export default function AstraSettingsPanel() {
       <div className="flex items-center justify-between pb-2.5 mb-3.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
           <Settings size={17} color="var(--brand-gold)" />
-          <span style={{ fontSize: '14px', fontWeight: 600 }}>ASTRA Studio Settings & System Health</span>
+          <span style={{ fontSize: '14px', fontWeight: 600 }}>EDITH Studio Settings & System Health</span>
         </div>
         <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>STUDIO ENVIRONMENT</Badge>
       </div>
@@ -206,8 +206,8 @@ export default function AstraSettingsPanel() {
               </span>
             </div>
             <div className="text-muted flex flex-col gap-1" style={{ fontSize: '10px', lineHeight: '1.4' }}>
-              <div>• <strong>Real Live Endpoints:</strong> Application API (:3000), BRAHMA (:8001), ASTRA Engine (:8002).</div>
-              <div>• <strong>Sandboxed Boundary:</strong> ASTRA Runner (:8003) execution mode is strictly "disabled" for host safety.</div>
+              <div>• <strong>Real Live Endpoints:</strong> Application API (:3000), FRIDAY (:8001), EDITH Engine (:8002).</div>
+              <div>• <strong>Sandboxed Boundary:</strong> EDITH Runner (:8003) execution mode is strictly "disabled" for host safety.</div>
               <div>• <strong>Local Database:</strong> SQLite dev.db via Prisma client. Zero external cloud dependencies required.</div>
             </div>
           </div>

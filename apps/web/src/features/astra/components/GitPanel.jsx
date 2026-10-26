@@ -29,9 +29,9 @@ export default function GitPanel() {
   const [stagedFiles, setStagedFiles] = useState(['src/app.py', 'config/settings.py']);
   const [unstagedFiles, setUnstagedFiles] = useState(['tests/test_api.py', 'README.md']);
   const [commitLog, setCommitLog] = useState([
-    { hash: '7c8a1e2', msg: 'Implement AST patch generator and risk evaluator', author: 'ASTRA Lead', time: '10 mins ago' },
+    { hash: '7c8a1e2', msg: 'Implement AST patch generator and risk evaluator', author: 'EDITH Lead', time: '10 mins ago' },
     { hash: '9b3f0d4', msg: 'Add sandbox execution restrictions for safe commands', author: 'Security Officer', time: '1 hour ago' },
-    { hash: '1a4e8b9', msg: 'Initialize ASTRA multi-workspace repository structure', author: 'BRAHMA Core', time: 'Yesterday' }
+    { hash: '1a4e8b9', msg: 'Initialize EDITH multi-workspace repository structure', author: 'FRIDAY Core', time: 'Yesterday' }
   ]);
   const [isSyncing, setIsSyncing] = useState(false);
 

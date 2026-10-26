@@ -35,7 +35,7 @@ export default function PatchReview({
           No Active Code Patch
         </h4>
         <p className="body-small text-muted" style={{ maxWidth: '320px' }}>
-          When ASTRA Assistant proposes code modifications, the unified diff and risk analysis will appear here for your review.
+          When EDITH Assistant proposes code modifications, the unified diff and risk analysis will appear here for your review.
         </p>
       </div>
     );
@@ -214,7 +214,7 @@ export default function PatchReview({
           color: 'var(--text-secondary)'
         }}
       >
-        <span>{patchProposal.summary || 'ASTRA code synthesis patch proposal'}</span>
+        <span>{patchProposal.summary || 'EDITH code synthesis patch proposal'}</span>
         <span className="text-muted" style={{ fontSize: '10px' }}>
           {patchProposal.files.length} file(s) modified
         </span>

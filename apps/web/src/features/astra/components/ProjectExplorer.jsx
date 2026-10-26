@@ -353,7 +353,7 @@ export default function ProjectExplorer({
       <Modal
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
-        title="Create ASTRA Workspace"
+        title="Create EDITH Workspace"
         maxWidth="460px"
       >
         <form onSubmit={handleCreateSubmit} className="flex flex-col gap-4">

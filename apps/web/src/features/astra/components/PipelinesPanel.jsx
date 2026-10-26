@@ -47,14 +47,14 @@ export default function PipelinesPanel() {
       name: '4. Docker Container Build',
       duration: '45s',
       status: 'passed',
-      logs: '[Docker] Step 1/6 : FROM python:3.12-slim\n[Docker] Step 2/6 : WORKDIR /app\n[Docker] Step 3/6 : COPY . .\n[Docker] Step 4/6 : RUN pip install -r requirements.txt\n[Docker] Successfully tagged astra-engine:v1.0.0 (312MB)'
+      logs: '[Docker] Step 1/6 : FROM python:3.12-slim\n[Docker] Step 2/6 : WORKDIR /app\n[Docker] Step 3/6 : COPY . .\n[Docker] Step 4/6 : RUN pip install -r requirements.txt\n[Docker] Successfully tagged edith-engine:v1.0.0 (312MB)'
     },
     {
       id: 5,
       name: '5. Staging Environment Deployment',
       duration: '28s',
       status: 'passed',
-      logs: '[Deploy] Authenticating to Kubernetes cluster staging.brahma-astra.local\n[Deploy] Applying Helm chart astra-release-v142\n[Deploy] Pods 3/3 healthy. Traffic routed to ingress.'
+      logs: '[Deploy] Authenticating to Kubernetes cluster staging.friday-ai.local\n[Deploy] Applying Helm chart edith-release-v142\n[Deploy] Pods 3/3 healthy. Traffic routed to ingress.'
     }
   ];
 

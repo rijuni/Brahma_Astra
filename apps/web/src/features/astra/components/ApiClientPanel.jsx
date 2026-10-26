@@ -21,9 +21,9 @@ const QUICK_ENDPOINTS = [
   { label: 'Application API Health (:3000)', method: 'GET', url: 'http://localhost:3000/health/live' },
   { label: 'Application API Readiness (:3000)', method: 'GET', url: 'http://localhost:3000/health/ready' },
   { label: 'List Projects (:3000)', method: 'GET', url: 'http://localhost:3000/api/v1/projects' },
-  { label: 'BRAHMA Core Health (:8001)', method: 'GET', url: 'http://localhost:8001/health/live' },
-  { label: 'ASTRA Engine Health (:8002)', method: 'GET', url: 'http://localhost:8002/health/live' },
-  { label: 'ASTRA Runner Health (:8003)', method: 'GET', url: 'http://localhost:8003/health/live' }
+  { label: 'FRIDAY Core Health (:8001)', method: 'GET', url: 'http://localhost:8001/health/live' },
+  { label: 'EDITH Engine Health (:8002)', method: 'GET', url: 'http://localhost:8002/health/live' },
+  { label: 'EDITH Runner Health (:8003)', method: 'GET', url: 'http://localhost:8003/health/live' }
 ];
 
 export default function ApiClientPanel() {

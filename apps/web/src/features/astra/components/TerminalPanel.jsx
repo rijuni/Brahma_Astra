@@ -26,10 +26,10 @@ export default function TerminalPanel({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [commandHistory, setCommandHistory] = useState(['help', 'status', 'test']);
   const [logHistory, setLogHistory] = useState([
-    '(venv) user@astra:~/workspace$ astra-runner --version',
-    'ASTRA Runner Execution Boundary v1.0.0 (Windows Native Sandboxed)',
+    '(venv) user@edith:~/workspace$ edith-runner --version',
+    'EDITH Runner Execution Boundary v1.0.0 (Windows Native Sandboxed)',
     'Execution Mode: "disabled" (Zero Arbitrary Host Execution Guard)',
-    '(venv) user@astra:~/workspace$ uvicorn app.main:app --port 8000',
+    '(venv) user@edith:~/workspace$ uvicorn app.main:app --port 8000',
     'INFO:     Started server process in sandbox [PID: 28412]',
     'INFO:     Waiting for application startup...',
     'INFO:     Application startup complete. Uvicorn running on http://127.0.0.1:8000',
@@ -66,7 +66,7 @@ export default function TerminalPanel({
       return;
     }
 
-    setLogHistory((prev) => [...prev, `(venv) user@astra:~/workspace$ ${cmd}`]);
+    setLogHistory((prev) => [...prev, `(venv) user@edith:~/workspace$ ${cmd}`]);
     setInputCmd('');
 
     const output = await astraRunnerService.runSafeCommand(cmd);
@@ -204,7 +204,7 @@ export default function TerminalPanel({
               fontSize: '12.5px'
             }}
           >
-            <span style={{ color: 'var(--brand-cyan)', fontWeight: 500 }}>(venv) user@astra:~$</span>
+            <span style={{ color: 'var(--brand-cyan)', fontWeight: 500 }}>(venv) user@edith:~$</span>
             <input
               ref={inputRef}
               type="text"
@@ -265,18 +265,18 @@ export default function TerminalPanel({
 
       {activeTab === 'output' && (
         <div className="flex-1 overflow-y-auto p-3 font-mono text-muted" style={{ fontSize: '11px' }}>
-          <div>[ASTRA Background Daemon] Initialized local event listeners.</div>
-          <div>[ASTRA Sandboxed File Watcher] Monitoring 4 active project files.</div>
+          <div>[EDITH Background Daemon] Initialized local event listeners.</div>
+          <div>[EDITH Sandboxed File Watcher] Monitoring 4 active project files.</div>
           <div>[Prisma SQLite Engine] dev.db connection pool healthy.</div>
         </div>
       )}
 
       {activeTab === 'debug_console' && (
         <div className="flex-1 overflow-y-auto p-3 font-mono" style={{ fontSize: '11px' }}>
-          <div className="text-muted mb-2">ASTRA Debug Console (REPL) - Evaluate expressions in active execution boundary:</div>
+          <div className="text-muted mb-2">EDITH Debug Console (REPL) - Evaluate expressions in active execution boundary:</div>
           <div style={{ color: 'var(--brand-cyan)' }}>&gt; process.env.NODE_ENV</div>
           <div style={{ color: '#34D399', marginBottom: '8px' }}>"development"</div>
-          <div style={{ color: 'var(--brand-cyan)' }}>&gt; astra.activeWorkspace.status</div>
+          <div style={{ color: 'var(--brand-cyan)' }}>&gt; edith.activeWorkspace.status</div>
           <div style={{ color: '#34D399' }}>"ready"</div>
         </div>
       )}

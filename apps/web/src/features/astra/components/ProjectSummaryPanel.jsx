@@ -95,7 +95,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             </span>
           </div>
           <p className="body-small text-muted" style={{ fontSize: '10px', lineHeight: '1.4', margin: 0 }}>
-            Running in isolated browser context. Backend Node API (:3000) and ASTRA Engine (:8002) communicate via strictly scoped REST schemas. Arbitrary OS execution remains blocked.
+            Running in isolated browser context. Backend Node API (:3000) and EDITH Engine (:8002) communicate via strictly scoped REST schemas. Arbitrary OS execution remains blocked.
           </p>
         </div>
       </div>
