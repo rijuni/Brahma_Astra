@@ -28,6 +28,10 @@ export default function AstraShell({
   onBackToBrahma,
   onToggleZenMode,
   isZenMode,
+  isSidebarOpen = true,
+  onToggleSidebar,
+  isAssistantOpen = true,
+  onToggleAssistant,
   children
 }) {
   // Ensure the window/document scroll is strictly locked to top on mount
@@ -194,6 +198,49 @@ export default function AstraShell({
             </div>
 
             <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>Sandboxed Runner :8003</Badge>
+
+            {/* Panel Visibility Toggles */}
+            {onToggleSidebar && (
+              <button
+                onClick={onToggleSidebar}
+                className="glass-btn-ghost flex items-center gap-1.5"
+                style={{
+                  height: '32px',
+                  padding: '0 12px',
+                  borderRadius: 'var(--radius-pill)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: isSidebarOpen ? 'var(--brand-gold)' : 'var(--text-muted)',
+                  background: isSidebarOpen ? 'rgba(246, 200, 122, 0.12)' : 'transparent',
+                  border: isSidebarOpen ? '1px solid rgba(246, 200, 122, 0.35)' : '1px solid transparent'
+                }}
+                title={isSidebarOpen ? 'Collapse Explorer (Ctrl+E)' : 'Expand Explorer (Ctrl+E)'}
+              >
+                <FolderTree size={14} />
+                <span>Explorer</span>
+              </button>
+            )}
+
+            {onToggleAssistant && (
+              <button
+                onClick={onToggleAssistant}
+                className="glass-btn-ghost flex items-center gap-1.5"
+                style={{
+                  height: '32px',
+                  padding: '0 12px',
+                  borderRadius: 'var(--radius-pill)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: isAssistantOpen ? 'var(--brand-violet-light)' : 'var(--text-muted)',
+                  background: isAssistantOpen ? 'rgba(139, 92, 246, 0.18)' : 'transparent',
+                  border: isAssistantOpen ? '1px solid rgba(139, 92, 246, 0.45)' : '1px solid transparent'
+                }}
+                title={isAssistantOpen ? 'Hide AI Assistant (Ctrl+J)' : 'Show AI Assistant (Ctrl+J)'}
+              >
+                <Bot size={14} />
+                <span>AI Assistant</span>
+              </button>
+            )}
 
             {onToggleZenMode && (
               <button

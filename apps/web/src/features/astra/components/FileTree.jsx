@@ -11,6 +11,7 @@ import {
   Search,
   ChevronRight,
   ChevronDown,
+  ChevronLeft,
   Trash2,
   Edit2,
   Copy,
@@ -30,7 +31,8 @@ export default function FileTree({
   onAddFile,
   onDeleteFile,
   onRenameFile,
-  dirtyFilePaths = new Set()
+  dirtyFilePaths = new Set(),
+  onCollapse
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [openFolders, setOpenFolders] = useState({});
@@ -156,6 +158,16 @@ export default function FileTree({
           >
             <FolderPlus size={15} color="var(--brand-cyan)" />
           </button>
+          {onCollapse && (
+            <button
+              onClick={onCollapse}
+              className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
+              style={{ width: '26px', height: '26px', borderRadius: '6px', padding: 0 }}
+              title="Collapse Explorer (Ctrl+E)"
+            >
+              <ChevronLeft size={14} />
+            </button>
+          )}
         </div>
       </div>
 

@@ -38,9 +38,9 @@
   --astra-header-height: 50px;
   --astra-activity-width: 58px;
   --astra-activity-btn-size: 40px;
-  --astra-sidebar-width: 280px;
-  --astra-assistant-width: 350px;
-  --astra-dock-height: 255px;
+  --astra-sidebar-width: 240px;
+  --astra-assistant-width: 365px;
+  --astra-dock-height: 260px;
   --astra-btn-height-sm: 28px;
   --astra-btn-height-md: 34px;
   --astra-tab-height: 38px;
@@ -115,23 +115,59 @@
   flex-shrink: 0;
 }
 
+/* Luminous Cosmic Glass Panel */
+.astra-luminous-panel {
+  position: relative;
+  background: rgba(11, 15, 26, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.astra-luminous-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(246, 200, 122, 0.45) 0%, rgba(139, 92, 246, 0.45) 50%, rgba(56, 189, 248, 0.3) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 /* IDE Code Editor */
 .astra-editor-container {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: rgba(15, 23, 42, 0.38);
-  backdrop-filter: blur(18px);
+  background: rgba(11, 15, 26, 0.65);
+  backdrop-filter: blur(20px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.astra-editor-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(246, 200, 122, 0.45) 0%, rgba(139, 92, 246, 0.45) 50%, rgba(56, 189, 248, 0.3) 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .astra-editor-tabs {
   display: flex;
   align-items: center;
   height: var(--astra-tab-height);
-  background: rgba(11, 15, 26, 0.6);
+  background: rgba(7, 10, 24, 0.7);
   border-bottom: 1px solid var(--glass-border);
   overflow-x: auto;
   scrollbar-width: none;
@@ -152,6 +188,7 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
+  position: relative;
 }
 
 .astra-editor-tab:hover {
@@ -160,9 +197,10 @@
 }
 
 .astra-editor-tab.active {
-  background: rgba(30, 27, 61, 0.65);
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.22) 0%, rgba(11, 15, 26, 0.8) 100%);
   color: var(--brand-gold-light);
   border-bottom: 2px solid var(--brand-gold);
+  box-shadow: inset 0 1px 0 rgba(246, 200, 122, 0.4), 0 0 12px rgba(139, 92, 246, 0.25);
 }
 
 .astra-code-line {
@@ -173,10 +211,10 @@
 }
 
 .astra-line-number {
-  width: 50px;
+  width: 48px;
   text-align: right;
-  padding-right: 16px;
-  color: rgba(255, 255, 255, 0.3);
+  padding-right: 14px;
+  color: rgba(255, 255, 255, 0.25);
   user-select: none;
   flex-shrink: 0;
 }
@@ -187,14 +225,17 @@
   color: #E2E8F0;
 }
 
-/* Syntax Token Colors */
-.tok-keyword { color: #F472B6; font-weight: 600; }
-.tok-fn { color: #60A5FA; }
-.tok-str { color: #34D399; }
-.tok-cls { color: #FBBF24; }
-.tok-comment { color: #64748B; font-style: italic; }
-.tok-num { color: #A78BFA; }
-.tok-prop { color: #38BDF8; }
+/* Vibrant Cosmic Syntax Token Colors */
+.tok-keyword { color: #C084FC; font-weight: 600; }
+.tok-fn { color: #38BDF8; font-weight: 500; }
+.tok-str { color: #F6C87A; }
+.tok-cls { color: #FBBF24; font-weight: 600; }
+.tok-comment { color: #94A3B8; font-style: italic; opacity: 0.8; }
+.tok-num { color: #34D399; }
+.tok-prop { color: #67E8F9; }
+.tok-decorator { color: #F472B6; font-weight: 500; }
+.tok-builtin { color: #818CF8; }
+.tok-punct { color: #94A3B8; }
 
 /* Diff Viewer */
 .diff-line-add {
@@ -225,4 +266,31 @@
   padding: 14px 16px;
   color: #CBD5E1;
   overflow-y: auto;
+}
+
+/* Astra Assistant Spacious Ergonomics */
+.astra-assistant-container {
+  background: rgba(18, 14, 38, 0.55);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+
+.astra-context-pill {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+  user-select: none;
+}
+.astra-context-pill:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+}
+
+.astra-composer-box {
+  background: rgba(11, 15, 26, 0.75);
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s ease;
+}
+.astra-composer-box:focus-within {
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }

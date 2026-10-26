@@ -22,6 +22,63 @@ import Modal from '../../../components/common/Modal';
 import Button from '../../../components/common/Button';
 import { useToast } from '../../../components/feedback/Toast';
 
+// Lightweight, zero-dependency cosmic token colorizer for code syntax
+function highlightLine(line) {
+  if (!line) return <span>&nbsp;</span>;
+
+  const commentMatch = line.match(/^(\s*)(#.*|\/\/.*)$/);
+  if (commentMatch) {
+    return (
+      <>
+        <span>{commentMatch[1]}</span>
+        <span className="tok-comment">{commentMatch[2]}</span>
+      </>
+    );
+  }
+
+  const tokenRegex = /(#.*$|\/\/.*$)|(".*?"|'.*?'|`.*?`)|(@[a-zA-Z0-9_\.]+)|(\b(?:from|import|as|def|class|return|async|await|if|elif|else|for|while|try|except|finally|raise|with|in|is|not|and|or|const|let|var|function|export|default|type|interface)\b)|(\b(?:int|str|float|bool|list|dict|set|tuple|Optional|List|Dict|Any|Promise|Array|Object|String|Number|Boolean)\b)|(\b[A-Z][a-zA-Z0-9_]*\b)|(\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\())|(\b(?:True|False|None|true|false|null|undefined|\d+(?:\.\d+)?)\b)/g;
+
+  const elements = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      elements.push(line.slice(lastIndex, match.index));
+    }
+
+    const [full, comment, str, decorator, keyword, builtin, cls, fn, num] = match;
+
+    if (comment) {
+      elements.push(<span key={match.index} className="tok-comment">{comment}</span>);
+    } else if (str) {
+      elements.push(<span key={match.index} className="tok-str">{str}</span>);
+    } else if (decorator) {
+      elements.push(<span key={match.index} className="tok-decorator">{decorator}</span>);
+    } else if (keyword) {
+      elements.push(<span key={match.index} className="tok-keyword">{keyword}</span>);
+    } else if (builtin) {
+      elements.push(<span key={match.index} className="tok-builtin">{builtin}</span>);
+    } else if (fn) {
+      elements.push(<span key={match.index} className="tok-fn">{fn}</span>);
+    } else if (cls) {
+      elements.push(<span key={match.index} className="tok-cls">{cls}</span>);
+    } else if (num) {
+      elements.push(<span key={match.index} className="tok-num">{num}</span>);
+    } else {
+      elements.push(full);
+    }
+
+    lastIndex = tokenRegex.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    elements.push(line.slice(lastIndex));
+  }
+
+  return elements.length > 0 ? elements : <span>{line}</span>;
+}
+
 export default function CodeEditor({
   openFiles = [],
   activeFile,
@@ -48,7 +105,19 @@ export default function CodeEditor({
   const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 });
 
   const textareaRef = useRef(null);
+  const gutterRef = useRef(null);
+  const syntaxLayerRef = useRef(null);
   const { addToast } = useToast();
+
+  const handleScroll = (e) => {
+    const top = e.target.scrollTop;
+    const left = e.target.scrollLeft;
+    if (gutterRef.current) gutterRef.current.scrollTop = top;
+    if (syntaxLayerRef.current) {
+      syntaxLayerRef.current.scrollTop = top;
+      syntaxLayerRef.current.scrollLeft = left;
+    }
+  };
 
   const detectedLang = activeFile ? getLanguageForFile(activeFile.name) : null;
   const currentLang = overrideLang || detectedLang;
@@ -468,23 +537,25 @@ export default function CodeEditor({
       )}
 
       {/* Editor Workspace Area */}
-      <div className="flex flex-1 relative overflow-hidden" style={{ minHeight: '300px' }}>
+      <div className="flex flex-1 relative overflow-hidden" style={{ minHeight: 0 }}>
         {/* Line Numbers Gutter */}
         <div
-          className="astra-line-number flex flex-col py-3 select-none"
+          ref={gutterRef}
+          className="astra-line-number flex flex-col py-3 select-none overflow-hidden"
           style={{
-            background: 'rgba(11, 15, 26, 0.4)',
-            borderRight: '1px solid rgba(255, 255, 255, 0.05)',
+            background: 'rgba(7, 10, 24, 0.65)',
+            borderRight: '1px solid var(--glass-border)',
             fontFamily: 'var(--font-code)',
-            fontSize: '12px',
-            lineHeight: '20px'
+            fontSize: '13px',
+            lineHeight: '22px'
           }}
         >
           {Array.from({ length: lineCount }).map((_, i) => (
             <div
               key={i}
               style={{
-                color: cursorPos.line === i + 1 ? 'var(--brand-gold)' : 'var(--text-muted)',
+                height: '22px',
+                color: cursorPos.line === i + 1 ? 'var(--brand-gold)' : 'rgba(255, 255, 255, 0.25)',
                 fontWeight: cursorPos.line === i + 1 ? 600 : 400
               }}
             >
@@ -493,26 +564,53 @@ export default function CodeEditor({
           ))}
         </div>
 
-        {/* Textarea Code Input Surface */}
-        <textarea
-          ref={textareaRef}
-          value={activeFile.content || ''}
-          onChange={handleTextareaChange}
-          onKeyUp={updateCursorPosition}
-          onClick={updateCursorPosition}
-          readOnly={isReadOnly}
-          spellCheck={false}
-          className="flex-1 p-3 outline-none border-none resize-none"
-          style={{
-            background: 'transparent',
-            fontFamily: 'var(--font-code)',
-            fontSize: '13px',
-            lineHeight: '20px',
-            color: '#E2E8F0',
-            tabSize: 2,
-            whiteSpace: 'pre'
-          }}
-        />
+        {/* Code Editor Surface: Syntax Highlight Layer + Editable Transparent Textarea */}
+        <div className="flex-1 relative overflow-hidden">
+          {/* Syntax Highlight Layer */}
+          <div
+            ref={syntaxLayerRef}
+            aria-hidden="true"
+            className="absolute inset-0 p-3 pointer-events-none select-none overflow-hidden"
+            style={{
+              fontFamily: 'var(--font-code)',
+              fontSize: '13px',
+              lineHeight: '22px',
+              tabSize: 2,
+              whiteSpace: 'pre',
+              color: '#E2E8F0'
+            }}
+          >
+            {fileLines.map((line, idx) => (
+              <div key={idx} style={{ height: '22px', minHeight: '22px' }}>
+                {highlightLine(line)}
+              </div>
+            ))}
+          </div>
+
+          {/* Textarea Code Input Surface */}
+          <textarea
+            ref={textareaRef}
+            value={activeFile.content || ''}
+            onChange={handleTextareaChange}
+            onKeyUp={updateCursorPosition}
+            onClick={updateCursorPosition}
+            onScroll={handleScroll}
+            readOnly={isReadOnly}
+            spellCheck={false}
+            className="absolute inset-0 p-3 outline-none border-none resize-none overflow-auto"
+            style={{
+              background: 'transparent',
+              fontFamily: 'var(--font-code)',
+              fontSize: '13px',
+              lineHeight: '22px',
+              color: 'transparent',
+              caretColor: 'var(--brand-gold)',
+              tabSize: 2,
+              whiteSpace: 'pre',
+              zIndex: 1
+            }}
+          />
+        </div>
       </div>
 
       {/* Editor Status Bar */}

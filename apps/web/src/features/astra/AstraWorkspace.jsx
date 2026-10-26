@@ -1,4 +1,24 @@
 import React, { useState } from 'react';
+import {
+  Terminal,
+  AlertTriangle,
+  Bug,
+  CheckCircle2,
+  GitBranch,
+  Database,
+  Globe,
+  Rocket,
+  Layers,
+  BarChart3,
+  Minimize2,
+  Maximize2,
+  Minus,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  Bot,
+  FolderTree
+} from 'lucide-react';
 import AstraShell from './AstraShell';
 import ProjectExplorer from './components/ProjectExplorer';
 import FileTree from './components/FileTree';
@@ -16,6 +36,7 @@ import PipelinesPanel from './components/PipelinesPanel';
 import ProjectSummaryPanel from './components/ProjectSummaryPanel';
 import TaskHistoryPanel from './components/TaskHistoryPanel';
 import AstraSettingsPanel from './components/AstraSettingsPanel';
+import Badge from '../../components/common/Badge';
 import { ASTRA_SAMPLE_PROJECTS } from '../../config/astra-sample-projects';
 import { astraService } from '../../services/astra/astra-service';
 import { useToast } from '../../components/feedback/Toast';
@@ -33,8 +54,14 @@ export default function AstraWorkspace({ onBackToBrahma }) {
   // Active navigation view on activity bar
   const [activeNav, setActiveNav] = useState('workspace');
 
-  // Bottom dock active panel
+  // Bottom dock active panel & subtab
   const [dockPanel, setDockPanel] = useState('terminal');
+  const [terminalSubTab, setTerminalSubTab] = useState('terminal'); // 'terminal' | 'problems' | 'output' | 'debug_console'
+  const [dockState, setDockState] = useState('standard'); // 'minimized' | 'standard' | 'maximized'
+
+  // Panel collapsibility states
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(true);
 
   // AI Task & Patch state
   const [activeTask, setActiveTask] = useState(null);
@@ -45,12 +72,21 @@ export default function AstraWorkspace({ onBackToBrahma }) {
   const [isZenMode, setIsZenMode] = useState(false);
   const { addToast } = useToast();
 
-  // Ctrl+B shortcut to toggle Zen Mode
+  // Keyboard shortcuts: Ctrl+B (Zen), Ctrl+E (Explorer), Ctrl+J (Assistant), Ctrl+` (Dock)
   React.useEffect(() => {
     function handleKeyDown(e) {
       if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
         e.preventDefault();
         setIsZenMode((prev) => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        setIsSidebarOpen((prev) => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'j') {
+        e.preventDefault();
+        setIsAssistantOpen((prev) => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === '`') {
+        e.preventDefault();
+        setDockState((prev) => (prev === 'minimized' ? 'standard' : 'minimized'));
       }
     }
     window.addEventListener('keydown', handleKeyDown);
@@ -327,7 +363,13 @@ export default function AstraWorkspace({ onBackToBrahma }) {
   const renderBottomDock = () => {
     switch (dockPanel) {
       case 'terminal':
-        return <TerminalPanel />;
+        return (
+          <TerminalPanel
+            hideHeader={true}
+            activeTab={terminalSubTab}
+            onSelectTab={setTerminalSubTab}
+          />
+        );
       case 'debug':
         return <DebugPanel />;
       case 'testing':
@@ -345,7 +387,13 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       case 'summary':
         return <ProjectSummaryPanel project={activeProject} />;
       default:
-        return <TerminalPanel />;
+        return (
+          <TerminalPanel
+            hideHeader={true}
+            activeTab={terminalSubTab}
+            onSelectTab={setTerminalSubTab}
+          />
+        );
     }
   };
 
@@ -456,86 +504,107 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       onBackToBrahma={onBackToBrahma}
       isZenMode={isZenMode}
       onToggleZenMode={() => setIsZenMode((p) => !p)}
+      isSidebarOpen={isSidebarOpen}
+      onToggleSidebar={() => setIsSidebarOpen((p) => !p)}
+      isAssistantOpen={isAssistantOpen}
+      onToggleAssistant={() => setIsAssistantOpen((p) => !p)}
     >
       <div
         className="flex h-full"
         style={{
-          padding: 'var(--astra-canvas-padding, 12px)',
-          gap: 'var(--astra-canvas-gap, 12px)',
+          padding: 'var(--astra-canvas-padding, 10px)',
+          gap: 'var(--astra-canvas-gap, 10px)',
           overflow: 'hidden',
           minHeight: 0,
           flex: 1
         }}
       >
-        {/* Left Secondary Rail (Projects + File Tree) - hidden in Zen Mode */}
-        {!isZenMode && (
+        {/* Left Secondary Rail (Projects + File Tree) - hidden in Zen Mode or when collapsed */}
+        {!isZenMode && isSidebarOpen && (
           <div
-            className="glass-panel flex flex-col"
+            className="astra-luminous-panel flex flex-col"
             style={{
-              width: 'var(--astra-sidebar-width, 290px)',
+              width: 'var(--astra-sidebar-width, 240px)',
               borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
               flexShrink: 0,
-              minHeight: 0
+              minHeight: 0,
+              transition: 'width 0.2s ease'
             }}
           >
-          {/* Sub-tab Switcher: Projects vs File Explorer */}
-          <div className="flex" style={{ height: '40px', borderBottom: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.5)' }}>
-            <button
-              onClick={() => setActiveNav('workspace')}
-              className="glass-btn-ghost flex-1 py-2 body-small flex items-center justify-center gap-1.5"
+            {/* Sub-tab Switcher: Projects vs File Explorer + Collapse button */}
+            <div
+              className="flex items-center"
               style={{
-                fontSize: '12.5px',
-                fontWeight: 600,
-                color: activeNav === 'workspace' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                borderBottom: activeNav === 'workspace' ? '2px solid var(--brand-gold)' : 'none',
-                background: activeNav === 'workspace' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
+                height: '38px',
+                borderBottom: '1px solid var(--glass-border)',
+                background: 'rgba(11, 15, 26, 0.7)'
               }}
             >
-              Files
-            </button>
-            <button
-              onClick={() => setActiveNav('projects_rail')}
-              className="glass-btn-ghost flex-1 py-2 body-small flex items-center justify-center gap-1.5"
-              style={{
-                fontSize: '12.5px',
-                fontWeight: 600,
-                color: activeNav === 'projects_rail' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                borderBottom: activeNav === 'projects_rail' ? '2px solid var(--brand-gold)' : 'none',
-                background: activeNav === 'projects_rail' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
-              }}
-            >
-              Projects
-            </button>
-          </div>
+              <button
+                onClick={() => setActiveNav('workspace')}
+                className="glass-btn-ghost flex-1 py-1.5 body-small flex items-center justify-center gap-1.5"
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: activeNav === 'workspace' ? 'var(--brand-gold)' : 'var(--text-muted)',
+                  borderBottom: activeNav === 'workspace' ? '2px solid var(--brand-gold)' : 'none',
+                  background: activeNav === 'workspace' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
+                }}
+              >
+                Files
+              </button>
+              <button
+                onClick={() => setActiveNav('projects_rail')}
+                className="glass-btn-ghost flex-1 py-1.5 body-small flex items-center justify-center gap-1.5"
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: activeNav === 'projects_rail' ? 'var(--brand-gold)' : 'var(--text-muted)',
+                  borderBottom: activeNav === 'projects_rail' ? '2px solid var(--brand-gold)' : 'none',
+                  background: activeNav === 'projects_rail' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
+                }}
+              >
+                Projects
+              </button>
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white px-2"
+                style={{ height: '100%', borderLeft: '1px solid rgba(255, 255, 255, 0.05)' }}
+                title="Collapse Explorer (Ctrl+E)"
+              >
+                <ChevronLeft size={14} />
+              </button>
+            </div>
 
-          <div className="flex-1 overflow-hidden">
-            {activeNav === 'projects_rail' ? (
-              <ProjectExplorer
-                projects={projects}
-                activeProjectId={activeProjectId}
-                onSelectProject={handleSelectProject}
-                onCreateProject={handleCreateProject}
-                onDeleteProject={handleDeleteProject}
-                onDuplicateProject={handleDuplicateProject}
-              />
-            ) : (
-              <FileTree
-                files={activeProject.files}
-                activeFilePath={activeFilePath}
-                onSelectFile={handleOpenFile}
-                onAddFile={handleAddFile}
-                onDeleteFile={handleDeleteFile}
-                onRenameFile={handleRenameFile}
-                dirtyFilePaths={dirtyFilePaths}
-              />
-            )}
+            <div className="flex-1 overflow-hidden">
+              {activeNav === 'projects_rail' ? (
+                <ProjectExplorer
+                  projects={projects}
+                  activeProjectId={activeProjectId}
+                  onSelectProject={handleSelectProject}
+                  onCreateProject={handleCreateProject}
+                  onDeleteProject={handleDeleteProject}
+                  onDuplicateProject={handleDuplicateProject}
+                />
+              ) : (
+                <FileTree
+                  files={activeProject.files}
+                  activeFilePath={activeFilePath}
+                  onSelectFile={handleOpenFile}
+                  onAddFile={handleAddFile}
+                  onDeleteFile={handleDeleteFile}
+                  onRenameFile={handleRenameFile}
+                  dirtyFilePaths={dirtyFilePaths}
+                  onCollapse={() => setIsSidebarOpen(false)}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Center Main Work Area (Editor + Patch Review + Bottom Docks) */}
-        <div className="flex flex-col flex-1 gap-3 overflow-hidden" style={{ minHeight: 0, minWidth: 0 }}>
+        {/* Center Main Work Area (Editor + Patch Review + Bottom Docks) */}
+        <div className="flex flex-col flex-1 gap-2.5 overflow-hidden" style={{ minHeight: 0, minWidth: 0 }}>
           {/* Top Half: Code Editor or Patch Review */}
           <div className="flex-1 overflow-hidden flex flex-col" style={{ minHeight: 0 }}>
             {patchProposal ? (
@@ -561,70 +630,156 @@ export default function AstraWorkspace({ onBackToBrahma }) {
             )}
           </div>
 
-          {/* Bottom Half: Tabbed Dock Panels (Terminal, Tests, Debug, Deploy, Database, Git, API) */}
+          {/* Bottom Half: Unified Single-Tier Dock Panels (Reclaims 38px vertical height) */}
           <div
-            className="glass-panel flex flex-col"
+            className="astra-luminous-panel flex flex-col"
             style={{
-              height: 'var(--astra-dock-height, 260px)',
+              height:
+                dockState === 'minimized'
+                  ? '38px'
+                  : dockState === 'maximized'
+                  ? '58vh'
+                  : 'var(--astra-dock-height, 260px)',
               borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
               flexShrink: 0,
-              minHeight: 0
+              minHeight: 0,
+              transition: 'height 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
-            {/* Dock Switcher Tab Bar */}
+            {/* Unified Single Dock Switcher & Diagnostics Tab Bar */}
             <div
-              className="flex items-center gap-1.5 px-3 py-1.5 overflow-x-auto"
+              className="flex items-center justify-between px-2.5 overflow-x-auto"
               style={{
-                background: 'rgba(11, 15, 26, 0.7)',
-                borderBottom: '1px solid var(--glass-border)',
+                height: '38px',
+                background: 'rgba(7, 10, 24, 0.75)',
+                borderBottom: dockState === 'minimized' ? 'none' : '1px solid var(--glass-border)',
                 flexShrink: 0
               }}
             >
-              {[
-                { id: 'terminal', label: 'Terminal' },
-                { id: 'testing', label: 'Testing' },
-                { id: 'debug', label: 'Run & Debug' },
-                { id: 'deploy', label: 'Deployment' },
-                { id: 'database', label: 'Database' },
-                { id: 'git', label: 'Git' },
-                { id: 'api_client', label: 'API Client' },
-                { id: 'summary', label: 'Project Summary' }
-              ].map((dock) => (
+              {/* Left: Unified Diagnostic & Tool Tabs */}
+              <div className="flex items-center gap-1">
+                {[
+                  { id: 'terminal', subId: 'terminal', label: 'Terminal', icon: Terminal },
+                  { id: 'terminal', subId: 'problems', label: 'Problems (3)', icon: AlertTriangle },
+                  { id: 'terminal', subId: 'output', label: 'Output', icon: Terminal },
+                  { id: 'terminal', subId: 'debug_console', label: 'Debug Console', icon: Bug }
+                ].map((item) => {
+                  const isActive =
+                    dockPanel === 'terminal' && terminalSubTab === item.subId && dockState !== 'minimized';
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.subId}
+                      onClick={() => {
+                        setDockPanel('terminal');
+                        setTerminalSubTab(item.subId);
+                        if (dockState === 'minimized') setDockState('standard');
+                      }}
+                      className="glass-btn-ghost flex items-center gap-1.5"
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '11.5px',
+                        fontWeight: isActive ? 600 : 500,
+                        borderRadius: '5px',
+                        color: isActive ? 'var(--brand-gold)' : 'var(--text-muted)',
+                        background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
+                        border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
+                      }}
+                    >
+                      <Icon size={12} color={isActive ? 'var(--brand-gold)' : 'currentColor'} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+
+                {/* Subtle Group Divider */}
+                <div style={{ width: '1px', height: '16px', background: 'rgba(255, 255, 255, 0.1)', margin: '0 4px' }} />
+
+                {[
+                  { id: 'testing', label: 'Testing', icon: CheckCircle2 },
+                  { id: 'git', label: 'Git', icon: GitBranch },
+                  { id: 'database', label: 'Database', icon: Database },
+                  { id: 'api_client', label: 'API Client', icon: Globe },
+                  { id: 'deploy', label: 'Deploy', icon: Rocket },
+                  { id: 'pipelines', label: 'Pipelines', icon: Layers },
+                  { id: 'summary', label: 'Summary', icon: BarChart3 }
+                ].map((item) => {
+                  const isActive = dockPanel === item.id && dockState !== 'minimized';
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setDockPanel(item.id);
+                        if (dockState === 'minimized') setDockState('standard');
+                      }}
+                      className="glass-btn-ghost flex items-center gap-1.5"
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '11.5px',
+                        fontWeight: isActive ? 600 : 500,
+                        borderRadius: '5px',
+                        color: isActive ? 'var(--brand-gold)' : 'var(--text-muted)',
+                        background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
+                        border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
+                      }}
+                    >
+                      <Icon size={12} color={isActive ? 'var(--brand-gold)' : 'currentColor'} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right: Security Badge & Window Expand/Minimize Controls */}
+              <div className="flex items-center gap-2">
+                <Badge variant="cyan" style={{ padding: '3px 8px', fontSize: '10.5px' }}>
+                  Execution: Disabled (Safe Boundary)
+                </Badge>
+
+                {/* Minimize / Expand Toggle */}
                 <button
-                  key={dock.id}
-                  onClick={() => setDockPanel(dock.id)}
-                  className="glass-btn-ghost body-small"
-                  style={{
-                    padding: '5px 12px',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    borderRadius: '6px',
-                    color: dockPanel === dock.id ? 'var(--brand-gold)' : 'var(--text-secondary)',
-                    background: dockPanel === dock.id ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
-                    border: dockPanel === dock.id ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
-                  }}
+                  onClick={() => setDockState((prev) => (prev === 'minimized' ? 'standard' : 'minimized'))}
+                  className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
+                  style={{ width: '24px', height: '24px', borderRadius: '4px' }}
+                  title={dockState === 'minimized' ? 'Expand Dock (Ctrl+`)' : 'Minimize Dock (Ctrl+`)'}
                 >
-                  {dock.label}
+                  {dockState === 'minimized' ? <ChevronUp size={13} /> : <Minus size={13} />}
                 </button>
-              ))}
+
+                {/* Maximize / Restore Toggle */}
+                <button
+                  onClick={() => setDockState((prev) => (prev === 'maximized' ? 'standard' : 'maximized'))}
+                  className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
+                  style={{ width: '24px', height: '24px', borderRadius: '4px' }}
+                  title={dockState === 'maximized' ? 'Restore Dock Height' : 'Maximize Dock'}
+                >
+                  {dockState === 'maximized' ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                </button>
+              </div>
             </div>
 
-            {/* Dock Panel Body */}
-            <div className="flex-1 overflow-hidden p-2">
-              {renderBottomDock()}
-            </div>
+            {/* Dock Panel Body (Hidden when minimized for maximum editor space) */}
+            {dockState !== 'minimized' && (
+              <div className="flex-1 overflow-hidden p-2" style={{ minHeight: 0 }}>
+                {renderBottomDock()}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Side Pane: Astra Assistant AI Panel - hidden in Zen Mode */}
-        {!isZenMode && (
+        {/* Right Side Pane: Astra Assistant AI Panel - hidden in Zen Mode or when collapsed */}
+        {!isZenMode && isAssistantOpen && (
           <div
+            className="astra-luminous-panel flex flex-col"
             style={{
-              width: 'var(--astra-assistant-width, 360px)',
+              width: 'var(--astra-assistant-width, 365px)',
+              borderRadius: 'var(--radius-lg)',
               flexShrink: 0,
               overflow: 'hidden',
-              minHeight: 0
+              minHeight: 0,
+              transition: 'width 0.2s ease'
             }}
           >
             <AstraAssistant
@@ -633,6 +788,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
               onGenerateTask={handleGenerateTask}
               isGenerating={isGenerating}
               activeTask={activeTask}
+              onClose={() => setIsAssistantOpen(false)}
             />
           </div>
         )}

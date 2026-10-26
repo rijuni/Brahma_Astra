@@ -14,8 +14,14 @@ import Badge from '../../../components/common/Badge';
 import { astraRunnerService } from '../../../services/astra/astra-runner-service';
 import { useToast } from '../../../components/feedback/Toast';
 
-export default function TerminalPanel() {
-  const [activeTab, setActiveTab] = useState('terminal'); // 'terminal' | 'problems' | 'output' | 'debug_console'
+export default function TerminalPanel({
+  activeTab: externalTab,
+  onSelectTab: externalSetTab,
+  hideHeader = false
+} = {}) {
+  const [internalTab, setInternalTab] = useState('terminal'); // 'terminal' | 'problems' | 'output' | 'debug_console'
+  const activeTab = externalTab !== undefined ? externalTab : internalTab;
+  const setActiveTab = externalSetTab || setInternalTab;
   const [inputCmd, setInputCmd] = useState('');
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [commandHistory, setCommandHistory] = useState(['help', 'status', 'test']);
@@ -104,60 +110,62 @@ export default function TerminalPanel() {
 
   return (
     <div className="glass-card flex flex-col h-full overflow-hidden" style={{ borderRadius: 'var(--radius-md)' }}>
-      {/* Terminal Tab Bar */}
-      <div
-        className="flex items-center justify-between px-3 py-1"
-        style={{
-          borderBottom: '1px solid var(--glass-border)',
-          background: 'rgba(11, 15, 26, 0.6)'
-        }}
-      >
-        <div className="flex items-center gap-1">
-          {[
-            { id: 'terminal', label: 'Terminal' },
-            { id: 'problems', label: `Problems (${diagnostics.length})` },
-            { id: 'output', label: 'Output' },
-            { id: 'debug_console', label: 'Debug Console' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="glass-btn-ghost body-small capitalize"
-              style={{
-                padding: '5px 12px',
-                fontSize: '12px',
-                fontWeight: 500,
-                borderRadius: '6px',
-                color: activeTab === tab.id ? 'var(--brand-gold)' : 'var(--text-muted)',
-                background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+      {/* Terminal Tab Bar (shown when standalone, hidden in unified dock) */}
+      {!hideHeader && (
+        <div
+          className="flex items-center justify-between px-3 py-1"
+          style={{
+            borderBottom: '1px solid var(--glass-border)',
+            background: 'rgba(11, 15, 26, 0.6)'
+          }}
+        >
+          <div className="flex items-center gap-1">
+            {[
+              { id: 'terminal', label: 'Terminal' },
+              { id: 'problems', label: `Problems (${diagnostics.length})` },
+              { id: 'output', label: 'Output' },
+              { id: 'debug_console', label: 'Debug Console' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="glass-btn-ghost body-small capitalize"
+                style={{
+                  padding: '5px 12px',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  borderRadius: '6px',
+                  color: activeTab === tab.id ? 'var(--brand-gold)' : 'var(--text-muted)',
+                  background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-        {/* Host Guard & Controls */}
-        <div className="flex items-center gap-2.5">
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>Execution: Disabled (Safe Boundary)</Badge>
-          <button
-            onClick={handleExportLogs}
-            className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
-            title="Export terminal log"
-          >
-            <Download size={14} />
-          </button>
-          <button
-            onClick={() => setLogHistory([])}
-            className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
-            title="Clear terminal"
-          >
-            <Trash2 size={14} />
-          </button>
+          {/* Host Guard & Controls */}
+          <div className="flex items-center gap-2.5">
+            <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>Execution: Disabled (Safe Boundary)</Badge>
+            <button
+              onClick={handleExportLogs}
+              className="glass-btn-ghost flex items-center justify-center"
+              style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
+              title="Export terminal log"
+            >
+              <Download size={14} />
+            </button>
+            <button
+              onClick={() => setLogHistory([])}
+              className="glass-btn-ghost flex items-center justify-center"
+              style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
+              title="Clear terminal"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Tab Body */}
       {activeTab === 'terminal' && (
