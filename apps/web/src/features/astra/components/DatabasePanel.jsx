@@ -171,17 +171,17 @@ export default function DatabasePanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* DB Connection Bar */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <Database size={15} color="var(--brand-gold)" />
-          <span style={{ fontSize: '12px', fontWeight: 600 }}>Active Database:</span>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <Database size={16} color="var(--brand-gold)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Active Database:</span>
           <select
             value={selectedDb}
             onChange={(e) => setSelectedDb(e.target.value)}
             className="glass-input"
-            style={{ padding: '2px 8px', fontSize: '11px', borderRadius: '4px' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
           >
             {dbProfiles.map((p) => (
               <option key={p.id} value={p.id} style={{ background: '#0B0F1A' }}>
@@ -192,39 +192,39 @@ export default function DatabasePanel() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Badge variant="cyan" size="small">SSL VERIFIED</Badge>
-          <Badge variant="gold" size="small">READ-ONLY SANDBOX</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SSL VERIFIED</Badge>
+          <Badge variant="gold" style={{ padding: '4px 8px', fontSize: '11px' }}>READ-ONLY SANDBOX</Badge>
         </div>
       </div>
 
       {/* Main Grid: Schema Explorer + SQL Query & Grid */}
-      <div className="grid grid-cols-3 gap-3 flex-1 overflow-hidden">
+      <div className="grid grid-cols-3 gap-3.5 flex-1 overflow-hidden">
         {/* Left: Schema Tables Tree */}
-        <div className="flex flex-col gap-1 overflow-y-auto" style={{ borderRight: '1px solid rgba(255, 255, 255, 0.05)', paddingRight: '8px' }}>
+        <div className="flex flex-col gap-1.5 overflow-y-auto" style={{ borderRight: '1px solid rgba(255, 255, 255, 0.08)', paddingRight: '10px' }}>
           <div className="flex items-center justify-between mb-1">
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>SCHEMA TABLES</span>
-            <span className="text-muted" style={{ fontSize: '10px' }}>Click to query</span>
+            <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 600 }}>SCHEMA TABLES</span>
+            <span className="text-muted" style={{ fontSize: '11px' }}>Click to query</span>
           </div>
           {tables.map((t) => (
             <div
               key={t.name}
               onClick={() => handleSelectTable(t.name)}
-              className="flex flex-col p-2 mb-1 rounded cursor-pointer transition-all hover:bg-white/5"
+              className="flex flex-col p-2.5 mb-1 rounded-md cursor-pointer transition-all hover:bg-white/5"
               style={{
-                background: 'rgba(7, 10, 24, 0.4)',
+                background: 'rgba(7, 10, 24, 0.45)',
                 border: '1px solid var(--glass-border)'
               }}
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Table size={12} color="var(--brand-cyan)" />
-                  <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</span>
+                <div className="flex items-center gap-2">
+                  <Table size={14} color="var(--brand-cyan)" />
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</span>
                 </div>
-                <span className="code-inline" style={{ fontSize: '9px' }}>{t.count} rows</span>
+                <span className="code-inline" style={{ fontSize: '10px', padding: '2px 5px' }}>{t.count} rows</span>
               </div>
-              <div className="flex flex-wrap gap-1 mt-1">
+              <div className="flex flex-wrap gap-1 mt-1.5">
                 {t.cols.map((col) => (
-                  <span key={col} className="text-muted" style={{ fontSize: '9px', background: 'rgba(255,255,255,0.03)', padding: '1px 4px', borderRadius: '2px' }}>
+                  <span key={col} className="text-muted" style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', padding: '2px 5px', borderRadius: '3px' }}>
                     {col}
                   </span>
                 ))}
@@ -234,12 +234,12 @@ export default function DatabasePanel() {
         </div>
 
         {/* Right: SQL Query Editor & Result Grid */}
-        <div className="col-span-2 flex flex-col gap-2 overflow-hidden">
+        <div className="col-span-2 flex flex-col gap-2.5 overflow-hidden">
           {/* Query Editor & Templates */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>SQL QUERY</span>
+              <div className="flex items-center gap-2.5">
+                <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 600 }}>SQL QUERY</span>
                 <select
                   onChange={(e) => {
                     if (e.target.value) {
@@ -248,7 +248,7 @@ export default function DatabasePanel() {
                     }
                   }}
                   className="glass-input"
-                  style={{ padding: '1px 6px', fontSize: '10px', borderRadius: '3px' }}
+                  style={{ height: '30px', padding: '0 8px', fontSize: '11.5px', borderRadius: '4px' }}
                 >
                   <option value="">Query Templates...</option>
                   {SQL_TEMPLATES.map((tmpl) => (
@@ -259,12 +259,12 @@ export default function DatabasePanel() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <Button
                   variant="gold"
                   icon={Play}
                   onClick={() => handleExecute()}
-                  style={{ padding: '3px 10px', fontSize: '11px' }}
+                  style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
                 >
                   Execute
                 </Button>
@@ -275,12 +275,13 @@ export default function DatabasePanel() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               rows={2}
-              className="glass-input p-2 outline-none"
+              className="glass-input p-2.5 outline-none"
               style={{
                 fontFamily: 'var(--font-code)',
-                fontSize: '11px',
-                borderRadius: '4px',
-                background: 'rgba(7, 10, 24, 0.5)'
+                fontSize: '12.5px',
+                borderRadius: '6px',
+                background: 'rgba(7, 10, 24, 0.55)',
+                minHeight: '56px'
               }}
             />
           </div>

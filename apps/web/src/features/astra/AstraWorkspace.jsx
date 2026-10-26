@@ -457,40 +457,52 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       isZenMode={isZenMode}
       onToggleZenMode={() => setIsZenMode((p) => !p)}
     >
-      <div className="flex h-full p-2 gap-2" style={{ overflow: 'hidden' }}>
+      <div
+        className="flex h-full"
+        style={{
+          padding: 'var(--astra-canvas-padding, 12px)',
+          gap: 'var(--astra-canvas-gap, 12px)',
+          overflow: 'hidden',
+          minHeight: 0,
+          flex: 1
+        }}
+      >
         {/* Left Secondary Rail (Projects + File Tree) - hidden in Zen Mode */}
         {!isZenMode && (
           <div
             className="glass-panel flex flex-col"
             style={{
-              width: '260px',
-              borderRadius: 'var(--radius-md)',
+              width: 'var(--astra-sidebar-width, 290px)',
+              borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
-              flexShrink: 0
+              flexShrink: 0,
+              minHeight: 0
             }}
           >
           {/* Sub-tab Switcher: Projects vs File Explorer */}
-          <div className="flex" style={{ borderBottom: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.4)' }}>
+          <div className="flex" style={{ height: '40px', borderBottom: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.5)' }}>
             <button
               onClick={() => setActiveNav('workspace')}
-              className="glass-btn-ghost flex-1 py-2 body-small"
+              className="glass-btn-ghost flex-1 py-2 body-small flex items-center justify-center gap-1.5"
               style={{
-                fontSize: '11px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 color: activeNav === 'workspace' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                borderBottom: activeNav === 'workspace' ? '2px solid var(--brand-gold)' : 'none'
+                borderBottom: activeNav === 'workspace' ? '2px solid var(--brand-gold)' : 'none',
+                background: activeNav === 'workspace' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
               }}
             >
               Files
             </button>
             <button
               onClick={() => setActiveNav('projects_rail')}
-              className="glass-btn-ghost flex-1 py-2 body-small"
+              className="glass-btn-ghost flex-1 py-2 body-small flex items-center justify-center gap-1.5"
               style={{
-                fontSize: '11px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 color: activeNav === 'projects_rail' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                borderBottom: activeNav === 'projects_rail' ? '2px solid var(--brand-gold)' : 'none'
+                borderBottom: activeNav === 'projects_rail' ? '2px solid var(--brand-gold)' : 'none',
+                background: activeNav === 'projects_rail' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
               }}
             >
               Projects
@@ -523,9 +535,9 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       )}
 
       {/* Center Main Work Area (Editor + Patch Review + Bottom Docks) */}
-        <div className="flex flex-col flex-1 gap-2 overflow-hidden">
+        <div className="flex flex-col flex-1 gap-3 overflow-hidden" style={{ minHeight: 0, minWidth: 0 }}>
           {/* Top Half: Code Editor or Patch Review */}
-          <div className="flex-1 overflow-hidden flex flex-col" style={{ minHeight: '320px' }}>
+          <div className="flex-1 overflow-hidden flex flex-col" style={{ minHeight: 0 }}>
             {patchProposal ? (
               <PatchReview
                 patchProposal={patchProposal}
@@ -553,17 +565,18 @@ export default function AstraWorkspace({ onBackToBrahma }) {
           <div
             className="glass-panel flex flex-col"
             style={{
-              height: '240px',
-              borderRadius: 'var(--radius-md)',
+              height: 'var(--astra-dock-height, 260px)',
+              borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
-              flexShrink: 0
+              flexShrink: 0,
+              minHeight: 0
             }}
           >
             {/* Dock Switcher Tab Bar */}
             <div
-              className="flex items-center gap-1 px-3 py-1 overflow-x-auto"
+              className="flex items-center gap-1.5 px-3 py-1.5 overflow-x-auto"
               style={{
-                background: 'rgba(11, 15, 26, 0.6)',
+                background: 'rgba(11, 15, 26, 0.7)',
                 borderBottom: '1px solid var(--glass-border)',
                 flexShrink: 0
               }}
@@ -583,11 +596,13 @@ export default function AstraWorkspace({ onBackToBrahma }) {
                   onClick={() => setDockPanel(dock.id)}
                   className="glass-btn-ghost body-small"
                   style={{
-                    padding: '3px 10px',
-                    fontSize: '11px',
-                    borderRadius: '4px',
-                    color: dockPanel === dock.id ? 'var(--brand-gold)' : 'var(--text-muted)',
-                    background: dockPanel === dock.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+                    padding: '5px 12px',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    borderRadius: '6px',
+                    color: dockPanel === dock.id ? 'var(--brand-gold)' : 'var(--text-secondary)',
+                    background: dockPanel === dock.id ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
+                    border: dockPanel === dock.id ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
                   }}
                 >
                   {dock.label}
@@ -596,7 +611,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
             </div>
 
             {/* Dock Panel Body */}
-            <div className="flex-1 overflow-hidden p-1">
+            <div className="flex-1 overflow-hidden p-2">
               {renderBottomDock()}
             </div>
           </div>
@@ -606,9 +621,10 @@ export default function AstraWorkspace({ onBackToBrahma }) {
         {!isZenMode && (
           <div
             style={{
-              width: '320px',
+              width: 'var(--astra-assistant-width, 360px)',
               flexShrink: 0,
-              overflow: 'hidden'
+              overflow: 'hidden',
+              minHeight: 0
             }}
           >
             <AstraAssistant

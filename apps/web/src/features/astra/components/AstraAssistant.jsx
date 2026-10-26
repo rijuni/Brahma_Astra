@@ -142,41 +142,43 @@ export default function AstraAssistant({
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between p-3"
+        className="flex items-center justify-between px-4 py-3"
         style={{
+          height: '52px',
           borderBottom: '1px solid var(--glass-border)',
-          background: 'rgba(11, 15, 26, 0.5)'
+          background: 'rgba(11, 15, 26, 0.6)'
         }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <div
             style={{
-              width: '24px',
-              height: '24px',
+              width: '28px',
+              height: '28px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-cyan) 100%)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 0 10px rgba(139, 92, 246, 0.4)'
             }}
           >
-            <Sparkles size={13} color="#FFFFFF" />
+            <Sparkles size={15} color="#FFFFFF" />
           </div>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
             Astra Assistant
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={handleResetSession}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
+            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="Reset assistant chat session"
           >
-            <RotateCcw size={12} color="var(--text-muted)" />
+            <RotateCcw size={14} color="var(--text-muted)" />
           </button>
-          <span className="code-inline" style={{ fontSize: '10px', color: 'var(--brand-gold)' }}>
+          <span className="code-inline" style={{ fontSize: '11px', padding: '2px 7px', color: 'var(--brand-gold)' }}>
             brahma-1
           </span>
         </div>
@@ -184,15 +186,15 @@ export default function AstraAssistant({
 
       {/* Task Type Selector Bar */}
       <div
-        className="px-3 py-2 flex items-center gap-2"
-        style={{ borderBottom: '1px solid var(--glass-border)', background: 'rgba(15, 23, 42, 0.3)' }}
+        className="px-4 py-2.5 flex items-center gap-2.5"
+        style={{ borderBottom: '1px solid var(--glass-border)', background: 'rgba(15, 23, 42, 0.4)' }}
       >
-        <span className="body-small text-muted" style={{ fontSize: '10px' }}>Mode:</span>
+        <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 500 }}>Mode:</span>
         <select
           value={selectedTaskType}
           onChange={(e) => setSelectedTaskType(e.target.value)}
           className="glass-input flex-1"
-          style={{ padding: '2px 8px', fontSize: '11px', borderRadius: '4px', border: '1px solid var(--glass-border)' }}
+          style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px', border: '1px solid var(--glass-border)' }}
         >
           {ASTRA_TASK_TYPES.map((t) => (
             <option key={t.id} value={t.id} style={{ background: '#0B0F1A', color: '#F7F7FB' }}>
@@ -274,43 +276,43 @@ export default function AstraAssistant({
               className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} gap-1`}
             >
               <div
-                className="glass-card p-2.5"
+                className="glass-card p-3.5"
                 style={{
                   maxWidth: '92%',
                   borderRadius: 'var(--radius-md)',
-                  background: isUser ? 'rgba(139, 92, 246, 0.25)' : 'rgba(255, 255, 255, 0.03)',
+                  background: isUser ? 'rgba(139, 92, 246, 0.28)' : 'rgba(255, 255, 255, 0.04)',
                   border: isUser ? '1px solid var(--brand-violet)' : '1px solid var(--glass-border)'
                 }}
               >
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span style={{ fontSize: '10px', fontWeight: 600, color: isUser ? 'var(--brand-cyan)' : 'var(--brand-gold)' }}>
+                <div className="flex items-center justify-between gap-2.5 mb-1.5">
+                  <span style={{ fontSize: '11.5px', fontWeight: 600, color: isUser ? 'var(--brand-cyan)' : 'var(--brand-gold)' }}>
                     {isUser ? 'You' : 'ASTRA'}
                   </span>
-                  <div className="flex items-center gap-1">
-                    <span className="text-muted" style={{ fontSize: '9px' }}>{m.timestamp}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-muted" style={{ fontSize: '10.5px' }}>{m.timestamp}</span>
                     <button
                       onClick={() => handleCopyText(m.id, m.text)}
-                      className="glass-btn-ghost"
-                      style={{ padding: '1px 3px' }}
+                      className="glass-btn-ghost flex items-center justify-center"
+                      style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
                       title="Copy"
                     >
-                      {copiedId === m.id ? <Check size={10} color="var(--status-success)" /> : <Copy size={10} color="var(--text-muted)" />}
+                      {copiedId === m.id ? <Check size={12} color="var(--status-success)" /> : <Copy size={12} color="var(--text-muted)" />}
                     </button>
                   </div>
                 </div>
 
-                <p className="body-small" style={{ fontSize: '11px', lineHeight: '1.4', color: 'var(--text-primary)' }}>
+                <p className="body-small" style={{ fontSize: '13px', lineHeight: '1.5', color: 'var(--text-primary)' }}>
                   {m.text}
                 </p>
 
                 {m.plan && (
-                  <div className="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1">
-                    <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--brand-gold)' }}>
+                  <div className="mt-2.5 pt-2.5 border-t border-white/10 flex flex-col gap-1.5">
+                    <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--brand-gold)' }}>
                       Architectural Plan Steps:
                     </span>
                     {m.plan.map((step, idx) => (
-                      <div key={idx} className="flex items-start gap-1 text-muted" style={{ fontSize: '10px' }}>
-                        <CheckCircle2 size={10} color="var(--status-success)" style={{ marginTop: '2px', flexShrink: 0 }} />
+                      <div key={idx} className="flex items-start gap-1.5 text-secondary" style={{ fontSize: '11.5px' }}>
+                        <CheckCircle2 size={12} color="var(--status-success)" style={{ marginTop: '2px', flexShrink: 0 }} />
                         <span><strong>{step.stage}:</strong> {step.detail}</span>
                       </div>
                     ))}
@@ -323,44 +325,44 @@ export default function AstraAssistant({
       </div>
 
       {/* Multiline Prompt Composer with Context Pills */}
-      <form onSubmit={handleSend} className="p-3" style={{ borderTop: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.6)' }}>
+      <form onSubmit={handleSend} className="p-3.5" style={{ borderTop: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.7)' }}>
         {/* Context Pills */}
-        <div className="flex items-center gap-1 mb-2 flex-wrap">
+        <div className="flex items-center gap-1.5 mb-2.5 flex-wrap">
           <button
             type="button"
             onClick={() => handleAddContextPill(`@file:${activeFile?.name || 'app'}`)}
-            className="glass-btn-ghost body-small flex items-center gap-1"
-            style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.1)', color: 'var(--brand-cyan)' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ padding: '4px 9px', fontSize: '11.5px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', color: 'var(--brand-cyan)' }}
           >
-            <FileCode size={10} /> @ActiveFile
+            <FileCode size={12} /> @ActiveFile
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill(`@project:${activeProject?.name || 'workspace'}`)}
-            className="glass-btn-ghost body-small flex items-center gap-1"
-            style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '4px', background: 'rgba(139, 92, 246, 0.1)', color: 'var(--brand-violet)' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ padding: '4px 9px', fontSize: '11.5px', fontWeight: 500, borderRadius: '6px', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--brand-violet-light)' }}
           >
-            <Cpu size={10} /> @Project
+            <Cpu size={12} /> @Project
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill('@selection')}
-            className="glass-btn-ghost body-small flex items-center gap-1"
-            style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--brand-gold)' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ padding: '4px 9px', fontSize: '11.5px', fontWeight: 500, borderRadius: '6px', background: 'rgba(245, 158, 11, 0.12)', color: 'var(--brand-gold)' }}
           >
-            <Zap size={10} /> @Selection
+            <Zap size={12} /> @Selection
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill('@terminal:output')}
-            className="glass-btn-ghost body-small flex items-center gap-1"
-            style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--status-success)' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ padding: '4px 9px', fontSize: '11.5px', fontWeight: 500, borderRadius: '6px', background: 'rgba(16, 185, 129, 0.12)', color: 'var(--status-success)' }}
           >
-            <Terminal size={10} /> @Terminal
+            <Terminal size={12} /> @Terminal
           </button>
         </div>
 
-        <div className="glass-input flex items-center gap-2" style={{ padding: '6px 10px', borderRadius: 'var(--radius-md)' }}>
+        <div className="glass-input flex items-center gap-2.5" style={{ padding: '8px 12px', borderRadius: 'var(--radius-md)' }}>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -377,10 +379,11 @@ export default function AstraAssistant({
               border: 'none',
               outline: 'none',
               color: 'var(--text-primary)',
-              fontSize: '11px',
+              fontSize: '12.5px',
               fontFamily: 'var(--font-ui)',
               width: '100%',
-              resize: 'none'
+              resize: 'none',
+              lineHeight: '1.4'
             }}
           />
           <button
@@ -388,14 +391,15 @@ export default function AstraAssistant({
             disabled={!prompt.trim() || isGenerating}
             className="glass-btn-primary flex items-center justify-center transition-all"
             style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '50%',
+              width: '34px',
+              height: '34px',
+              borderRadius: '8px',
               padding: 0,
+              flexShrink: 0,
               opacity: prompt.trim() && !isGenerating ? 1 : 0.4
             }}
           >
-            <Send size={12} />
+            <Send size={14} />
           </button>
         </div>
       </form>

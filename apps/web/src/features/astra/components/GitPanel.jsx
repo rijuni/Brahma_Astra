@@ -94,12 +94,12 @@ export default function GitPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Git Header */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <GitBranch size={15} color="var(--brand-gold)" />
-          <span style={{ fontSize: '12px', fontWeight: 600 }}>Branch:</span>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <GitBranch size={16} color="var(--brand-gold)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Branch:</span>
           <select
             value={activeBranch}
             onChange={(e) => {
@@ -107,7 +107,7 @@ export default function GitPanel() {
               addToast(`Switched to branch "${e.target.value}"`, 'info');
             }}
             className="glass-input"
-            style={{ padding: '2px 8px', fontSize: '11px', borderRadius: '4px', color: 'var(--brand-gold)' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px', color: 'var(--brand-gold)' }}
           >
             {branches.map((b) => (
               <option key={b} value={b} style={{ background: '#0B0F1A' }}>
@@ -119,53 +119,53 @@ export default function GitPanel() {
           <button
             onClick={() => setIsNewBranchOpen(true)}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
+            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="Create new branch"
           >
-            <Plus size={12} color="var(--brand-gold)" />
+            <Plus size={14} color="var(--brand-gold)" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="cyan" size="small">SIMULATED GIT ENGINE</Badge>
+        <div className="flex items-center gap-2.5">
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED GIT ENGINE</Badge>
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="glass-btn-ghost flex items-center gap-1 body-small text-muted hover:text-white"
-            style={{ padding: '2px 8px', fontSize: '11px' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ height: '30px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
             title="Toggle Commit Log"
           >
-            <History size={12} color={showHistory ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+            <History size={13} color={showHistory ? 'var(--brand-gold)' : 'var(--text-muted)'} />
             <span>History</span>
           </button>
           <button
             onClick={handleSync}
             disabled={isSyncing}
-            className="glass-btn-ghost flex items-center gap-1 body-small text-muted hover:text-white"
-            style={{ padding: '2px 8px', fontSize: '11px' }}
+            className="glass-btn-ghost flex items-center gap-1.5"
+            style={{ height: '30px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
             title="Fetch and sync upstream"
           >
-            <RotateCw size={11} className={isSyncing ? 'animate-spin' : ''} />
+            <RotateCw size={13} className={isSyncing ? 'animate-spin' : ''} />
             <span>Sync</span>
           </button>
         </div>
       </div>
 
       {/* Commit Input Box */}
-      <form onSubmit={handleCommit} className="mb-2">
-        <div className="glass-input flex items-center gap-2 p-1.5" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <form onSubmit={handleCommit} className="mb-2.5">
+        <div className="glass-input flex items-center gap-2.5 p-2" style={{ borderRadius: 'var(--radius-sm)' }}>
           <input
             type="text"
             placeholder={stagedFiles.length > 0 ? 'Commit message (e.g. feat: add route validation)...' : 'Stage changes below to enable commit...'}
             value={commitMsg}
             onChange={(e) => setCommitMsg(e.target.value)}
             disabled={stagedFiles.length === 0}
-            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '11px', flex: 1 }}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '12.5px', flex: 1 }}
           />
           <Button
             variant="gold"
             type="submit"
             disabled={!commitMsg.trim() || stagedFiles.length === 0}
-            style={{ padding: '3px 10px', fontSize: '11px' }}
+            style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
           >
             Commit
           </Button>

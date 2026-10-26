@@ -35,10 +35,11 @@ export default function AstraLauncher({ onEnterWorkspace, onBackToBrahma }) {
     <div
       className="galaxy-canvas flex flex-col items-center justify-center relative"
       style={{
-        minHeight: '100vh',
+        position: 'fixed',
+        inset: 0,
+        height: '100vh',
         width: '100vw',
-        overflow: 'hidden',
-        position: 'relative'
+        overflow: 'hidden'
       }}
     >
       {/* Top Glass Navigation Bar */}

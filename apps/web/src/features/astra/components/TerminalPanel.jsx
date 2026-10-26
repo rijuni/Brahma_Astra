@@ -36,12 +36,14 @@ export default function TerminalPanel() {
     { id: 3, type: 'warning', file: 'config/settings.py', line: 28, msg: 'Secret key is using default development fallback' }
   ]);
 
-  const bottomRef = useRef(null);
+  const terminalBodyRef = useRef(null);
   const inputRef = useRef(null);
   const { addToast } = useToast();
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+    }
   }, [logHistory, activeTab]);
 
   const handleCommandSubmit = async (e) => {
@@ -122,11 +124,12 @@ export default function TerminalPanel() {
               onClick={() => setActiveTab(tab.id)}
               className="glass-btn-ghost body-small capitalize"
               style={{
-                padding: '3px 8px',
-                fontSize: '11px',
-                borderRadius: '4px',
+                padding: '5px 12px',
+                fontSize: '12px',
+                fontWeight: 500,
+                borderRadius: '6px',
                 color: activeTab === tab.id ? 'var(--brand-gold)' : 'var(--text-muted)',
-                background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.15)' : 'transparent'
+                background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
               }}
             >
               {tab.label}
@@ -135,23 +138,23 @@ export default function TerminalPanel() {
         </div>
 
         {/* Host Guard & Controls */}
-        <div className="flex items-center gap-2">
-          <Badge variant="cyan" size="small">Execution: Disabled (Safe Boundary)</Badge>
+        <div className="flex items-center gap-2.5">
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>Execution: Disabled (Safe Boundary)</Badge>
           <button
             onClick={handleExportLogs}
-            className="glass-btn-ghost"
-            style={{ padding: '3px', borderRadius: '4px', color: 'var(--text-muted)' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
             title="Export terminal log"
           >
-            <Download size={12} />
+            <Download size={14} />
           </button>
           <button
             onClick={() => setLogHistory([])}
-            className="glass-btn-ghost"
-            style={{ padding: '3px', borderRadius: '4px', color: 'var(--text-muted)' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '28px', height: '28px', borderRadius: '6px', color: 'var(--text-muted)' }}
             title="Clear terminal"
           >
-            <Trash2 size={12} />
+            <Trash2 size={14} />
           </button>
         </div>
       </div>
@@ -160,9 +163,13 @@ export default function TerminalPanel() {
       {activeTab === 'terminal' && (
         <>
           {/* Terminal Output Stream */}
-          <div className="astra-terminal-body flex-1 overflow-y-auto p-2" style={{ fontFamily: 'var(--font-code)', fontSize: '11px' }}>
+          <div
+            ref={terminalBodyRef}
+            className="astra-terminal-body flex-1 overflow-y-auto p-3"
+            style={{ fontFamily: 'var(--font-code)', fontSize: '12.5px' }}
+          >
             {logHistory.map((line, idx) => {
-              let lineStyle = { whiteSpace: 'pre-wrap', marginBottom: '2px' };
+              let lineStyle = { whiteSpace: 'pre-wrap', marginBottom: '3px' };
               if (line.includes('INFO:')) lineStyle.color = '#38BDF8';
               else if (line.includes('ERROR:') || line.includes('[BLOCKED]') || line.includes('Prohibited')) lineStyle.color = '#F87171';
               else if (line.includes('PASS') || line.includes('200 OK') || line.includes('complete')) lineStyle.color = '#34D399';
@@ -175,21 +182,21 @@ export default function TerminalPanel() {
                 </div>
               );
             })}
-            <div ref={bottomRef} />
           </div>
 
           {/* Terminal Input Prompt */}
           <form
             onSubmit={handleCommandSubmit}
-            className="flex items-center gap-2 px-3 py-1"
+            className="flex items-center gap-2.5 px-4"
             style={{
-              background: 'rgba(7, 10, 24, 0.8)',
-              borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+              height: '36px',
+              background: 'rgba(7, 10, 24, 0.85)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
               fontFamily: 'var(--font-code)',
-              fontSize: '11px'
+              fontSize: '12.5px'
             }}
           >
-            <span style={{ color: 'var(--brand-cyan)' }}>(venv) user@astra:~$</span>
+            <span style={{ color: 'var(--brand-cyan)', fontWeight: 500 }}>(venv) user@astra:~$</span>
             <input
               ref={inputRef}
               type="text"
@@ -204,7 +211,7 @@ export default function TerminalPanel() {
                 outline: 'none',
                 color: '#F8FAFC',
                 fontFamily: 'var(--font-code)',
-                fontSize: '11px'
+                fontSize: '12.5px'
               }}
             />
           </form>

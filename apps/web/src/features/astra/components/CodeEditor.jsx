@@ -203,8 +203,8 @@ export default function CodeEditor({
                 onClick={() => onSelectTab(file)}
                 className={`astra-editor-tab ${isActive ? 'active' : ''}`}
               >
-                <span style={{ color: lang.iconColor, fontSize: '11px' }}>●</span>
-                <span>{file.name}</span>
+                <span style={{ color: lang.iconColor, fontSize: '12px' }}>●</span>
+                <span style={{ fontWeight: 500 }}>{file.name}</span>
                 {isDirty && (
                   <span style={{ color: 'var(--brand-gold)', fontSize: '14px' }}>●</span>
                 )}
@@ -214,11 +214,19 @@ export default function CodeEditor({
                     e.stopPropagation();
                     onCloseTab(file.path);
                   }}
-                  className="glass-btn-ghost"
-                  style={{ padding: '2px', borderRadius: '2px', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+                  className="glass-btn-ghost flex items-center justify-center"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--text-muted)',
+                    marginLeft: '4px'
+                  }}
                   title="Close tab"
                 >
-                  <X size={12} />
+                  <X size={13} />
                 </button>
               </div>
             );
@@ -226,13 +234,13 @@ export default function CodeEditor({
         </div>
 
         {/* Tab Options & Toolbar Controls */}
-        <div className="flex items-center gap-1.5 px-3">
+        <div className="flex items-center gap-2 px-3">
           {openFiles.length > 1 && (
-            <div className="flex items-center gap-1 mr-2 border-r border-white/10 pr-2">
+            <div className="flex items-center gap-1.5 mr-2 border-r border-white/10 pr-3">
               <button
                 onClick={() => onCloseOtherTabs && onCloseOtherTabs(activeFile.path)}
                 className="glass-btn-ghost text-muted hover:text-white"
-                style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '3px' }}
+                style={{ padding: '4px 10px', fontSize: '11.5px', borderRadius: '5px', fontWeight: 500 }}
                 title="Close other tabs"
               >
                 Close Others
@@ -240,7 +248,7 @@ export default function CodeEditor({
               <button
                 onClick={() => onCloseAllTabs && onCloseAllTabs()}
                 className="glass-btn-ghost text-muted hover:text-white"
-                style={{ padding: '2px 6px', fontSize: '10px', borderRadius: '3px' }}
+                style={{ padding: '4px 10px', fontSize: '11.5px', borderRadius: '5px', fontWeight: 500 }}
                 title="Close all open tabs"
               >
                 Close All
@@ -250,18 +258,20 @@ export default function CodeEditor({
 
           <button
             onClick={() => onRunFile && onRunFile(activeFile)}
-            className="glass-btn flex items-center gap-1"
+            className="glass-btn flex items-center justify-center gap-1.5"
             style={{
-              padding: '3px 8px',
-              borderRadius: '4px',
-              fontSize: '11px',
+              height: '32px',
+              padding: '0 12px',
+              borderRadius: '6px',
+              fontSize: '12px',
+              fontWeight: 600,
               color: 'var(--status-success)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              background: 'rgba(16, 185, 129, 0.1)'
+              border: '1px solid rgba(16, 185, 129, 0.4)',
+              background: 'rgba(16, 185, 129, 0.15)'
             }}
             title="Execute file in sandboxed runner"
           >
-            <Play size={11} fill="currentColor" />
+            <Play size={13} fill="currentColor" />
             <span>Run</span>
           </button>
 
@@ -270,11 +280,11 @@ export default function CodeEditor({
               if (onSaveFile) onSaveFile(activeFile.path);
               addToast(`Saved ${activeFile.name}`, 'success');
             }}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Save (Ctrl+S)"
           >
-            <Save size={13} color="var(--brand-gold)" />
+            <Save size={15} color="var(--brand-gold)" />
           </button>
 
           <button
@@ -282,11 +292,11 @@ export default function CodeEditor({
               setIsFindOpen(true);
               setIsReplaceMode(!isReplaceMode);
             }}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Find & Replace (Ctrl+H)"
           >
-            <Replace size={13} color={isFindOpen && isReplaceMode ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+            <Replace size={15} color={isFindOpen && isReplaceMode ? 'var(--brand-gold)' : 'var(--text-muted)'} />
           </button>
 
           <button
@@ -294,29 +304,29 @@ export default function CodeEditor({
               setIsFindOpen((prev) => !prev);
               setIsReplaceMode(false);
             }}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Find in file (Ctrl+F)"
           >
-            <Search size={13} color={isFindOpen && !isReplaceMode ? 'var(--brand-cyan)' : 'var(--text-muted)'} />
+            <Search size={15} color={isFindOpen && !isReplaceMode ? 'var(--brand-cyan)' : 'var(--text-muted)'} />
           </button>
 
           <button
             onClick={() => setIsReadOnly((prev) => !prev)}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title={isReadOnly ? 'Read-only locked' : 'Editable'}
           >
-            {isReadOnly ? <Lock size={13} color="var(--status-error)" /> : <Unlock size={13} color="var(--text-muted)" />}
+            {isReadOnly ? <Lock size={15} color="var(--status-error)" /> : <Unlock size={15} color="var(--text-muted)" />}
           </button>
 
           <button
             onClick={handleCopyCode}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Copy code"
           >
-            {copied ? <Check size={13} color="var(--status-success)" /> : <Copy size={13} color="var(--text-muted)" />}
+            {copied ? <Check size={15} color="var(--status-success)" /> : <Copy size={15} color="var(--text-muted)" />}
           </button>
         </div>
       </div>
@@ -324,16 +334,16 @@ export default function CodeEditor({
       {/* Find & Replace Overlay */}
       {isFindOpen && (
         <div
-          className="flex flex-col gap-1.5 px-3 py-2 animate-entrance"
+          className="flex flex-col gap-2 px-4 py-2.5 animate-entrance"
           style={{
             background: 'rgba(23, 20, 50, 0.95)',
             borderBottom: '1px solid var(--glass-border-violet)',
-            fontSize: '11px'
+            fontSize: '12px'
           }}
         >
           {/* Find row */}
-          <div className="flex items-center gap-2">
-            <Search size={12} color="var(--brand-cyan)" />
+          <div className="flex items-center gap-2.5">
+            <Search size={14} color="var(--brand-cyan)" />
             <input
               type="text"
               placeholder="Find in file..."
@@ -342,9 +352,10 @@ export default function CodeEditor({
               autoFocus
               className="glass-input"
               style={{
-                padding: '3px 8px',
-                fontSize: '11px',
-                width: '200px',
+                height: '30px',
+                padding: '4px 10px',
+                fontSize: '12px',
+                width: '220px',
                 borderRadius: 'var(--radius-sm)'
               }}
             />
@@ -506,20 +517,20 @@ export default function CodeEditor({
 
       {/* Editor Status Bar */}
       <div
-        className="flex items-center justify-between px-3 py-1"
+        className="flex items-center justify-between px-4 py-1"
         style={{
-          height: '24px',
-          background: 'rgba(11, 15, 26, 0.6)',
+          height: '32px',
+          background: 'rgba(11, 15, 26, 0.7)',
           borderTop: '1px solid var(--glass-border)',
           fontFamily: 'var(--font-ui)',
-          fontSize: '11px',
+          fontSize: '12px',
           color: 'var(--text-muted)'
         }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
             onClick={() => setIsGoToLineOpen(true)}
-            className="hover:text-white transition-colors"
+            className="hover:text-white transition-colors cursor-pointer font-medium"
             title="Click or Ctrl+G to jump to line"
           >
             Ln {cursorPos.line}, Col {cursorPos.col}
@@ -529,10 +540,10 @@ export default function CodeEditor({
           <span>{lineCount} lines</span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
             onClick={() => setIsLangSwitcherOpen(true)}
-            className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
             title="Click to switch language mode"
           >
             <span style={{ color: currentLang?.iconColor || 'var(--brand-cyan)' }}>●</span>
@@ -540,7 +551,7 @@ export default function CodeEditor({
               {currentLang?.name || 'Plaintext'}
             </span>
           </button>
-          {isReadOnly && <span style={{ color: 'var(--status-error)' }}>[Read-Only]</span>}
+          {isReadOnly && <span style={{ color: 'var(--status-error)', fontWeight: 600 }}>[Read-Only]</span>}
         </div>
       </div>
 

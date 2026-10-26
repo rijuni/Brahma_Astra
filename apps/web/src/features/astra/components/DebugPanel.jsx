@@ -94,56 +94,56 @@ export default function DebugPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header Controls & Stepping Toolbar */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <Bug size={15} color="var(--brand-violet)" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <Bug size={16} color="var(--brand-violet)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
             Run & Debug
           </span>
-          <Badge variant="cyan" size="small">SIMULATED DEBUGGER</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED DEBUGGER</Badge>
         </div>
 
         {/* Stepping controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           {!isRunning ? (
             <button
               onClick={handleStartDebug}
-              className="glass-btn flex items-center gap-1"
-              style={{ padding: '3px 8px', fontSize: '11px', color: 'var(--status-success)', borderRadius: '4px' }}
+              className="glass-btn flex items-center justify-center gap-1.5"
+              style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600, color: 'var(--status-success)', borderRadius: '6px' }}
               title="Start Debugging (F5)"
             >
-              <Play size={11} fill="currentColor" />
+              <Play size={13} fill="currentColor" />
               <span>Start</span>
             </button>
           ) : (
             <>
               <button
                 onClick={handleStepOver}
-                className="glass-btn-ghost flex items-center gap-1"
-                style={{ padding: '2px 6px', fontSize: '10px' }}
+                className="glass-btn-ghost flex items-center gap-1.5"
+                style={{ height: '30px', padding: '0 10px', fontSize: '11.5px', borderRadius: '5px' }}
                 title="Step Over (F10)"
               >
-                <CornerDownRight size={11} color="var(--brand-cyan)" />
+                <CornerDownRight size={13} color="var(--brand-cyan)" />
                 <span>Step Over</span>
               </button>
               <button
                 onClick={() => addToast('Stepped into function', 'info')}
-                className="glass-btn-ghost flex items-center gap-1"
-                style={{ padding: '2px 6px', fontSize: '10px' }}
+                className="glass-btn-ghost flex items-center gap-1.5"
+                style={{ height: '30px', padding: '0 10px', fontSize: '11.5px', borderRadius: '5px' }}
                 title="Step Into (F11)"
               >
-                <ArrowDown size={11} color="var(--brand-gold)" />
+                <ArrowDown size={13} color="var(--brand-gold)" />
                 <span>Step Into</span>
               </button>
               <button
                 onClick={handleStopDebug}
-                className="glass-btn-ghost flex items-center gap-1"
-                style={{ padding: '2px 6px', fontSize: '10px', color: 'var(--status-error)' }}
+                className="glass-btn-ghost flex items-center gap-1.5"
+                style={{ height: '30px', padding: '0 10px', fontSize: '11.5px', borderRadius: '5px', color: 'var(--status-error)' }}
                 title="Stop Debugging (Shift+F5)"
               >
-                <Square size={11} fill="currentColor" />
+                <Square size={13} fill="currentColor" />
                 <span>Stop</span>
               </button>
             </>

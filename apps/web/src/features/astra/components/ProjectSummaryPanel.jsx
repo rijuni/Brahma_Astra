@@ -20,55 +20,55 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
   const totalLines = (project.files || []).reduce((acc, f) => acc + (f.content ? f.content.split('\n').length : 20), 0);
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Title & Path */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <FolderKanban size={15} color="var(--brand-gold)" />
-          <span style={{ fontSize: '13px', fontWeight: 600 }}>{project.name}</span>
-          <Badge variant="cyan" size="small">{project.status || 'active'}</Badge>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <FolderKanban size={17} color="var(--brand-gold)" />
+          <span style={{ fontSize: '14px', fontWeight: 600 }}>{project.name}</span>
+          <Badge variant="cyan" style={{ padding: '3px 8px', fontSize: '11px' }}>{project.status || 'active'}</Badge>
         </div>
-        <span className="code-inline" style={{ fontSize: '10px' }}>{project.path}</span>
+        <span className="code-inline" style={{ fontSize: '11px', padding: '2px 7px' }}>{project.path}</span>
       </div>
 
-      <p className="body-small text-secondary mb-3" style={{ fontSize: '11px', lineHeight: '1.4' }}>
+      <p className="body-small text-secondary mb-3.5" style={{ fontSize: '12px', lineHeight: '1.5' }}>
         {project.description}
       </p>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-4 gap-2 mb-3">
-        <div className="flex flex-col p-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}>
-          <div className="flex items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-            <FileText size={11} /> Files
+      <div className="grid grid-cols-4 gap-2.5 mb-3.5">
+        <div className="flex flex-col p-2.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
+          <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
+            <FileText size={13} /> Files
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--brand-cyan)' }}>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--brand-cyan)' }}>
             {project.files ? project.files.length : (project.stats?.files || 48)}
           </span>
         </div>
 
-        <div className="flex flex-col p-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}>
-          <div className="flex items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-            <Code2 size={11} /> Lines of Code
+        <div className="flex flex-col p-2.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
+          <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
+            <Code2 size={13} /> Lines of Code
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--brand-gold)' }}>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--brand-gold)' }}>
             ~{totalLines.toLocaleString()}
           </span>
         </div>
 
-        <div className="flex flex-col p-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}>
-          <div className="flex items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-            <GitCommit size={11} /> Commits
+        <div className="flex flex-col p-2.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
+          <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
+            <GitCommit size={13} /> Commits
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--brand-violet-light)' }}>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--brand-violet-light)' }}>
             {project.stats?.commits || 128}
           </span>
         </div>
 
-        <div className="flex flex-col p-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}>
-          <div className="flex items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-            <Clock size={11} /> Updated
+        <div className="flex flex-col p-2.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
+          <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
+            <Clock size={13} /> Updated
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 500, color: '#34D399' }}>
+          <span style={{ fontSize: '12px', fontWeight: 500, color: '#34D399' }}>
             {project.stats?.lastUpdated || 'Just now'}
           </span>
         </div>

@@ -82,9 +82,11 @@ export default function TestRunnerPanel() {
               onClick={() => setFilter('all')}
               className="glass-btn-ghost"
               style={{
-                padding: '2px 6px',
-                fontSize: '10px',
-                borderRadius: '3px',
+                height: '28px',
+                padding: '0 10px',
+                fontSize: '11.5px',
+                fontWeight: 500,
+                borderRadius: '5px',
                 color: filter === 'all' ? 'var(--brand-gold)' : 'var(--text-muted)',
                 background: filter === 'all' ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
               }}
@@ -95,9 +97,11 @@ export default function TestRunnerPanel() {
               onClick={() => setFilter('passed')}
               className="glass-btn-ghost"
               style={{
-                padding: '2px 6px',
-                fontSize: '10px',
-                borderRadius: '3px',
+                height: '28px',
+                padding: '0 10px',
+                fontSize: '11.5px',
+                fontWeight: 500,
+                borderRadius: '5px',
                 color: filter === 'passed' ? 'var(--status-success)' : 'var(--text-muted)',
                 background: filter === 'passed' ? 'rgba(16, 185, 129, 0.15)' : 'transparent'
               }}
@@ -108,9 +112,11 @@ export default function TestRunnerPanel() {
               onClick={() => setFilter('failed')}
               className="glass-btn-ghost"
               style={{
-                padding: '2px 6px',
-                fontSize: '10px',
-                borderRadius: '3px',
+                height: '28px',
+                padding: '0 10px',
+                fontSize: '11.5px',
+                fontWeight: 500,
+                borderRadius: '5px',
                 color: filter === 'failed' ? 'var(--status-error)' : 'var(--text-muted)',
                 background: filter === 'failed' ? 'rgba(239, 68, 68, 0.15)' : 'transparent'
               }}
@@ -120,14 +126,14 @@ export default function TestRunnerPanel() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="cyan" size="small">SANDBOXED RUNNER</Badge>
+        <div className="flex items-center gap-2.5">
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SANDBOXED RUNNER</Badge>
           <Button
             variant="gold"
             icon={isRunning ? RefreshCw : Play}
             onClick={handleRunAll}
             isLoading={isRunning}
-            style={{ padding: '3px 10px', fontSize: '11px' }}
+            style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
           >
             {isRunning ? 'Running...' : 'Run All'}
           </Button>

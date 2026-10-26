@@ -77,45 +77,45 @@ export default function AstraSettingsPanel() {
   ];
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 mb-3" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <Settings size={15} color="var(--brand-gold)" />
-          <span style={{ fontSize: '13px', fontWeight: 600 }}>ASTRA Studio Settings & System Health</span>
+      <div className="flex items-center justify-between pb-2.5 mb-3.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <Settings size={17} color="var(--brand-gold)" />
+          <span style={{ fontSize: '14px', fontWeight: 600 }}>ASTRA Studio Settings & System Health</span>
         </div>
-        <Badge variant="cyan" size="small">STUDIO ENVIRONMENT</Badge>
+        <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>STUDIO ENVIRONMENT</Badge>
       </div>
 
       <div className="grid grid-cols-2 gap-4 flex-1 overflow-y-auto">
         {/* Left: Preferences & Keybindings */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {/* Preferences */}
           <div>
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+            <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
               EDITOR & THEME PREFERENCES
             </span>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="flex flex-col gap-1">
-                <span className="text-muted" style={{ fontSize: '10px' }}>Tab Size</span>
-                <select value={tabSize} onChange={(e) => setTabSize(e.target.value)} className="glass-input" style={{ padding: '3px 6px', fontSize: '11px' }}>
+            <div className="grid grid-cols-3 gap-2.5">
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Tab Size</span>
+                <select value={tabSize} onChange={(e) => setTabSize(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
                   <option value="2" style={{ background: '#0B0F1A' }}>2 spaces</option>
                   <option value="4" style={{ background: '#0B0F1A' }}>4 spaces</option>
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-muted" style={{ fontSize: '10px' }}>Font Size</span>
-                <select value={fontSize} onChange={(e) => setFontSize(e.target.value)} className="glass-input" style={{ padding: '3px 6px', fontSize: '11px' }}>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Font Size</span>
+                <select value={fontSize} onChange={(e) => setFontSize(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
                   <option value="12" style={{ background: '#0B0F1A' }}>12 px</option>
                   <option value="13" style={{ background: '#0B0F1A' }}>13 px</option>
                   <option value="14" style={{ background: '#0B0F1A' }}>14 px</option>
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-muted" style={{ fontSize: '10px' }}>Theme</span>
-                <select value={theme} onChange={(e) => setTheme(e.target.value)} className="glass-input" style={{ padding: '3px 6px', fontSize: '11px' }}>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Theme</span>
+                <select value={theme} onChange={(e) => setTheme(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
                   <option value="cosmic-dark" style={{ background: '#0B0F1A' }}>Cosmic Dark (Default)</option>
                   <option value="obsidian" style={{ background: '#0B0F1A' }}>Obsidian Glass</option>
                 </select>
@@ -125,14 +125,14 @@ export default function AstraSettingsPanel() {
 
           {/* Keybindings Cheat Sheet */}
           <div>
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
+            <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
               KEYBOARD SHORTCUTS
             </span>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5">
               {shortcuts.map((s, idx) => (
-                <div key={idx} className="flex items-center justify-between p-1.5 px-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)', fontSize: '11px' }}>
-                  <kbd className="code-inline" style={{ fontSize: '10px', color: 'var(--brand-gold)' }}>{s.key}</kbd>
-                  <span className="body-small text-secondary" style={{ fontSize: '10px' }}>{s.desc}</span>
+                <div key={idx} className="flex items-center justify-between p-2 px-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)', fontSize: '12px' }}>
+                  <kbd className="code-inline" style={{ fontSize: '11px', color: 'var(--brand-gold)', padding: '2px 7px' }}>{s.key}</kbd>
+                  <span className="body-small text-secondary" style={{ fontSize: '11.5px' }}>{s.desc}</span>
                 </div>
               ))}
             </div>
@@ -140,21 +140,21 @@ export default function AstraSettingsPanel() {
         </div>
 
         {/* Right: Microservice Live Ping Monitor & Reality Matrix */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3.5">
           {/* Microservice Health Monitor */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600 }}>
                 INTEGRATION STATUS MATRIX & LIVE PING MONITOR
               </span>
               <button
                 onClick={pingAllServices}
                 disabled={isCheckingServices}
-                className="glass-btn-ghost flex items-center gap-1 text-muted hover:text-white"
-                style={{ fontSize: '10px', padding: '1px 5px' }}
+                className="glass-btn-ghost flex items-center gap-1.5 text-muted hover:text-white"
+                style={{ fontSize: '11.5px', height: '28px', padding: '0 10px', borderRadius: '6px' }}
                 title="Ping all background microservices"
               >
-                <RefreshCw size={10} className={isCheckingServices ? 'animate-spin' : ''} /> Ping All
+                <RefreshCw size={12} className={isCheckingServices ? 'animate-spin' : ''} /> Ping All
               </button>
             </div>
 

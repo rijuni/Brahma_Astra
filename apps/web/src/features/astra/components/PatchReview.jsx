@@ -78,15 +78,16 @@ export default function PatchReview({
     <div className="glass-card flex flex-col h-full overflow-hidden" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Patch Header & Risk Assessment */}
       <div
-        className="flex items-center justify-between p-3"
+        className="flex items-center justify-between px-4 py-2.5"
         style={{
+          height: '52px',
           borderBottom: '1px solid var(--glass-border)',
-          background: 'rgba(30, 27, 61, 0.5)'
+          background: 'rgba(30, 27, 61, 0.6)'
         }}
       >
-        <div className="flex items-center gap-2">
-          <FileDiff size={16} color="var(--brand-gold)" />
-          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+        <div className="flex items-center gap-2.5">
+          <FileDiff size={18} color="var(--brand-gold)" />
+          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
             Proposed Patch Review
           </span>
           <button
@@ -94,52 +95,56 @@ export default function PatchReview({
             className="flex items-center gap-1 cursor-pointer"
             title="Click for risk analysis breakdown"
           >
-            <Badge variant={patchProposal.risk_level === 'high' ? 'error' : 'cyan'}>
+            <Badge variant={patchProposal.risk_level === 'high' ? 'error' : 'cyan'} style={{ padding: '4px 8px', fontSize: '11px' }}>
               Risk: {patchProposal.risk_level || 'low'}
             </Badge>
           </button>
-          <span style={{ fontSize: '11px', color: 'var(--status-success)' }}>+{additions}</span>
-          <span style={{ fontSize: '11px', color: 'var(--status-error)' }}>-{deletions}</span>
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--status-success)' }}>+{additions}</span>
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--status-error)' }}>-{deletions}</span>
         </div>
 
         {/* View mode toggle & Action Controls */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center border border-white/10 rounded overflow-hidden mr-1">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center border border-white/10 rounded-md overflow-hidden mr-1">
             <button
               onClick={() => setDiffMode('unified')}
-              className="glass-btn-ghost flex items-center gap-1"
+              className="glass-btn-ghost flex items-center gap-1.5"
               style={{
-                padding: '3px 8px',
-                fontSize: '11px',
-                background: diffMode === 'unified' ? 'rgba(139, 92, 246, 0.25)' : 'transparent',
+                height: '32px',
+                padding: '0 12px',
+                fontSize: '12px',
+                fontWeight: 500,
+                background: diffMode === 'unified' ? 'rgba(139, 92, 246, 0.3)' : 'transparent',
                 color: diffMode === 'unified' ? 'var(--brand-gold)' : 'var(--text-muted)'
               }}
               title="Unified diff view"
             >
-              <AlignLeft size={11} /> Unified
+              <AlignLeft size={13} /> Unified
             </button>
             <button
               onClick={() => setDiffMode('split')}
-              className="glass-btn-ghost flex items-center gap-1"
+              className="glass-btn-ghost flex items-center gap-1.5"
               style={{
-                padding: '3px 8px',
-                fontSize: '11px',
-                background: diffMode === 'split' ? 'rgba(139, 92, 246, 0.25)' : 'transparent',
+                height: '32px',
+                padding: '0 12px',
+                fontSize: '12px',
+                fontWeight: 500,
+                background: diffMode === 'split' ? 'rgba(139, 92, 246, 0.3)' : 'transparent',
                 color: diffMode === 'split' ? 'var(--brand-gold)' : 'var(--text-muted)'
               }}
               title="Side-by-side split diff view"
             >
-              <Columns size={11} /> Split
+              <Columns size={13} /> Split
             </button>
           </div>
 
           <button
             onClick={handleCopyDiff}
-            className="glass-btn-ghost"
-            style={{ padding: '4px', borderRadius: '4px' }}
+            className="glass-btn-ghost flex items-center justify-center"
+            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Copy diff to clipboard"
           >
-            <Copy size={13} color="var(--text-muted)" />
+            <Copy size={15} color="var(--text-muted)" />
           </button>
 
           <Button
@@ -147,7 +152,7 @@ export default function PatchReview({
             icon={X}
             onClick={onReject}
             disabled={isApplying}
-            style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--status-error)' }}
+            style={{ height: '34px', padding: '0 14px', fontSize: '12.5px', color: 'var(--status-error)' }}
           >
             Reject
           </Button>
@@ -157,7 +162,7 @@ export default function PatchReview({
             icon={Check}
             onClick={onApprove}
             isLoading={isApplying}
-            style={{ padding: '4px 14px', fontSize: '12px' }}
+            style={{ height: '34px', padding: '0 16px', fontSize: '12.5px', fontWeight: 600 }}
           >
             Approve & Apply Patch
           </Button>

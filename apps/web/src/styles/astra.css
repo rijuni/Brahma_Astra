@@ -31,24 +31,42 @@
   100% { transform: scale(0.9); opacity: 0.4; }
 }
 
+/* ASTRA Studio Ergonomic Sizing & Spacing Tokens */
+:root {
+  --astra-canvas-padding: 10px;
+  --astra-canvas-gap: 10px;
+  --astra-header-height: 50px;
+  --astra-activity-width: 58px;
+  --astra-activity-btn-size: 40px;
+  --astra-sidebar-width: 280px;
+  --astra-assistant-width: 350px;
+  --astra-dock-height: 255px;
+  --astra-btn-height-sm: 28px;
+  --astra-btn-height-md: 34px;
+  --astra-tab-height: 38px;
+}
+
 /* Activity Bar */
 .astra-activity-bar {
-  width: 56px;
+  width: var(--astra-activity-width);
+  height: 100%;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 0;
+  padding: 12px 0 10px 0;
   border-right: 1px solid var(--glass-border);
-  background: rgba(11, 15, 26, 0.45);
-  backdrop-filter: blur(20px);
+  background: rgba(11, 15, 26, 0.55);
+  backdrop-filter: blur(24px);
   flex-shrink: 0;
   z-index: 40;
+  overflow: hidden;
 }
 
 .astra-activity-btn {
-  width: 40px;
-  height: 40px;
+  width: var(--astra-activity-btn-size);
+  height: var(--astra-activity-btn-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,20 +77,22 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  flex-shrink: 0;
 }
 
 .astra-activity-btn:hover {
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.18);
   color: var(--text-primary);
   border-color: var(--glass-border-violet);
+  transform: translateY(-1px);
 }
 
 .astra-activity-btn.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(56, 189, 248, 0.22) 100%);
   color: var(--brand-gold);
   border-color: var(--glass-border-violet);
-  box-shadow: 0 0 12px var(--brand-violet-glow);
+  box-shadow: 0 0 14px var(--brand-violet-glow);
 }
 
 .astra-activity-btn.active::before {
@@ -86,14 +106,23 @@
   background: var(--brand-gold);
 }
 
+/* Activity Bar Group Separator */
+.astra-activity-divider {
+  width: 28px;
+  height: 1px;
+  background: var(--glass-border);
+  margin: 6px 0 8px 0;
+  flex-shrink: 0;
+}
+
 /* IDE Code Editor */
 .astra-editor-container {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(16px);
-  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.38);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   overflow: hidden;
 }
@@ -101,7 +130,8 @@
 .astra-editor-tabs {
   display: flex;
   align-items: center;
-  background: rgba(11, 15, 26, 0.5);
+  height: var(--astra-tab-height);
+  background: rgba(11, 15, 26, 0.6);
   border-bottom: 1px solid var(--glass-border);
   overflow-x: auto;
   scrollbar-width: none;
@@ -110,10 +140,11 @@
 .astra-editor-tab {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 10px;
+  padding: 0 16px;
+  height: 100%;
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
   border-right: 1px solid var(--glass-border);
@@ -124,12 +155,12 @@
 }
 
 .astra-editor-tab:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
 }
 
 .astra-editor-tab.active {
-  background: rgba(30, 27, 61, 0.6);
+  background: rgba(30, 27, 61, 0.65);
   color: var(--brand-gold-light);
   border-bottom: 2px solid var(--brand-gold);
 }
@@ -137,15 +168,15 @@
 .astra-code-line {
   display: flex;
   font-family: var(--font-code);
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 13.5px;
+  line-height: 22px;
 }
 
 .astra-line-number {
-  width: 44px;
+  width: 50px;
   text-align: right;
-  padding-right: 14px;
-  color: rgba(255, 255, 255, 0.25);
+  padding-right: 16px;
+  color: rgba(255, 255, 255, 0.3);
   user-select: none;
   flex-shrink: 0;
 }
@@ -187,11 +218,11 @@
 /* Terminal output */
 .astra-terminal-body {
   font-family: var(--font-code);
-  font-size: 12px;
-  line-height: 1.6;
-  background: rgba(7, 10, 24, 0.7);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  background: rgba(7, 10, 24, 0.75);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
   color: #CBD5E1;
   overflow-y: auto;
 }

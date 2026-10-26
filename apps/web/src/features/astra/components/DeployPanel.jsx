@@ -68,13 +68,13 @@ export default function DeployPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <Rocket size={15} color="var(--brand-cyan)" />
-          <span style={{ fontSize: '12px', fontWeight: 600 }}>Deployment Orchestrator</span>
-          <Badge variant="cyan" size="small">SIMULATED CLOUD DEPLOY</Badge>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <Rocket size={16} color="var(--brand-cyan)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Deployment Orchestrator</span>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED CLOUD DEPLOY</Badge>
         </div>
         <div className="flex items-center gap-2">
           {deployedUrl && (
@@ -82,25 +82,25 @@ export default function DeployPanel() {
               href={deployedUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1 text-muted hover:text-white"
-              style={{ fontSize: '10px' }}
+              className="flex items-center gap-1.5 text-muted hover:text-white"
+              style={{ fontSize: '11.5px' }}
             >
               <span>{deployedUrl}</span>
-              <ExternalLink size={10} />
+              <ExternalLink size={12} />
             </a>
           )}
         </div>
       </div>
 
       {/* Configuration Controls */}
-      <div className="grid grid-cols-3 gap-2 mb-2">
+      <div className="grid grid-cols-3 gap-2.5 mb-2.5">
         <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '10px' }}>Environment</span>
+          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Environment</span>
           <select
             value={environment}
             onChange={(e) => setEnvironment(e.target.value)}
             className="glass-input"
-            style={{ padding: '3px 8px', fontSize: '11px', borderRadius: 'var(--radius-sm)' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
           >
             <option value="preview" style={{ background: '#0B0F1A' }}>Preview Sandbox</option>
             <option value="docker" style={{ background: '#0B0F1A' }}>Docker Container</option>
@@ -110,12 +110,12 @@ export default function DeployPanel() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '10px' }}>Strategy</span>
+          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Strategy</span>
           <select
             value={target}
             onChange={(e) => setTarget(e.target.value)}
             className="glass-input"
-            style={{ padding: '3px 8px', fontSize: '11px', borderRadius: 'var(--radius-sm)' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
           >
             <option value="development" style={{ background: '#0B0F1A' }}>Blue-Green Zero Downtime</option>
             <option value="canary" style={{ background: '#0B0F1A' }}>Canary 10% Rollout</option>
@@ -124,27 +124,27 @@ export default function DeployPanel() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '10px' }}>Service Port</span>
+          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Service Port</span>
           <input
             type="text"
             value={port}
             onChange={(e) => setPort(e.target.value)}
             className="glass-input"
-            style={{ padding: '3px 8px', fontSize: '11px', borderRadius: 'var(--radius-sm)' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
           />
         </div>
       </div>
 
       {/* Main Grid: Release Gates & Environment Variables */}
-      <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden">
+      <div className="grid grid-cols-2 gap-3.5 flex-1 overflow-hidden">
         {/* Left: Verification Gates & Logs */}
-        <div className="flex flex-col gap-1.5 overflow-hidden">
-          <div className="flex items-center justify-between p-2 rounded" style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}>
+        <div className="flex flex-col gap-2 overflow-hidden">
+          <div className="flex items-center justify-between p-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
-              <div className="body-small text-muted" style={{ fontSize: '10px' }}>Applies pre-flight health checks and initiates release.</div>
+              <div style={{ fontSize: '12.5px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
+              <div className="body-small text-muted" style={{ fontSize: '11px' }}>Applies pre-flight health checks and initiates release.</div>
             </div>
-            <Button variant="gold" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ padding: '4px 10px', fontSize: '11px' }}>
+            <Button variant="gold" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}>
               Deploy
             </Button>
           </div>

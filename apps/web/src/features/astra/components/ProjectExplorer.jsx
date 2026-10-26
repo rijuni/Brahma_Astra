@@ -106,12 +106,12 @@ export default function ProjectExplorer({
   };
 
   return (
-    <div className="flex flex-col h-full" style={{ padding: '12px' }}>
+    <div className="flex flex-col h-full" style={{ padding: '14px 16px' }}>
       {/* Top Header & New Project CTA */}
-      <div className="flex items-center justify-between" style={{ marginBottom: '10px' }}>
-        <div className="flex items-center gap-1.5">
-          <FolderKanban size={14} color="var(--brand-gold)" />
-          <span className="body-small text-muted" style={{ fontWeight: 600, letterSpacing: '0.06em' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: '12px' }}>
+        <div className="flex items-center gap-2">
+          <FolderKanban size={16} color="var(--brand-gold)" />
+          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.06em' }}>
             WORKSPACES ({projects.length})
           </span>
         </div>
@@ -119,25 +119,25 @@ export default function ProjectExplorer({
           onClick={() => setIsCreateOpen(true)}
           className="glass-btn-ghost flex items-center justify-center transition-all"
           style={{
-            width: '24px',
-            height: '24px',
-            borderRadius: '4px',
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
             padding: 0,
-            background: 'rgba(245, 158, 11, 0.1)',
-            border: '1px solid rgba(245, 158, 11, 0.3)'
+            background: 'rgba(245, 158, 11, 0.12)',
+            border: '1px solid rgba(245, 158, 11, 0.35)'
           }}
           title="New Project"
         >
-          <Plus size={14} color="var(--brand-gold)" />
+          <Plus size={15} color="var(--brand-gold)" />
         </button>
       </div>
 
       {/* Project Search Input */}
       <div
         className="glass-input flex items-center gap-2"
-        style={{ padding: '6px 8px', marginBottom: '10px', borderRadius: 'var(--radius-sm)' }}
+        style={{ padding: '7px 10px', marginBottom: '12px', borderRadius: 'var(--radius-sm)' }}
       >
-        <Search size={12} color="var(--text-muted)" />
+        <Search size={14} color="var(--text-muted)" />
         <input
           type="text"
           placeholder="Filter workspaces..."
@@ -148,7 +148,7 @@ export default function ProjectExplorer({
             border: 'none',
             outline: 'none',
             color: 'var(--text-primary)',
-            fontSize: '11px',
+            fontSize: '12px',
             width: '100%'
           }}
         />
@@ -159,7 +159,7 @@ export default function ProjectExplorer({
             style={{ padding: '2px', borderRadius: '50%' }}
             title="Clear search"
           >
-            <X size={11} color="var(--text-muted)" />
+            <X size={12} color="var(--text-muted)" />
           </button>
         )}
       </div>
@@ -194,20 +194,20 @@ export default function ProjectExplorer({
                 onClick={() => onSelectProject(proj.id)}
                 className="glass-card flex flex-col cursor-pointer transition-all relative"
                 style={{
-                  padding: '10px',
+                  padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                  background: isActive ? 'rgba(139, 92, 246, 0.18)' : 'rgba(255, 255, 255, 0.03)',
                   borderColor: isActive ? 'var(--brand-violet)' : 'var(--glass-border)',
                   boxShadow: isActive ? '0 4px 14px var(--brand-violet-glow)' : 'none'
                 }}
               >
                 {/* Header row: Icon, Name, Active Badge & Menu */}
-                <div className="flex items-center justify-between" style={{ marginBottom: '4px' }}>
-                  <div className="flex items-center gap-1.5 overflow-hidden">
-                    <FolderKanban size={14} color={isActive ? 'var(--brand-gold)' : 'var(--brand-cyan)'} />
+                <div className="flex items-center justify-between" style={{ marginBottom: '6px' }}>
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <FolderKanban size={16} color={isActive ? 'var(--brand-gold)' : 'var(--brand-cyan)'} />
                     <span
                       style={{
-                        fontSize: '12px',
+                        fontSize: '13px',
                         fontWeight: 600,
                         color: 'var(--text-primary)',
                         whiteSpace: 'nowrap',
@@ -218,7 +218,7 @@ export default function ProjectExplorer({
                       {proj.name}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     {isActive && <Badge variant="gold" size="small">Active</Badge>}
                     <button
                       onClick={(e) => {
@@ -226,10 +226,10 @@ export default function ProjectExplorer({
                         setMenuOpenId(isMenuOpen ? null : proj.id);
                       }}
                       className="glass-btn-ghost flex items-center justify-center"
-                      style={{ width: '20px', height: '20px', borderRadius: '4px', padding: 0 }}
+                      style={{ width: '24px', height: '24px', borderRadius: '4px', padding: 0 }}
                       title="Project options"
                     >
-                      <MoreVertical size={12} color="var(--text-muted)" />
+                      <MoreVertical size={13} color="var(--text-muted)" />
                     </button>
                   </div>
                 </div>

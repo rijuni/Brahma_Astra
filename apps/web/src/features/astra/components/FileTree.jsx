@@ -95,9 +95,9 @@ export default function FileTree({
 
   const getFileIcon = (fileName) => {
     const lang = getLanguageForFile(fileName);
-    if (fileName.endsWith('.json')) return <FileJson size={13} color={lang.iconColor} />;
-    if (fileName.endsWith('.md')) return <FileText size={13} color={lang.iconColor} />;
-    return <FileCode size={13} color={lang.iconColor} />;
+    if (fileName.endsWith('.json')) return <FileJson size={15} color={lang.iconColor} />;
+    if (fileName.endsWith('.md')) return <FileText size={15} color={lang.iconColor} />;
+    return <FileCode size={15} color={lang.iconColor} />;
   };
 
   // Build folder/file hierarchy
@@ -125,13 +125,13 @@ export default function FileTree({
   }, [files, searchTerm]);
 
   return (
-    <div className="flex flex-col h-full" style={{ padding: '12px' }}>
+    <div className="flex flex-col h-full" style={{ padding: '14px 16px' }}>
       {/* File Tree Header */}
-      <div className="flex items-center justify-between" style={{ marginBottom: '10px' }}>
-        <span className="body-small text-muted" style={{ fontWeight: 600, letterSpacing: '0.06em' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: '12px' }}>
+        <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.06em' }}>
           EXPLORER ({files.length})
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => {
               setIsCreatingFile(true);
@@ -139,10 +139,10 @@ export default function FileTree({
               setNewItemName('');
             }}
             className="glass-btn-ghost flex items-center justify-center transition-all"
-            style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
+            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="New File"
           >
-            <Plus size={13} color="var(--brand-gold)" />
+            <Plus size={15} color="var(--brand-gold)" />
           </button>
           <button
             onClick={() => {
@@ -151,10 +151,10 @@ export default function FileTree({
               setNewItemName('');
             }}
             className="glass-btn-ghost flex items-center justify-center transition-all"
-            style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
+            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="New Folder"
           >
-            <FolderPlus size={13} color="var(--brand-cyan)" />
+            <FolderPlus size={15} color="var(--brand-cyan)" />
           </button>
         </div>
       </div>
@@ -162,9 +162,9 @@ export default function FileTree({
       {/* Filter Search */}
       <div
         className="glass-input flex items-center gap-2"
-        style={{ padding: '5px 8px', marginBottom: '8px', borderRadius: 'var(--radius-sm)' }}
+        style={{ padding: '7px 10px', marginBottom: '10px', borderRadius: 'var(--radius-sm)' }}
       >
-        <Search size={12} color="var(--text-muted)" />
+        <Search size={14} color="var(--text-muted)" />
         <input
           type="text"
           placeholder="Filter files..."
@@ -175,7 +175,7 @@ export default function FileTree({
             border: 'none',
             outline: 'none',
             color: 'var(--text-primary)',
-            fontSize: '11px',
+            fontSize: '12px',
             width: '100%'
           }}
         />
@@ -186,7 +186,7 @@ export default function FileTree({
             style={{ padding: '2px', borderRadius: '50%' }}
             title="Clear filter"
           >
-            <X size={11} color="var(--text-muted)" />
+            <X size={12} color="var(--text-muted)" />
           </button>
         )}
       </div>
@@ -234,21 +234,21 @@ export default function FileTree({
                   {/* Folder Row */}
                   <button
                     onClick={() => toggleFolder(folderName)}
-                    className="flex items-center gap-1.5 w-full text-left py-1 px-1.5 rounded transition-all hover:bg-white/5"
-                    style={{ fontSize: '11px', color: 'var(--text-primary)', fontWeight: 500 }}
+                    className="flex items-center gap-2 w-full text-left py-1.5 px-2 rounded-md transition-all hover:bg-white/5"
+                    style={{ fontSize: '12.5px', color: 'var(--text-primary)', fontWeight: 500, minHeight: '30px' }}
                   >
                     {isExpanded ? (
-                      <ChevronDown size={12} color="var(--text-muted)" />
+                      <ChevronDown size={14} color="var(--text-muted)" />
                     ) : (
-                      <ChevronRight size={12} color="var(--text-muted)" />
+                      <ChevronRight size={14} color="var(--text-muted)" />
                     )}
                     {isExpanded ? (
-                      <FolderOpen size={13} color="var(--brand-gold)" />
+                      <FolderOpen size={15} color="var(--brand-gold)" />
                     ) : (
-                      <Folder size={13} color="var(--brand-gold)" />
+                      <Folder size={15} color="var(--brand-gold)" />
                     )}
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{folderName}</span>
-                    <span className="text-muted" style={{ fontSize: '10px', marginLeft: 'auto' }}>
+                    <span className="text-muted" style={{ fontSize: '11px', marginLeft: 'auto' }}>
                       ({folderFiles.length})
                     </span>
                   </button>
@@ -331,29 +331,30 @@ export default function FileTree({
       <div
         key={file.path}
         onClick={() => onSelectFile(file)}
-        className="flex items-center justify-between w-full text-left cursor-pointer transition-all rounded relative group"
+        className="flex items-center justify-between w-full text-left cursor-pointer transition-all rounded-md relative group"
         style={{
-          padding: '4px 6px',
-          background: isActive ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
+          padding: '6px 8px',
+          minHeight: '30px',
+          background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
           border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent',
           color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-          fontSize: '11px'
+          fontSize: '12.5px'
         }}
       >
-        <div className="flex items-center gap-1.5 overflow-hidden">
+        <div className="flex items-center gap-2 overflow-hidden">
           {getFileIcon(file.name)}
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: isActive ? 600 : 400 }}>
             {file.path.split('/').pop() || file.path}
           </span>
         </div>
 
-        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
           {isDirty && (
             <span
               title="Unsaved changes"
               style={{
                 color: 'var(--brand-gold)',
-                fontSize: '12px',
+                fontSize: '13px',
                 lineHeight: '1'
               }}
             >
@@ -367,10 +368,10 @@ export default function FileTree({
               setActiveMenuPath(isMenuOpen ? null : file.path);
             }}
             className="glass-btn-ghost opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all"
-            style={{ width: '18px', height: '18px', borderRadius: '3px', padding: 0 }}
+            style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
             title="Options"
           >
-            <MoreVertical size={11} color="var(--text-muted)" />
+            <MoreVertical size={13} color="var(--text-muted)" />
           </button>
         </div>
 

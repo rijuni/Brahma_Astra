@@ -68,23 +68,23 @@ export default function PipelinesPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <Layers size={15} color="var(--brand-violet)" />
-          <span style={{ fontSize: '12px', fontWeight: 600 }}>CI/CD Pipeline Stages</span>
-          <Badge variant="cyan" size="small">SIMULATED PIPELINE</Badge>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <Layers size={16} color="var(--brand-violet)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>CI/CD Pipeline Stages</span>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED PIPELINE</Badge>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="gold" size="small">Pipeline #142 Passed</Badge>
+        <div className="flex items-center gap-2.5">
+          <Badge variant="gold" style={{ padding: '4px 8px', fontSize: '11px' }}>Pipeline #142 Passed</Badge>
           <Button
             variant="gold"
             icon={isRunning ? RotateCw : Play}
             onClick={handleRerun}
             isLoading={isRunning}
-            style={{ padding: '3px 10px', fontSize: '11px' }}
+            style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
           >
             {isRunning ? 'Running...' : 'Rerun Pipeline'}
           </Button>
@@ -92,31 +92,31 @@ export default function PipelinesPanel() {
       </div>
 
       {/* Main Grid: Stages Flow + Console Output Drawer */}
-      <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden">
+      <div className="grid grid-cols-2 gap-3.5 flex-1 overflow-hidden">
         {/* Stages Flow */}
-        <div className="flex flex-col gap-1.5 overflow-y-auto">
+        <div className="flex flex-col gap-2 overflow-y-auto pr-1">
           {stages.map((stage) => {
             const isSelected = selectedStage?.id === stage.id;
             return (
               <div
                 key={stage.id}
                 onClick={() => setSelectedStage(isSelected ? null : stage)}
-                className="flex items-center justify-between p-2 rounded cursor-pointer transition-all hover:bg-white/5"
+                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:bg-white/5"
                 style={{
-                  background: isSelected ? 'rgba(139, 92, 246, 0.15)' : 'rgba(7, 10, 24, 0.4)',
+                  background: isSelected ? 'rgba(139, 92, 246, 0.18)' : 'rgba(7, 10, 24, 0.45)',
                   border: isSelected ? '1px solid var(--brand-violet)' : '1px solid rgba(255, 255, 255, 0.04)'
                 }}
               >
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 size={14} color="var(--status-success)" />
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 size={16} color="var(--status-success)" />
                   <div>
-                    <div style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-primary)' }}>{stage.name}</div>
-                    <div className="text-muted" style={{ fontSize: '9px' }}>Completed in {stage.duration} • Click for logs</div>
+                    <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>{stage.name}</div>
+                    <div className="text-muted" style={{ fontSize: '11px', marginTop: '2px' }}>Completed in {stage.duration} • Click for logs</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Badge variant="cyan" size="small">SUCCESS</Badge>
-                  {isSelected ? <ChevronDown size={11} color="var(--text-muted)" /> : <ChevronRight size={11} color="var(--text-muted)" />}
+                <div className="flex items-center gap-2">
+                  <Badge variant="cyan" style={{ padding: '3px 8px', fontSize: '11px' }}>SUCCESS</Badge>
+                  {isSelected ? <ChevronDown size={14} color="var(--text-muted)" /> : <ChevronRight size={14} color="var(--text-muted)" />}
                 </div>
               </div>
             );
@@ -124,24 +124,24 @@ export default function PipelinesPanel() {
         </div>
 
         {/* Stage Console Log Drawer */}
-        <div className="flex flex-col gap-1 overflow-hidden p-2 rounded bg-black/50 border border-white/5">
-          <div className="flex items-center justify-between pb-1 border-b border-white/5">
-            <div className="flex items-center gap-1.5">
-              <Terminal size={12} color="var(--brand-gold)" />
-              <span className="text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>
+        <div className="flex flex-col gap-2 overflow-hidden p-3 rounded-lg bg-black/50 border border-white/5">
+          <div className="flex items-center justify-between pb-2 border-b border-white/5">
+            <div className="flex items-center gap-2">
+              <Terminal size={14} color="var(--brand-gold)" />
+              <span className="text-muted" style={{ fontSize: '11.5px', fontWeight: 600 }}>
                 {selectedStage ? `STAGE LOGS: ${selectedStage.name}` : 'SELECT A STAGE TO VIEW LOGS'}
               </span>
             </div>
             {selectedStage && (
-              <button onClick={() => setSelectedStage(null)} className="text-muted hover:text-white">
-                <X size={11} />
+              <button onClick={() => setSelectedStage(null)} className="text-muted hover:text-white p-1 rounded">
+                <X size={14} />
               </button>
             )}
           </div>
 
           <pre
-            className="flex-1 overflow-y-auto font-mono text-muted p-1"
-            style={{ fontSize: '10px', whiteSpace: 'pre-wrap', lineHeight: '1.4', margin: 0, color: '#34D399' }}
+            className="flex-1 overflow-y-auto font-mono text-muted p-2"
+            style={{ fontSize: '11.5px', whiteSpace: 'pre-wrap', lineHeight: '1.5', margin: 0, color: '#34D399' }}
           >
             {selectedStage
               ? selectedStage.logs

@@ -155,26 +155,26 @@ export default function ApiClientPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Top Bar: Quick Endpoints Dropdown + Reality Disclosure */}
-      <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/5">
-        <div className="flex items-center gap-2">
-          <Globe size={14} color="var(--brand-cyan)" />
-          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '11px' }}>
+      <div className="flex items-center justify-between mb-2.5 pb-2.5 border-b border-white/5">
+        <div className="flex items-center gap-2.5">
+          <Globe size={16} color="var(--brand-cyan)" />
+          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px' }}>
             REST & GRAPHQL API CLIENT
           </span>
-          <Badge variant="cyan" size="small">VERIFIED LIVE BROWSER HTTP</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>VERIFIED LIVE BROWSER HTTP</Badge>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-muted" style={{ fontSize: '10px' }}>Preset:</span>
+          <span className="text-muted" style={{ fontSize: '11px' }}>Preset:</span>
           <select
             onChange={(e) => {
               const ep = QUICK_ENDPOINTS.find((q) => q.label === e.target.value);
               if (ep) handleSelectQuickEndpoint(ep);
             }}
             className="glass-input"
-            style={{ padding: '2px 6px', fontSize: '11px', borderRadius: '4px' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
           >
             <option value="">Select Local Service Endpoint...</option>
             {QUICK_ENDPOINTS.map((ep) => (
@@ -187,16 +187,18 @@ export default function ApiClientPanel() {
       </div>
 
       {/* URL & Method Bar */}
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2.5 mb-2.5">
         <select
           value={method}
           onChange={(e) => setMethod(e.target.value)}
           className="glass-input"
           style={{
-            padding: '5px 8px',
-            fontSize: '11px',
-            fontWeight: 600,
-            borderRadius: 'var(--radius-sm)',
+            height: '36px',
+            padding: '0 12px',
+            fontSize: '12.5px',
+            fontWeight: 700,
+            borderRadius: '6px',
+            minWidth: '95px',
             color: method === 'GET' ? 'var(--status-success)' : method === 'POST' ? 'var(--brand-cyan)' : 'var(--brand-gold)'
           }}
         >
@@ -213,7 +215,7 @@ export default function ApiClientPanel() {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="http://localhost:3000/..."
           className="glass-input flex-1"
-          style={{ padding: '5px 8px', fontSize: '11px', borderRadius: 'var(--radius-sm)' }}
+          style={{ height: '36px', padding: '0 12px', fontSize: '12.5px', borderRadius: '6px' }}
         />
 
         <Button
@@ -221,14 +223,14 @@ export default function ApiClientPanel() {
           icon={Send}
           onClick={handleSend}
           isLoading={isLoading}
-          style={{ padding: '5px 12px', fontSize: '11px' }}
+          style={{ height: '36px', padding: '0 18px', fontSize: '12.5px', fontWeight: 600 }}
         >
           Send
         </Button>
       </div>
 
       {/* Subtab Switcher (Body, Params, Headers, GraphQL) */}
-      <div className="flex items-center gap-1 mb-2 border-b border-white/5 pb-1">
+      <div className="flex items-center gap-1.5 mb-2.5 border-b border-white/5 pb-1.5">
         {[
           { id: 'body', label: 'JSON Body' },
           { id: 'params', label: `Params (${queryParams.filter((p) => p.enabled).length})` },

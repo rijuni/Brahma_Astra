@@ -60,71 +60,71 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3" style={{ borderRadius: 'var(--radius-md)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2">
-          <History size={15} color="var(--brand-gold)" />
-          <span style={{ fontSize: '12px', fontWeight: 600 }}>Task & Session History</span>
-          <Badge variant="cyan" size="small">{filtered.length} Sessions</Badge>
+      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-2.5">
+          <History size={16} color="var(--brand-gold)" />
+          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Task & Session History</span>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>{filtered.length} Sessions</Badge>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={handleExportHistory}
-            className="glass-btn-ghost flex items-center gap-1 text-muted hover:text-white"
-            style={{ fontSize: '10px', padding: '2px 6px' }}
+            className="glass-btn-ghost flex items-center gap-1.5 text-muted hover:text-white"
+            style={{ fontSize: '11.5px', height: '28px', padding: '0 10px', borderRadius: '6px' }}
             title="Export History JSON"
           >
-            <Download size={11} color="var(--brand-gold)" /> Export JSON
+            <Download size={13} color="var(--brand-gold)" /> Export JSON
           </button>
         </div>
       </div>
 
       {/* Search Input */}
-      <div className="glass-input flex items-center gap-2 mb-2" style={{ padding: '4px 8px', borderRadius: 'var(--radius-sm)' }}>
-        <Search size={11} color="var(--text-muted)" />
+      <div className="glass-input flex items-center gap-2 mb-2.5" style={{ padding: '6px 10px', borderRadius: 'var(--radius-sm)' }}>
+        <Search size={13} color="var(--text-muted)" />
         <input
           type="text"
           placeholder="Search past instructions or tasks..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '11px', width: '100%' }}
+          style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '12px', width: '100%' }}
         />
         {searchTerm && (
           <button onClick={() => setSearchTerm('')} className="glass-btn-ghost" style={{ padding: '2px' }}>
-            <X size={10} color="var(--text-muted)" />
+            <X size={12} color="var(--text-muted)" />
           </button>
         )}
       </div>
 
       {/* Task List */}
-      <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto">
         {filtered.length === 0 ? (
-          <div className="p-4 text-center text-muted body-small" style={{ fontSize: '11px' }}>
+          <div className="p-4 text-center text-muted body-small" style={{ fontSize: '12px' }}>
             No sessions match "{searchTerm}"
           </div>
         ) : (
           filtered.map((t) => (
             <div
               key={t.id}
-              className="flex flex-col p-2.5 rounded transition-all"
+              className="flex flex-col p-3 rounded-md transition-all"
               style={{
-                background: 'rgba(7, 10, 24, 0.4)',
-                border: '1px solid rgba(255, 255, 255, 0.04)'
+                background: 'rgba(7, 10, 24, 0.45)',
+                border: '1px solid rgba(255, 255, 255, 0.05)'
               }}
             >
-              <div className="flex items-center justify-between mb-1">
-                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              <div className="flex items-center justify-between mb-1.5">
+                <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
                   {t.title || 'Coding Task'}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-muted" style={{ fontSize: '10px' }}>{t.timestamp}</span>
-                  <Badge variant={t.status === 'completed' ? 'cyan' : 'gold'} size="small">{t.status}</Badge>
+                  <span className="text-muted" style={{ fontSize: '10.5px' }}>{t.timestamp}</span>
+                  <Badge variant={t.status === 'completed' ? 'cyan' : 'gold'} style={{ padding: '3px 7px', fontSize: '10.5px' }}>{t.status}</Badge>
                 </div>
               </div>
 
-              <p className="body-small text-secondary mb-2" style={{ fontSize: '11px', lineHeight: '1.4' }}>
+              <p className="body-small text-secondary mb-2" style={{ fontSize: '12px', lineHeight: '1.45' }}>
                 {t.instruction}
               </p>
 
@@ -135,10 +135,10 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
                       onRestoreTask(t);
                       addToast(`Restored task "${t.title || t.id}" into active studio`, 'info');
                     }}
-                    className="glass-btn-ghost body-small flex items-center gap-1 hover:text-white"
-                    style={{ padding: '2px 8px', fontSize: '10px', color: 'var(--brand-gold)' }}
+                    className="glass-btn-ghost body-small flex items-center gap-1.5 hover:text-white"
+                    style={{ height: '28px', padding: '0 10px', fontSize: '11.5px', color: 'var(--brand-gold)', borderRadius: '5px' }}
                   >
-                    <RotateCcw size={10} />
+                    <RotateCcw size={12} />
                     <span>Restore Session</span>
                   </button>
                 </div>
