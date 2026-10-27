@@ -514,3 +514,256 @@
 .theme-light .glass-modal-backdrop {
   background: rgba(15, 23, 42, 0.45);
 }
+
+/* FRIDAY Reactor Internal Precision Keyframe Animations */
+@keyframes reactorGearSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reactorTrackSpin {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes reactorCorePlasma {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(246, 200, 122, 0.75)) drop-shadow(0 0 24px rgba(229, 169, 60, 0.45));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 18px rgba(255, 220, 140, 0.95)) drop-shadow(0 0 36px rgba(246, 200, 122, 0.7));
+  }
+}
+
+.reactor-gear-spin {
+  animation: reactorGearSpin 36s linear infinite;
+}
+
+.reactor-track-spin {
+  animation: reactorTrackSpin 24s linear infinite;
+}
+
+.reactor-core-plasma {
+  animation: reactorCorePlasma 3s ease-in-out infinite;
+}
+
+/* FRIDAY Outer Orbit Keyframe Animations (Legacy Backwards Compatibility) */
+@keyframes reactorOuterSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes reactorInnerSpin {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes reactorCorePulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(246, 200, 122, 0.75)) drop-shadow(0 0 40px rgba(229, 169, 60, 0.45));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 32px rgba(255, 220, 140, 0.95)) drop-shadow(0 0 55px rgba(246, 200, 122, 0.65));
+    transform: scale(1.06);
+  }
+}
+
+/* FRIDAY Pod Breathing Border Glow */
+@keyframes fridayPodGlow {
+  0%, 100% {
+    border-color: rgba(246, 200, 122, 0.65);
+    box-shadow:
+      0 0 30px rgba(245, 175, 55, 0.28),
+      0 25px 60px rgba(0, 0, 0, 0.8),
+      inset 0 0 20px rgba(246, 200, 122, 0.12),
+      inset 0 1px 3px rgba(255, 255, 255, 0.45);
+  }
+  50% {
+    border-color: rgba(255, 225, 150, 0.9);
+    box-shadow:
+      0 0 48px rgba(245, 175, 55, 0.45),
+      0 25px 65px rgba(0, 0, 0, 0.85),
+      inset 0 0 30px rgba(246, 200, 122, 0.22),
+      inset 0 1px 4px rgba(255, 255, 255, 0.65);
+  }
+}
+
+/* Glass Sheen Light Reflection Sweep */
+@keyframes glassSheenSweep {
+  0% {
+    transform: translateX(-160%) skewX(-25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateX(260%) skewX(-25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(260%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+/* FRIDAY Cinematic Auth Pod (Ultra-Glassy Edition) */
+.friday-auth-canvas {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #070913;
+  background-image: url('/brand/friday-login-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.friday-auth-pod {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(246, 200, 122, 0.04) 25%,
+    rgba(14, 12, 26, 0.38) 60%,
+    rgba(18, 14, 30, 0.5) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1.5px solid rgba(246, 200, 122, 0.65);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+  border-radius: 28px;
+  box-shadow:
+    0 0 35px rgba(245, 175, 55, 0.3),
+    0 25px 60px rgba(0, 0, 0, 0.8),
+    inset 0 0 24px rgba(246, 200, 122, 0.15),
+    inset 0 1px 3px rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: fridayPodGlow 4s ease-in-out infinite;
+}
+
+/* Top shiny glass reflection */
+.friday-auth-pod::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Animated diagonal light sheen beam */
+.friday-auth-pod::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 240, 190, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: glassSheenSweep 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.friday-auth-input {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+  color: #FFFFFF !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.22s ease !important;
+}
+
+.friday-auth-input:focus {
+  border-color: rgba(246, 200, 122, 0.8) !important;
+  box-shadow: 0 0 18px rgba(246, 200, 122, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.friday-auth-btn-gold {
+  background: linear-gradient(90deg, #FCE38A 0%, #F3A638 100%) !important;
+  color: #120E05 !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 22px rgba(243, 166, 56, 0.45), inset 0 1px 2px #FFFFFF !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+}
+
+.friday-auth-btn-gold:hover {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 28px rgba(243, 166, 56, 0.65), inset 0 1px 3px #FFFFFF !important;
+  filter: brightness(1.08) !important;
+}
+
+.friday-auth-btn-gold:hover .auth-btn-arrow {
+  transform: translateX(4px);
+}
+
+.friday-auth-btn-gold:active {
+  transform: translateY(0px) !important;
+}
+
+.auth-btn-arrow {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.friday-social-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.22s ease;
+}
+
+.friday-social-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(246, 200, 122, 0.65);
+  box-shadow: 0 0 18px rgba(246, 200, 122, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}

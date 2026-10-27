@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, X } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, X, ArrowRight } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -88,6 +88,9 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         error={formErrors.email}
         disabled={isLoading}
         autoComplete="email"
+        wrapperMargin="8px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
       />
 
       <Input
@@ -100,6 +103,9 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         error={formErrors.password}
         disabled={isLoading}
         autoComplete="current-password"
+        wrapperMargin="8px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
         rightElement={
           <button
             type="button"
@@ -112,9 +118,9 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         }
       />
 
-      <div className="flex items-center justify-between" style={{ marginBottom: '14px', marginTop: '2px' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: '10px', marginTop: '2px' }}>
         <label className="flex items-center gap-2 cursor-pointer" style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-          <input type="checkbox" style={{ accentColor: 'var(--brand-gold)' }} />
+          <input type="checkbox" style={{ accentColor: 'var(--brand-gold)', borderRadius: '4px' }} />
           <span>Remember Me</span>
         </label>
         <button
@@ -134,15 +140,15 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         </button>
       </div>
 
-      <Button
+      <button
         type="submit"
-        variant="gold"
-        isLoading={isLoading}
-        className="w-full"
-        style={{ padding: '11px', fontSize: '14px' }}
+        disabled={isLoading}
+        className="friday-auth-btn-gold w-full"
+        style={{ height: '42px', fontSize: '14px', marginTop: '4px' }}
       >
-        Login
-      </Button>
+        <span>{isLoading ? 'Authenticating...' : 'Login'}</span>
+        {!isLoading && <ArrowRight size={17} className="auth-btn-arrow" />}
+      </button>
     </form>
   );
 }

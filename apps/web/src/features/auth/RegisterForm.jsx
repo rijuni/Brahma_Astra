@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -67,6 +67,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         onChange={(e) => setName(e.target.value)}
         error={formErrors.name}
         disabled={isLoading}
+        wrapperMargin="7px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
       />
 
       <Input
@@ -78,6 +81,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         onChange={(e) => setEmail(e.target.value)}
         error={formErrors.email}
         disabled={isLoading}
+        wrapperMargin="7px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
       />
 
       <Input
@@ -89,6 +95,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         onChange={(e) => setPassword(e.target.value)}
         error={formErrors.password}
         disabled={isLoading}
+        wrapperMargin="7px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
         rightElement={
           <button
             type="button"
@@ -109,17 +118,20 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         onChange={(e) => setConfirmPassword(e.target.value)}
         error={formErrors.confirmPassword}
         disabled={isLoading}
+        wrapperMargin="7px"
+        className="friday-auth-input"
+        style={{ height: '38px', fontSize: '13px' }}
       />
 
-      <Button
+      <button
         type="submit"
-        variant="gold"
-        isLoading={isLoading}
-        className="w-full"
-        style={{ marginTop: '6px', padding: '11px', fontSize: '14px' }}
+        disabled={isLoading}
+        className="friday-auth-btn-gold w-full"
+        style={{ height: '42px', fontSize: '14px', marginTop: '6px' }}
       >
-        Sign Up
-      </Button>
+        <span>{isLoading ? 'Creating Account...' : 'Sign Up'}</span>
+        {!isLoading && <ArrowRight size={17} className="auth-btn-arrow" />}
+      </button>
     </form>
   );
 }

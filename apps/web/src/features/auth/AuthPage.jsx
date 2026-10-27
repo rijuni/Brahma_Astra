@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import FridayArcReactor from '../../components/brand/FridayArcReactor';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/feedback/Toast';
 
@@ -55,108 +56,163 @@ export default function AuthPage({ onSuccess }) {
 
   return (
     <div
-      className="galaxy-canvas flex items-center justify-center"
+      className="friday-auth-canvas flex flex-col items-center justify-center relative"
       style={{
         minHeight: '100vh',
         width: '100vw',
-        padding: '16px',
+        padding: '20px 16px',
         boxSizing: 'border-box',
-        position: 'relative',
-        overflow: 'hidden'
+        position: 'relative'
       }}
     >
-      {/* Background Celestial Nebula Glow Orbs */}
+      {/* Top-Right HUD Environmental Motto */}
       <div
+        className="hidden-mobile"
         style={{
           position: 'absolute',
-          top: '20%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '640px',
-          height: '640px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(6, 182, 212, 0.1) 40%, transparent 70%)',
-          pointerEvents: 'none',
-          filter: 'blur(50px)',
-          zIndex: 0
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: '25%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '380px',
-          height: '380px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(246, 200, 122, 0.2) 0%, rgba(212, 154, 62, 0.08) 50%, transparent 70%)',
-          pointerEvents: 'none',
-          filter: 'blur(40px)',
-          zIndex: 0
-        }}
-      />
-
-      <div
-        className="glass-card-crystal animate-entrance"
-        style={{
-          maxWidth: '410px',
-          width: '100%',
-          padding: '28px 28px 22px',
-          position: 'relative',
-          zIndex: 1
+          top: '28px',
+          right: '40px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '6px',
+          zIndex: 10,
+          pointerEvents: 'none'
         }}
       >
-        {/* Brand Header: FRIDAY Arc Reactor & Wordmark */}
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: '18px' }}>
-          <img
-            src="/brand/friday-mark.svg"
-            alt="FRIDAY"
-            className="brahma-logo-gold"
-            style={{ width: '56px', height: '56px', marginBottom: '8px' }}
+        <div
+          style={{
+            fontSize: '11px',
+            letterSpacing: '0.24em',
+            color: 'rgba(255, 255, 255, 0.78)',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            textShadow: '0 0 10px rgba(0, 0, 0, 0.9)'
+          }}
+        >
+          THINK · EXPLORE · CREATE · EVOLVE
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
+          <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, transparent 0%, rgba(246, 200, 122, 0.6) 100%)' }} />
+          <span style={{ color: 'var(--brand-gold-light)', fontSize: '10px' }}>◆</span>
+          <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(246, 200, 122, 0.6) 0%, transparent 100%)' }} />
+        </div>
+      </div>
+
+      {/* Bottom-Left Bulkhead Pillars */}
+      <div
+        className="hidden-mobile"
+        style={{
+          position: 'absolute',
+          bottom: '28px',
+          left: '40px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px',
+          zIndex: 10,
+          pointerEvents: 'none',
+          fontSize: '10.5px',
+          letterSpacing: '0.24em',
+          color: 'rgba(246, 200, 122, 0.7)',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          lineHeight: '1.6',
+          textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
+        }}
+      >
+        <span>INTELLIGENCE</span>
+        <span>PRODUCTIVITY</span>
+        <span>CREATIVITY</span>
+        <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>WITHOUT LIMITS</span>
+      </div>
+
+      {/* Brand Header: Placed Outside & Above the Card */}
+      <div className="flex flex-col items-center text-center animate-entrance" style={{ marginBottom: '14px', zIndex: 10 }}>
+        {/* Authentic Arc Reactor Emblem (Internal Precision Animations) */}
+        <div
+          className="relative flex items-center justify-center"
+          style={{ width: '92px', height: '92px', marginBottom: '8px' }}
+        >
+          {/* Deep Space Backdrop Mask (Clears any background image artifacts behind the emblem) */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: '-10px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(7, 9, 19, 0.96) 0%, rgba(7, 9, 19, 0.85) 45%, transparent 75%)',
+              filter: 'blur(8px)',
+              pointerEvents: 'none'
+            }}
           />
-          <h1
+
+          {/* Ambient Gold Core Flare */}
+          <div
             style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '25px',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              background: 'linear-gradient(135deg, #FFE5A7 0%, #F6C87A 50%, #D49A3E 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '4px'
+              position: 'absolute',
+              inset: '6px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255, 215, 130, 0.35) 0%, rgba(229, 169, 60, 0.14) 48%, transparent 72%)',
+              filter: 'blur(10px)',
+              pointerEvents: 'none'
             }}
-          >
-            FRIDAY
-          </h1>
-          <span
-            style={{
-              fontFamily: 'var(--font-ui)',
-              fontSize: '10px',
-              fontWeight: 600,
-              letterSpacing: '0.15em',
-              color: 'var(--brand-gold-light)',
-              opacity: 0.85
-            }}
-          >
-            YOUR PERSONAL AI PLATFORM
-          </span>
+          />
+
+          {/* Dedicated Arc Reactor Vector (88px) */}
+          <FridayArcReactor size={88} />
         </div>
 
-        {/* Segmented Tab Switcher (Screen 2: [ Login ]  [ Sign Up ]) */}
+        <h1
+          style={{
+            fontFamily: "'Michroma', 'Syncopate', sans-serif",
+            fontSize: '34px',
+            fontWeight: 700,
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF3D6 24%, #F6C87A 58%, #D49A3E 82%, #9B6717 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: '4px',
+            filter: 'drop-shadow(0 0 20px rgba(246, 200, 122, 0.55)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95))'
+          }}
+        >
+          FRIDAY
+        </h1>
+        <span
+          style={{
+            fontFamily: "'Michroma', 'Syncopate', sans-serif",
+            fontSize: '9px',
+            fontWeight: 700,
+            letterSpacing: '0.24em',
+            color: 'var(--brand-gold-light)',
+            opacity: 0.95,
+            textShadow: '0 0 14px rgba(246, 200, 122, 0.6), 0 2px 8px rgba(0, 0, 0, 0.9)'
+          }}
+        >
+          YOUR PERSONAL AI PLATFORM
+        </span>
+      </div>
+
+      {/* Center Auth Pod Container */}
+      <div
+        className="friday-auth-pod animate-entrance"
+        style={{
+          maxWidth: '430px',
+          width: '100%',
+          padding: tab === 'register' ? '20px 28px 18px' : '24px 28px 20px',
+          position: 'relative',
+          zIndex: 10
+        }}
+      >
+        {/* Segmented Tab Switcher: [ Login ] [ Sign Up ] */}
         <div
           style={{
             display: 'flex',
-            background: 'rgba(0, 0, 0, 0.35)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            borderRadius: 'var(--radius-pill)',
+            background: 'rgba(0, 0, 0, 0.5)',
+            borderRadius: '9999px',
             padding: '3px',
-            marginBottom: '18px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.3)',
-            boxShadow: 'inset 0 2px 5px rgba(0, 0, 0, 0.45)',
-            boxSizing: 'border-box'
+            marginBottom: '14px',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.5)'
           }}
         >
           <button
@@ -164,19 +220,18 @@ export default function AuthPage({ onSuccess }) {
             onClick={() => { setTab('login'); setAuthError(null); }}
             style={{
               flex: 1,
-              borderRadius: 'var(--radius-pill)',
+              borderRadius: '9999px',
               padding: '8px 0',
               fontSize: '13px',
               fontWeight: tab === 'login' ? 700 : 500,
-              color: tab === 'login' ? '#0B0F1A' : 'rgba(255, 255, 255, 0.7)',
+              color: tab === 'login' ? '#120E05' : 'rgba(255, 255, 255, 0.7)',
               background: tab === 'login'
-                ? 'linear-gradient(135deg, #FFF3D6 0%, #F6C87A 40%, #E2A646 80%, #C48226 100%)'
+                ? 'linear-gradient(135deg, #FAD982 0%, #E5A93C 100%)'
                 : 'transparent',
-              border: tab === 'login' ? '1px solid rgba(255, 255, 255, 0.65)' : '1px solid transparent',
-              borderTop: tab === 'login' ? '1px solid #FFFFFF' : '1px solid transparent',
-              boxShadow: tab === 'login' ? '0 3px 14px rgba(246, 200, 122, 0.45), inset 0 1px 2px #FFFFFF' : 'none',
+              border: 'none',
+              boxShadow: tab === 'login' ? '0 2px 12px rgba(229, 169, 60, 0.45)' : 'none',
               cursor: 'pointer',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+              transition: 'all 0.2s ease'
             }}
           >
             Login
@@ -186,19 +241,18 @@ export default function AuthPage({ onSuccess }) {
             onClick={() => { setTab('register'); setAuthError(null); }}
             style={{
               flex: 1,
-              borderRadius: 'var(--radius-pill)',
+              borderRadius: '9999px',
               padding: '8px 0',
               fontSize: '13px',
               fontWeight: tab === 'register' ? 700 : 500,
-              color: tab === 'register' ? '#0B0F1A' : 'rgba(255, 255, 255, 0.7)',
+              color: tab === 'register' ? '#120E05' : 'rgba(255, 255, 255, 0.7)',
               background: tab === 'register'
-                ? 'linear-gradient(135deg, #FFF3D6 0%, #F6C87A 40%, #E2A646 80%, #C48226 100%)'
+                ? 'linear-gradient(135deg, #FAD982 0%, #E5A93C 100%)'
                 : 'transparent',
-              border: tab === 'register' ? '1px solid rgba(255, 255, 255, 0.65)' : '1px solid transparent',
-              borderTop: tab === 'register' ? '1px solid #FFFFFF' : '1px solid transparent',
-              boxShadow: tab === 'register' ? '0 3px 14px rgba(246, 200, 122, 0.45), inset 0 1px 2px #FFFFFF' : 'none',
+              border: 'none',
+              boxShadow: tab === 'register' ? '0 2px 12px rgba(229, 169, 60, 0.45)' : 'none',
               cursor: 'pointer',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+              transition: 'all 0.2s ease'
             }}
           >
             Sign Up
@@ -213,7 +267,7 @@ export default function AuthPage({ onSuccess }) {
         )}
 
         {/* Divider: or continue with */}
-        <div style={{ position: 'relative', margin: '18px 0 14px', textAlign: 'center' }}>
+        <div style={{ position: 'relative', margin: '12px 0 10px', textAlign: 'center' }}>
           <div
             style={{
               position: 'absolute',
@@ -221,21 +275,21 @@ export default function AuthPage({ onSuccess }) {
               left: 0,
               right: 0,
               height: '1px',
-              background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.18) 50%, transparent 100%)'
+              background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.16) 30%, rgba(255, 255, 255, 0.16) 70%, transparent 100%)'
             }}
           />
           <span
             style={{
               position: 'relative',
-              background: 'rgba(16, 20, 42, 0.85)',
+              background: 'rgba(16, 12, 24, 0.85)',
               backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: 'var(--radius-pill)',
-              padding: '2px 12px',
-              fontSize: '11px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '9999px',
+              padding: '1px 12px',
+              fontSize: '10.5px',
               fontWeight: 500,
               letterSpacing: '0.04em',
-              color: 'var(--text-muted)'
+              color: 'rgba(255, 255, 255, 0.55)'
             }}
           >
             or continue with
@@ -243,13 +297,20 @@ export default function AuthPage({ onSuccess }) {
         </div>
 
         {/* Social Circular Icon Buttons (Google, Apple, Microsoft) */}
-        <div className="flex gap-3 justify-center" style={{ marginBottom: '16px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '16px',
+            marginBottom: '12px'
+          }}
+        >
           {/* Google Button */}
           <button
             type="button"
             onClick={() => addToast('Google OAuth is not configured on local server.', 'info')}
-            className="glass-social-btn"
-            style={{ width: '42px', height: '42px' }}
+            className="friday-social-icon-btn"
             title="Sign in with Google"
           >
             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -264,8 +325,7 @@ export default function AuthPage({ onSuccess }) {
           <button
             type="button"
             onClick={() => addToast('Apple Sign-In is not configured on local server.', 'info')}
-            className="glass-social-btn"
-            style={{ width: '42px', height: '42px' }}
+            className="friday-social-icon-btn"
             title="Sign in with Apple"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -277,8 +337,7 @@ export default function AuthPage({ onSuccess }) {
           <button
             type="button"
             onClick={() => addToast('Microsoft Sign-In is not configured on local server.', 'info')}
-            className="glass-social-btn"
-            style={{ width: '42px', height: '42px' }}
+            className="friday-social-icon-btn"
             title="Sign in with Microsoft"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
@@ -290,10 +349,10 @@ export default function AuthPage({ onSuccess }) {
           </button>
         </div>
 
-        {/* Footer Navigation Link (Card Ends Cleanly Here) */}
+        {/* Footer Navigation Link */}
         <div style={{ textAlign: 'center', margin: 0 }}>
           {tab === 'login' ? (
-            <span className="body-small text-muted" style={{ fontSize: '12px' }}>
+            <span className="body-small" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)' }}>
               Don't have an account?{' '}
               <button
                 type="button"
@@ -301,7 +360,7 @@ export default function AuthPage({ onSuccess }) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'var(--brand-cyan-light)',
+                  color: '#FAD982',
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: 0,
@@ -317,7 +376,7 @@ export default function AuthPage({ onSuccess }) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'var(--brand-gold)',
+                  color: 'var(--brand-gold-light)',
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: 0,
@@ -329,7 +388,7 @@ export default function AuthPage({ onSuccess }) {
               </button>
             </span>
           ) : (
-            <span className="body-small text-muted" style={{ fontSize: '12px' }}>
+            <span className="body-small" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)' }}>
               Already have an account?{' '}
               <button
                 type="button"
@@ -337,7 +396,7 @@ export default function AuthPage({ onSuccess }) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'var(--brand-cyan-light)',
+                  color: '#FAD982',
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: 0,
