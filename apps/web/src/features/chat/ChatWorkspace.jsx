@@ -16,6 +16,7 @@ import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import EmptyState from '../../components/common/EmptyState';
+import FridayArcReactor from '../../components/brand/FridayArcReactor';
 import { conversationService } from '../../services/conversation-service';
 import { aiService } from '../../services/ai-service';
 import { useToast } from '../../components/feedback/Toast';
@@ -275,38 +276,37 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
     >
       {/* Left Conversations Rail */}
       <div
-        className="glass-card flex flex-col"
+        className="friday-workspace-panel friday-caliper-box flex flex-col"
         style={{
           width: '280px',
-          padding: '16px',
-          borderRadius: 'var(--radius-lg)',
+          padding: '18px 16px',
           flexShrink: 0
         }}
       >
         <Button
-          variant="primary"
+          variant="gold"
           onClick={handleNewChat}
           icon={Plus}
           className="w-full"
-          style={{ marginBottom: '14px' }}
+          style={{ marginBottom: '14px', fontWeight: 700, letterSpacing: '0.04em' }}
         >
           New Chat
         </Button>
 
         {/* Search Input */}
-        <div className="glass-input flex items-center gap-2" style={{ padding: '6px 10px', marginBottom: '14px' }}>
-          <Search size={14} color="var(--text-muted)" />
+        <div className="friday-search-bar flex items-center gap-2" style={{ padding: '6px 12px', marginBottom: '14px' }}>
+          <Search size={14} color="#F6C87A" />
           <input
             type="text"
             placeholder="Search chats..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: '13px', width: '100%' }}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFFFFF', fontSize: '13px', width: '100%' }}
           />
         </div>
 
         {/* Conversation List */}
-        <div className="flex flex-col gap-1" style={{ flex: 1, overflowY: 'auto' }}>
+        <div className="flex flex-col gap-1.5" style={{ flex: 1, overflowY: 'auto' }}>
           {isLoadingList ? (
             <LoadingSpinner size={20} label="" />
           ) : filteredConversations.length === 0 ? (
@@ -320,25 +320,27 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                 <button
                   key={conv.id}
                   onClick={() => setActiveConversationId(conv.id)}
-                  className={`glass-btn ${isActive ? 'glass-btn-secondary' : 'glass-btn-ghost'} flex items-center gap-2 w-full text-left`}
+                  className="flex items-center gap-2.5 w-full text-left"
                   style={{
-                    padding: '8px 12px',
-                    borderRadius: 'var(--radius-md)',
-                    border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent',
-                    background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
-                    boxShadow: isActive ? '0 2px 8px var(--brand-violet-glow)' : 'none',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    border: isActive ? '1px solid rgba(246, 200, 122, 0.5)' : '1px solid transparent',
+                    background: isActive ? 'linear-gradient(90deg, rgba(246, 200, 122, 0.22) 0%, rgba(229, 169, 60, 0.08) 100%)' : 'transparent',
+                    boxShadow: isActive ? '0 2px 10px rgba(246, 200, 122, 0.2)' : 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
                     justifyContent: 'flex-start'
                   }}
                 >
-                  <MessageSquare size={14} color={isActive ? 'var(--brand-gold)' : 'var(--text-muted)'} style={{ flexShrink: 0 }} />
+                  <MessageSquare size={14} color={isActive ? '#FAD982' : 'rgba(255, 255, 255, 0.5)'} style={{ flexShrink: 0 }} />
                   <span
-                    className="body-regular"
                     style={{
                       fontSize: '13px',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
-                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)'
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.72)'
                     }}
                   >
                     {conv.title || 'Untitled Chat'}
@@ -352,9 +354,8 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
 
       {/* Main Chat Thread & Composer Area */}
       <div
-        className="glass-card flex flex-col flex-1"
+        className="friday-workspace-panel friday-caliper-box flex flex-col flex-1"
         style={{
-          borderRadius: 'var(--radius-lg)',
           padding: '20px 24px',
           overflow: 'hidden'
         }}
@@ -364,27 +365,36 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           className="flex items-center justify-between"
           style={{
             paddingBottom: '14px',
-            borderBottom: '1px solid var(--glass-border)',
+            borderBottom: '1px solid rgba(246, 200, 122, 0.18)',
             marginBottom: '16px'
           }}
         >
           <div className="flex items-center gap-3">
-            <img
-              src="/brand/friday-mark.svg"
-              alt="FRIDAY"
-              className="brahma-logo-gold"
-              style={{ width: '24px', height: '24px' }}
-            />
+            <div style={{ flexShrink: 0 }}>
+              <FridayArcReactor size={28} />
+            </div>
             <div>
-              <span className="card-title" style={{ fontSize: '15px' }}>FRIDAY Intelligence Chat</span>
-              <span className="body-small text-muted" style={{ marginLeft: '8px' }}>
+              <span
+                style={{
+                  fontFamily: "'Michroma', sans-serif",
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  letterSpacing: '0.04em',
+                  color: '#FFFFFF'
+                }}
+              >
+                FRIDAY Neural Chat
+              </span>
+              <span className="body-small" style={{ marginLeft: '10px', color: 'rgba(255, 255, 255, 0.6)' }}>
                 {conversations.find((c) => c.id === activeConversationId)?.title || 'Active Session'}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="status-live-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--status-success)' }} />
-            <span className="body-small text-muted" style={{ fontSize: '11px' }}>FRIDAY Core Live</span>
+            <span className="telemetry-beacon-online" />
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold-light)', letterSpacing: '0.04em' }}>
+              NEURAL CORE ONLINE
+            </span>
           </div>
         </div>
 
@@ -396,7 +406,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
             <EmptyState
               icon={Bot}
               title="Welcome to FRIDAY Chat"
-              description="Ask complex research questions, analyze systems, write code, or draft documents."
+              description="Ask complex research questions, analyze telemetry, build code, or draft architectural systems."
             />
           ) : (
             messages.map((msg) => {
@@ -409,55 +419,34 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                   className={`flex gap-3 animate-entrance ${isAssistant ? 'justify-start' : 'justify-end'}`}
                 >
                   {isAssistant && (
-                    <div
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, rgba(246, 200, 122, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)',
-                        border: '1px solid var(--glass-border-gold)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                      }}
-                    >
-                      <img src="/brand/friday-mark.svg" alt="" style={{ width: '18px', height: '18px' }} />
+                    <div style={{ flexShrink: 0, marginTop: '2px' }}>
+                      <FridayArcReactor size={32} />
                     </div>
                   )}
 
                   <div
-                    className="glass-card"
+                    className={isAssistant ? 'friday-chat-bubble-ai' : 'friday-chat-bubble-user'}
                     style={{
                       maxWidth: '75%',
                       padding: '14px 18px',
-                      borderRadius: 'var(--radius-lg)',
-                      background: isAssistant
-                        ? 'rgba(30, 27, 61, 0.65)'
-                        : 'linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 85, 247, 0.2) 100%)',
-                      borderColor: isAssistant
-                        ? (msg.isError ? 'var(--status-error)' : 'var(--glass-border-violet)')
-                        : 'var(--brand-violet)',
-                      boxShadow: isAssistant
-                        ? '0 4px 16px rgba(0, 0, 0, 0.3)'
-                        : '0 4px 20px var(--brand-violet-glow)'
+                      borderColor: msg.isError ? 'var(--status-error)' : undefined
                     }}
                   >
                     <div className="flex items-center justify-between" style={{ marginBottom: '6px' }}>
-                      <span className="body-small" style={{ fontWeight: 600, color: isAssistant ? 'var(--brand-gold)' : 'var(--text-primary)' }}>
+                      <span className="body-small" style={{ fontWeight: 700, letterSpacing: '0.04em', color: isAssistant ? '#FAD982' : '#FFFFFF' }}>
                         {isAssistant ? 'FRIDAY' : 'You'}
                       </span>
                       <button
                         onClick={() => handleCopyMessage(msg.id, msg.content)}
                         className="glass-btn-ghost"
-                        style={{ padding: '2px', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+                        style={{ padding: '2px', border: 'none', cursor: 'pointer', color: 'rgba(255, 255, 255, 0.5)' }}
                         title="Copy message"
                       >
-                        {isCopied ? <Check size={12} color="var(--status-success)" /> : <Copy size={12} />}
+                        {isCopied ? <Check size={13} color="#10B981" /> : <Copy size={13} />}
                       </button>
                     </div>
 
-                    <div className="body-regular" style={{ color: 'var(--text-primary)' }}>
+                    <div className="body-regular" style={{ fontSize: '14px', color: '#FFFFFF' }}>
                       {renderMessageContent(msg.content)}
                     </div>
                   </div>
@@ -469,35 +458,21 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           {/* AI Thinking Waveform Indicator */}
           {isGenerating && (
             <div className="flex gap-3 items-center animate-entrance" style={{ padding: '8px 0' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: 'rgba(139, 92, 246, 0.2)',
-                  border: '1px solid var(--glass-border-violet)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Sparkles size={16} color="var(--brand-gold)" />
+              <div style={{ flexShrink: 0 }}>
+                <FridayArcReactor size={26} />
               </div>
               <div
-                className="glass-card flex items-center gap-2"
+                className="friday-chat-bubble-ai flex items-center gap-2"
                 style={{
-                  padding: '10px 16px',
-                  borderRadius: 'var(--radius-pill)',
-                  border: '1px solid var(--glass-border-violet)'
+                  padding: '8px 16px',
+                  borderRadius: '9999px'
                 }}
               >
-                <span className="body-small text-violet" style={{ fontWeight: 500 }}>
-                  FRIDAY Core is thinking
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--brand-gold-light)', letterSpacing: '0.04em' }}>
+                  FRIDAY Neural Engine synthesizing
                 </span>
-                <div className="flex items-center gap-1" style={{ marginLeft: '6px' }}>
-                  <div className="ai-wave-dot" />
-                  <div className="ai-wave-dot" />
-                  <div className="ai-wave-dot" />
+                <div className="flex items-center gap-1" style={{ marginLeft: '4px' }}>
+                  <div className="telemetry-beacon-online" style={{ width: '6px', height: '6px' }} />
                 </div>
               </div>
             </div>

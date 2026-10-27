@@ -102,10 +102,35 @@ export default function FilesWorkspace() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="page-title" style={{ fontSize: '24px', marginBottom: '4px' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(0, 0, 0, 0.45)',
+              border: '1px solid rgba(246, 200, 122, 0.3)',
+              borderRadius: '9999px',
+              padding: '2px 12px',
+              marginBottom: '6px'
+            }}
+          >
+            <span className="telemetry-beacon-online" />
+            <span
+              style={{
+                fontSize: '9.5px',
+                letterSpacing: '0.2em',
+                color: 'var(--brand-gold-light)',
+                textTransform: 'uppercase',
+                fontWeight: 700
+              }}
+            >
+              QUANTUM-SAFE ENCLAVE // FILE VAULT
+            </span>
+          </div>
+          <h1 className="friday-page-title">
             Document & File Management
           </h1>
-          <p className="body-small text-muted">
+          <p className="body-small" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>
             Upload, inspect, and stage files for AI reasoning and knowledge indexing.
           </p>
         </div>
@@ -114,6 +139,7 @@ export default function FilesWorkspace() {
           variant="gold"
           icon={Upload}
           onClick={() => fileInputRef.current?.click()}
+          style={{ fontWeight: 700, letterSpacing: '0.04em' }}
         >
           Upload Files
         </Button>
@@ -121,35 +147,31 @@ export default function FilesWorkspace() {
 
       {/* Backend Status Notice */}
       <div
-        className="glass-card flex items-center justify-between"
+        className="friday-workspace-panel flex items-center justify-between"
         style={{
           padding: '12px 18px',
-          borderColor: 'var(--brand-cyan)',
-          background: 'rgba(6, 182, 212, 0.08)'
+          borderColor: 'rgba(56, 189, 248, 0.35)',
+          background: 'rgba(8, 20, 36, 0.55)'
         }}
       >
         <div className="flex items-center gap-3">
-          <Info size={18} color="var(--brand-cyan-light)" />
-          <span className="body-regular" style={{ fontSize: '13px' }}>
-            <strong>Local Workspace Staging Active:</strong> Files are held safely in client session memory. Persistent remote cloud storage endpoint integration is currently pending backend S3 setup.
+          <Info size={18} color="#7DD3FC" />
+          <span className="body-regular" style={{ fontSize: '13px', color: '#FFFFFF' }}>
+            <strong style={{ color: '#7DD3FC' }}>Local Workspace Staging Active:</strong> Files are held safely in client session memory. Persistent remote cloud storage endpoint integration is currently pending backend S3 setup.
           </span>
         </div>
         <Badge variant="cyan">Session Staging</Badge>
       </div>
 
-      {/* Drag & Drop Zone */}
+      {/* Drag & Drop Zone with Caliper Brackets */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className="glass-card flex flex-col items-center justify-center text-center cursor-pointer"
+        className={`friday-dropzone friday-caliper-box flex flex-col items-center justify-center text-center cursor-pointer ${isDragging ? 'dragging' : ''}`}
         style={{
-          padding: '48px 24px',
-          borderRadius: 'var(--radius-xl)',
-          border: `2px dashed ${isDragging ? 'var(--brand-gold)' : 'var(--glass-border-violet)'}`,
-          background: isDragging ? 'rgba(139, 92, 246, 0.15)' : 'rgba(30, 27, 61, 0.4)',
-          transition: 'all 0.2s ease'
+          padding: '48px 24px'
         }}
       >
         <input
@@ -162,37 +184,58 @@ export default function FilesWorkspace() {
 
         <div
           style={{
-            width: '56px',
-            height: '56px',
+            width: '60px',
+            height: '60px',
             borderRadius: '50%',
-            background: 'rgba(246, 200, 122, 0.15)',
-            border: '1px solid var(--glass-border-gold)',
+            background: 'linear-gradient(135deg, rgba(246, 200, 122, 0.22) 0%, rgba(229, 169, 60, 0.1) 100%)',
+            border: '1.5px solid rgba(246, 200, 122, 0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '16px',
-            color: 'var(--brand-gold)'
+            color: 'var(--brand-gold-light)',
+            boxShadow: '0 0 20px rgba(246, 200, 122, 0.25)'
           }}
         >
-          <Upload size={24} />
+          <Upload size={26} />
         </div>
 
-        <h3 className="card-title" style={{ fontSize: '18px', marginBottom: '6px' }}>
-          Drag & Drop Files Here, or <span style={{ color: 'var(--brand-gold)' }}>Browse</span>
+        <h3
+          style={{
+            fontFamily: "'Michroma', sans-serif",
+            fontSize: '17px',
+            fontWeight: 700,
+            letterSpacing: '0.04em',
+            color: '#FFFFFF',
+            marginBottom: '6px'
+          }}
+        >
+          Drag & Drop Files Here, or <span style={{ color: 'var(--brand-gold-light)' }}>Browse</span>
         </h3>
-        <p className="body-small text-muted" style={{ maxWidth: '440px' }}>
+        <p className="body-small" style={{ maxWidth: '440px', color: 'rgba(255, 255, 255, 0.65)' }}>
           Supports PDF, Markdown, DOCX, JSON, CSV, and code files up to 25MB per file.
         </p>
       </div>
 
       {/* File Inventory Table */}
-      <Card style={{ padding: '24px' }}>
+      <div className="friday-workspace-panel friday-caliper-box" style={{ padding: '24px' }}>
         <div className="flex items-center justify-between" style={{ marginBottom: '18px' }}>
           <div className="flex items-center gap-2">
-            <HardDrive size={18} color="var(--brand-violet-light)" />
-            <h2 className="section-title" style={{ fontSize: '18px' }}>Workspace Files</h2>
+            <HardDrive size={18} color="var(--brand-gold-light)" />
+            <h2
+              style={{
+                fontFamily: "'Michroma', sans-serif",
+                fontSize: '15px',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                color: '#FFFFFF',
+                margin: 0
+              }}
+            >
+              Workspace Files
+            </h2>
           </div>
-          <span className="body-small text-muted">{files.length} Item(s) Staged</span>
+          <span className="body-small" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{files.length} Item(s) Staged</span>
         </div>
 
         {files.length === 0 ? (
@@ -205,12 +248,12 @@ export default function FilesWorkspace() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--text-muted)', fontSize: '12px' }}>
-                  <th style={{ padding: '12px 16px', fontWeight: 500 }}>NAME</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 500 }}>SIZE</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 500 }}>TYPE</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 500 }}>UPLOADED</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 500, textAlign: 'right' }}>ACTIONS</th>
+                <tr style={{ borderBottom: '1px solid rgba(246, 200, 122, 0.16)', color: 'rgba(255, 255, 255, 0.55)', fontSize: '11px', letterSpacing: '0.08em' }}>
+                  <th style={{ padding: '12px 16px', fontWeight: 600 }}>NAME</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 600 }}>SIZE</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 600 }}>TYPE</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 600 }}>UPLOADED</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 600, textAlign: 'right' }}>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -218,21 +261,36 @@ export default function FilesWorkspace() {
                   <tr
                     key={file.id}
                     style={{
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-                      fontSize: '13px'
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                      fontSize: '13px',
+                      transition: 'background 0.2s ease'
                     }}
                   >
                     <td style={{ padding: '14px 16px' }}>
                       <div className="flex items-center gap-3">
-                        <FileText size={16} color="var(--brand-gold)" />
-                        <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{file.name}</span>
+                        <FileText size={16} color="var(--brand-gold-light)" />
+                        <span style={{ fontWeight: 600, color: '#FFFFFF' }}>{file.name}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '14px 16px', color: 'var(--text-secondary)' }}>{file.size}</td>
+                    <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.7)' }}>{file.size}</td>
                     <td style={{ padding: '14px 16px' }}>
-                      <Badge variant="violet">{file.type.split('/')[1] || 'file'}</Badge>
+                      <span
+                        style={{
+                          fontSize: '10px',
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          fontWeight: 700,
+                          padding: '2px 8px',
+                          borderRadius: '9999px',
+                          background: 'rgba(246, 200, 122, 0.15)',
+                          border: '1px solid rgba(246, 200, 122, 0.35)',
+                          color: '#FAD982'
+                        }}
+                      >
+                        {file.type.split('/')[1] || 'file'}
+                      </span>
                     </td>
-                    <td style={{ padding: '14px 16px', color: 'var(--text-muted)' }}>
+                    <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.55)' }}>
                       {new Date(file.uploadedAt).toLocaleDateString()}
                     </td>
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -240,18 +298,18 @@ export default function FilesWorkspace() {
                         <button
                           onClick={() => handleDownload(file)}
                           className="glass-btn-ghost"
-                          style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
+                          style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px', color: 'rgba(255, 255, 255, 0.7)' }}
                           title="Download file snapshot"
                         >
-                          <Download size={15} color="var(--text-secondary)" />
+                          <Download size={15} />
                         </button>
                         <button
                           onClick={() => handleDelete(file.id, file.name)}
                           className="glass-btn-ghost"
-                          style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
+                          style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px', color: '#F87171' }}
                           title="Delete file"
                         >
-                          <Trash2 size={15} color="var(--status-error)" />
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </td>
@@ -261,7 +319,7 @@ export default function FilesWorkspace() {
             </table>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 }

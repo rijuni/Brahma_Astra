@@ -74,16 +74,22 @@ export default function PromptComposer({
           {attachments.map((att, idx) => (
             <span
               key={idx}
-              className="badge badge-violet flex items-center gap-1 animate-entrance"
-              style={{ fontSize: '12px', padding: '4px 8px' }}
+              className="badge flex items-center gap-1 animate-entrance"
+              style={{
+                fontSize: '12px',
+                padding: '4px 8px',
+                background: 'rgba(246, 200, 122, 0.15)',
+                border: '1px solid rgba(246, 200, 122, 0.35)',
+                color: '#FAD982'
+              }}
             >
               <Paperclip size={12} />
               <span>{att.name}</span>
-              <span className="text-muted" style={{ fontSize: '10px' }}>({att.size})</span>
+              <span style={{ fontSize: '10px', opacity: 0.7 }}>({att.size})</span>
               <button
                 type="button"
                 onClick={() => removeAttachment(idx)}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#FAD982' }}
               >
                 <X size={12} />
               </button>
@@ -95,13 +101,16 @@ export default function PromptComposer({
       {/* Floating Frosted Glass Composer Container */}
       <form
         onSubmit={handleSubmit}
-        className="glass-card flex items-end gap-2"
+        className="flex items-end gap-2"
         style={{
           padding: '8px 12px',
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid var(--glass-border-violet)',
-          background: 'rgba(15, 23, 42, 0.65)',
-          boxShadow: '0 8px 32px var(--brand-violet-glow)'
+          borderRadius: '20px',
+          border: '1.5px solid rgba(246, 200, 122, 0.35)',
+          borderTop: '1.5px solid rgba(255, 255, 255, 0.4)',
+          background: 'rgba(10, 9, 20, 0.7)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1)'
         }}
       >
         <input
@@ -117,10 +126,10 @@ export default function PromptComposer({
           onClick={() => fileInputRef.current?.click()}
           disabled={isGenerating || disabled}
           className="glass-btn-ghost"
-          style={{ padding: '8px', borderRadius: '50%', border: 'none', cursor: 'pointer', marginBottom: '2px' }}
+          style={{ padding: '8px', borderRadius: '50%', border: 'none', cursor: 'pointer', marginBottom: '2px', color: 'rgba(255, 255, 255, 0.6)' }}
           title="Attach file"
         >
-          <Paperclip size={18} color="var(--text-muted)" />
+          <Paperclip size={18} />
         </button>
 
         <textarea
@@ -137,7 +146,7 @@ export default function PromptComposer({
             background: 'transparent',
             border: 'none',
             outline: 'none',
-            color: 'var(--text-primary)',
+            color: '#FFFFFF',
             fontSize: '14px',
             lineHeight: '1.5',
             resize: 'none',
@@ -150,8 +159,17 @@ export default function PromptComposer({
           <button
             type="button"
             onClick={onCancelGeneration}
-            className="glass-btn glass-btn-secondary flex items-center justify-center"
-            style={{ width: '38px', height: '38px', padding: 0, borderRadius: '50%', color: 'var(--status-warning)' }}
+            className="flex items-center justify-center"
+            style={{
+              width: '38px',
+              height: '38px',
+              padding: 0,
+              borderRadius: '50%',
+              border: '1px solid rgba(239, 68, 68, 0.5)',
+              background: 'rgba(239, 68, 68, 0.2)',
+              color: '#F87171',
+              cursor: 'pointer'
+            }}
             title="Stop generation"
           >
             <Square size={16} />
@@ -160,8 +178,23 @@ export default function PromptComposer({
           <button
             type="submit"
             disabled={!content.trim() || disabled}
-            className="glass-btn glass-btn-primary flex items-center justify-center"
-            style={{ width: '38px', height: '38px', padding: 0, borderRadius: '50%' }}
+            style={{
+              width: '38px',
+              height: '38px',
+              padding: 0,
+              borderRadius: '50%',
+              border: 'none',
+              background: content.trim() && !disabled
+                ? 'linear-gradient(135deg, #FFE89E 0%, #F6C87A 50%, #D49A3E 100%)'
+                : 'rgba(255, 255, 255, 0.08)',
+              color: content.trim() && !disabled ? '#0B0A12' : 'rgba(255, 255, 255, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: content.trim() && !disabled ? 'pointer' : 'not-allowed',
+              boxShadow: content.trim() && !disabled ? '0 0 14px rgba(246, 200, 122, 0.45)' : 'none',
+              transition: 'all 0.22s ease'
+            }}
             title="Send prompt"
           >
             <Send size={16} />
@@ -172,8 +205,8 @@ export default function PromptComposer({
         <span className="body-small text-muted" style={{ fontSize: '11px' }}>
           Enter sends, Shift + Enter for new lines
         </span>
-        <span className="body-small text-muted" style={{ fontSize: '11px' }}>
-          FRIDAY Core AI Orchestration
+        <span style={{ fontSize: '11px', color: 'var(--brand-gold-light)', fontWeight: 600 }}>
+          FRIDAY Neural Synthesis Active
         </span>
       </div>
     </div>

@@ -56,15 +56,15 @@
   --scrollbar-thumb-hover: rgba(124, 58, 237, 0.55);
 }
 
-/* Cosmic Background Canvas with Galaxy Support */
+/* Cosmic Background Canvas with Cockpit Command Deck Support */
 .cosmic-canvas {
   min-height: 100vh;
-  background-color: var(--bg-deep-space);
+  background-color: #070913;
   background-image:
-    linear-gradient(180deg, rgba(7, 10, 24, 0.45) 0%, rgba(11, 15, 26, 0.7) 100%),
-    url('/backgrounds/galaxy-bg.jpg');
+    linear-gradient(180deg, rgba(7, 9, 19, 0.55) 0%, rgba(10, 12, 22, 0.75) 100%),
+    url('/brand/friday-login-bg.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--text-primary);
@@ -767,3 +767,410 @@
     display: none !important;
   }
 }
+
+/* FRIDAY Cockpit Hero Command Deck */
+.friday-hero-deck {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(246, 200, 122, 0.03) 25%,
+    rgba(14, 12, 26, 0.45) 60%,
+    rgba(18, 14, 30, 0.6) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(246, 200, 122, 0.35);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(245, 175, 55, 0.15),
+    inset 0 0 20px rgba(246, 200, 122, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diagonal Glass Sheen Reflection for Hero Deck */
+.friday-hero-deck::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 240, 190, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: glassSheenSweep 9s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Stark-Tech HUD Feature Module */
+.friday-hud-module {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(246, 200, 122, 0.04) 30%,
+    rgba(12, 10, 24, 0.6) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(246, 200, 122, 0.22);
+  border-top: 2px solid rgba(246, 200, 122, 0.6);
+  border-radius: 18px;
+  padding: 22px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 148px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 16px rgba(246, 200, 122, 0.04);
+}
+
+.friday-hud-module:hover {
+  border-color: rgba(246, 200, 122, 0.85);
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(246, 200, 122, 0.35),
+    inset 0 0 20px rgba(246, 200, 122, 0.14);
+  transform: translateY(-3px);
+}
+
+.friday-hud-module:hover .hud-action-arrow {
+  transform: translateX(4px);
+  color: var(--brand-gold-light);
+}
+
+.hud-action-arrow {
+  transition: transform 0.22s ease, color 0.22s ease;
+}
+
+/* Floating AI Composer Capsule */
+.friday-composer-capsule {
+  background: rgba(12, 10, 22, 0.6) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  border: 1.5px solid rgba(246, 200, 122, 0.38) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.friday-composer-capsule:focus-within {
+  border-color: rgba(246, 200, 122, 0.85) !important;
+  box-shadow: 0 0 28px rgba(246, 200, 122, 0.35), 0 12px 40px rgba(0, 0, 0, 0.8), inset 0 1px 3px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Frosted Quick Action Chip */
+.friday-quick-chip {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.friday-quick-chip:hover {
+  background: rgba(246, 200, 122, 0.12);
+  border-color: rgba(246, 200, 122, 0.6);
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(246, 200, 122, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Live Telemetry Beacon Dot */
+@keyframes telemetryBeacon {
+  0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 5px #10B981); }
+  50% { opacity: 0.45; transform: scale(0.85); filter: drop-shadow(0 0 1px #10B981); }
+}
+
+.telemetry-beacon-online {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  display: inline-block;
+  animation: telemetryBeacon 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   FRIDAY BOLD COCKPIT & SIDEBAR DESIGN SYSTEM
+   ========================================================================== */
+
+/* Modern Obsidian Cockpit Sidebar */
+.friday-sidebar {
+  background: rgba(8, 7, 14, 0.76) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border-right: 1px solid rgba(246, 200, 122, 0.2) !important;
+  box-shadow: 6px 0 32px rgba(0, 0, 0, 0.65), inset -1px 0 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Sidebar Nav Item */
+.friday-sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.68);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.friday-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(246, 200, 122, 0.2);
+  color: #FFFFFF;
+}
+
+.friday-sidebar-item.active {
+  background: linear-gradient(90deg, rgba(246, 200, 122, 0.22) 0%, rgba(229, 169, 60, 0.08) 100%) !important;
+  border: 1px solid rgba(246, 200, 122, 0.5) !important;
+  box-shadow: 0 4px 20px rgba(246, 200, 122, 0.2), inset 0 0 14px rgba(246, 200, 122, 0.08) !important;
+  color: #FFFFFF !important;
+}
+
+/* Neon Vertical Indicator Bar for Active Nav Item */
+.friday-sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 3.5px;
+  height: 70%;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, #FFE89E 0%, #F6C87A 50%, #D49A3E 100%);
+  box-shadow: 0 0 10px rgba(246, 200, 122, 0.95), 0 0 20px rgba(246, 200, 122, 0.6);
+}
+
+/* Sidebar Stark Telemetry Bottom Monitor */
+.friday-sidebar-telemetry {
+  position: relative;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(246, 200, 122, 0.25);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: inset 0 0 16px rgba(246, 200, 122, 0.05);
+}
+
+.friday-sidebar-telemetry::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid rgba(246, 200, 122, 0.65);
+  border-right: 2px solid rgba(246, 200, 122, 0.65);
+  border-radius: 0 12px 0 0;
+  pointer-events: none;
+}
+
+/* Stark-tech HUD Corner Calipers */
+.friday-caliper-box {
+  position: relative;
+}
+
+.friday-caliper-box::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid rgba(246, 200, 122, 0.75);
+  border-left: 2px solid rgba(246, 200, 122, 0.75);
+  border-radius: 4px 0 0 0;
+  pointer-events: none;
+}
+
+.friday-caliper-box::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid rgba(246, 200, 122, 0.75);
+  border-right: 2px solid rgba(246, 200, 122, 0.75);
+  border-radius: 0 0 4px 0;
+  pointer-events: none;
+}
+
+/* Bold Caliper Card */
+.friday-caliper-card {
+  position: relative;
+  background: rgba(10, 9, 18, 0.65) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(246, 200, 122, 0.28) !important;
+  border-radius: 18px !important;
+  padding: 20px 22px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(246, 200, 122, 0.04) !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.friday-caliper-card:hover {
+  border-color: rgba(246, 200, 122, 0.65) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 28px rgba(246, 200, 122, 0.2), inset 0 0 16px rgba(246, 200, 122, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+/* Bold Telemetry Visual Bars & Waveforms */
+@keyframes telemetryWave1 {
+  0%, 100% { height: 35%; opacity: 0.8; }
+  50% { height: 85%; opacity: 1; }
+}
+@keyframes telemetryWave2 {
+  0%, 100% { height: 60%; opacity: 0.9; }
+  50% { height: 25%; opacity: 0.7; }
+}
+@keyframes telemetryWave3 {
+  0%, 100% { height: 80%; opacity: 1; }
+  50% { height: 45%; opacity: 0.8; }
+}
+@keyframes telemetryWave4 {
+  0%, 100% { height: 40%; opacity: 0.75; }
+  50% { height: 95%; opacity: 1; }
+}
+
+.wave-bar-1 { animation: telemetryWave1 1.4s ease-in-out infinite; }
+.wave-bar-2 { animation: telemetryWave2 1.8s ease-in-out infinite; }
+.wave-bar-3 { animation: telemetryWave3 1.2s ease-in-out infinite; }
+.wave-bar-4 { animation: telemetryWave4 1.6s ease-in-out infinite; }
+
+/* Metric Progress Meter */
+.friday-metric-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.friday-metric-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #D49A3E 0%, #F6C87A 60%, #FFE89E 100%);
+  box-shadow: 0 0 10px rgba(246, 200, 122, 0.8);
+  transition: width 0.5s ease-in-out;
+}
+
+.telemetry-stat-tile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(246, 200, 122, 0.16);
+  border-radius: 10px;
+  padding: 8px 10px;
+  transition: all 0.2s ease;
+}
+
+.telemetry-stat-tile:hover {
+  background: rgba(246, 200, 122, 0.06);
+  border-color: rgba(246, 200, 122, 0.4);
+}
+
+/* ==========================================================================
+   FRIDAY WORKSPACE DESIGN SUITE (Chat, Projects, Files, Settings)
+   ========================================================================== */
+
+/* Workspace Header Lockup */
+.friday-page-title {
+  font-family: 'Michroma', 'Syncopate', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 26px !important;
+  letter-spacing: 0.04em !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF3D6 24%, #F6C87A 58%, #D49A3E 82%, #9B6717 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  filter: drop-shadow(0 0 16px rgba(246, 200, 122, 0.35)) !important;
+  margin-bottom: 4px !important;
+}
+
+/* Workspace Master Panel */
+.friday-workspace-panel {
+  background: rgba(10, 9, 18, 0.65) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(246, 200, 122, 0.22) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), inset 0 0 20px rgba(246, 200, 122, 0.03) !important;
+}
+
+/* High-Tech Search Bar */
+.friday-search-bar {
+  background: rgba(12, 10, 22, 0.6) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(246, 200, 122, 0.28) !important;
+  border-radius: 9999px !important;
+  padding: 8px 16px !important;
+  transition: all 0.22s ease !important;
+}
+
+.friday-search-bar:focus-within {
+  border-color: rgba(246, 200, 122, 0.8) !important;
+  box-shadow: 0 0 18px rgba(246, 200, 122, 0.3) !important;
+}
+
+/* Chat Thread Bubbles */
+.friday-chat-bubble-ai {
+  background: rgba(12, 10, 24, 0.75) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(246, 200, 122, 0.28) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), inset 0 0 14px rgba(246, 200, 122, 0.04) !important;
+}
+
+.friday-chat-bubble-user {
+  background: linear-gradient(135deg, rgba(246, 200, 122, 0.25) 0%, rgba(229, 169, 60, 0.12) 100%) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(246, 200, 122, 0.45) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(246, 200, 122, 0.15) !important;
+}
+
+/* Sci-Fi Drag & Drop Zone */
+.friday-dropzone {
+  background: rgba(10, 9, 20, 0.55) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 2px dashed rgba(246, 200, 122, 0.35) !important;
+  border-radius: 20px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.friday-dropzone:hover,
+.friday-dropzone.dragging {
+  border-color: rgba(246, 200, 122, 0.85) !important;
+  background: rgba(246, 200, 122, 0.08) !important;
+  box-shadow: 0 0 32px rgba(246, 200, 122, 0.2), inset 0 0 24px rgba(246, 200, 122, 0.08) !important;
+  transform: translateY(-2px);
+}
+

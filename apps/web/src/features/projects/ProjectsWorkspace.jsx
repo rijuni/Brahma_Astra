@@ -85,11 +85,36 @@ export default function ProjectsWorkspace({ onNavigate }) {
       {/* Top Header Bar */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="page-title" style={{ fontSize: '24px', marginBottom: '4px' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(0, 0, 0, 0.45)',
+              border: '1px solid rgba(246, 200, 122, 0.3)',
+              borderRadius: '9999px',
+              padding: '2px 12px',
+              marginBottom: '6px'
+            }}
+          >
+            <span className="telemetry-beacon-online" />
+            <span
+              style={{
+                fontSize: '9.5px',
+                letterSpacing: '0.2em',
+                color: 'var(--brand-gold-light)',
+                textTransform: 'uppercase',
+                fontWeight: 700
+              }}
+            >
+              AUTONOMOUS PIPELINES // STATEFUL MEMORY
+            </span>
+          </div>
+          <h1 className="friday-page-title">
             Projects Workspace
           </h1>
-          <p className="body-small text-muted">
-            Organize multi-step workflows, conversations, and technical documentation.
+          <p className="body-small" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>
+            Organize multi-step workflows, agent execution tasks, and technical documentation.
           </p>
         </div>
 
@@ -97,6 +122,7 @@ export default function ProjectsWorkspace({ onNavigate }) {
           variant="gold"
           onClick={() => setIsCreateOpen(true)}
           icon={Plus}
+          style={{ fontWeight: 700, letterSpacing: '0.04em' }}
         >
           New Project
         </Button>
@@ -104,36 +130,43 @@ export default function ProjectsWorkspace({ onNavigate }) {
 
       {/* Filter and Search Bar */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="glass-input flex items-center gap-2" style={{ maxWidth: '320px', padding: '8px 14px' }}>
-          <Search size={16} color="var(--text-muted)" />
+        <div className="friday-search-bar flex items-center gap-2" style={{ maxWidth: '340px', width: '100%', padding: '7px 14px' }}>
+          <Search size={16} color="#F6C87A" />
           <input
             type="text"
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--text-primary)', fontSize: '13px', width: '100%' }}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFFFFF', fontSize: '13px', width: '100%' }}
           />
         </div>
 
         <div
           className="flex"
           style={{
-            background: 'rgba(0, 0, 0, 0.25)',
-            borderRadius: 'var(--radius-pill)',
-            padding: '3px',
-            border: '1px solid var(--glass-border)'
+            background: 'rgba(0, 0, 0, 0.4)',
+            borderRadius: '9999px',
+            padding: '4px',
+            border: '1px solid rgba(246, 200, 122, 0.25)'
           }}
         >
           {['all', 'active', 'completed'].map((tab) => (
             <button
               key={tab}
               onClick={() => setFilterTab(tab)}
-              className={`glass-btn ${filterTab === tab ? 'glass-btn-secondary' : 'glass-btn-ghost'}`}
+              className="flex items-center justify-center"
               style={{
-                padding: '5px 14px',
+                padding: '6px 16px',
                 fontSize: '12px',
-                textTransform: 'capitalize',
-                background: filterTab === tab ? 'rgba(255, 255, 255, 0.12)' : 'transparent'
+                fontWeight: filterTab === tab ? 700 : 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                borderRadius: '9999px',
+                border: filterTab === tab ? '1px solid rgba(246, 200, 122, 0.45)' : '1px solid transparent',
+                background: filterTab === tab ? 'linear-gradient(135deg, rgba(246, 200, 122, 0.25) 0%, rgba(229, 169, 60, 0.1) 100%)' : 'transparent',
+                color: filterTab === tab ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
               }}
             >
               {tab}
@@ -174,13 +207,13 @@ export default function ProjectsWorkspace({ onNavigate }) {
         {/* Selected Project Details Drawer */}
         {selectedProject && (
           <div
-            className="glass-card flex flex-col justify-between animate-entrance"
+            className="friday-workspace-panel friday-caliper-box flex flex-col justify-between animate-entrance"
             style={{
               gridColumn: 'span 4',
               padding: '24px',
-              borderRadius: 'var(--radius-xl)',
+              borderRadius: '20px',
               maxHeight: '680px',
-              border: '1px solid var(--glass-border-violet)'
+              border: '1px solid rgba(246, 200, 122, 0.3)'
             }}
           >
             <div>
