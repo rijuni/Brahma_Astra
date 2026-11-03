@@ -61,7 +61,7 @@ class AiService {
           provider: response.provider || 'mock',
           completedAt: new Date()
         }
-      }).catch(() => {});
+      });
     } catch (err) {
       // In case FRIDAY Core is offline or errors
       await prisma.aiTask.update({
@@ -71,7 +71,7 @@ class AiService {
           error: err.message || 'AI execution failed',
           completedAt: new Date()
         }
-      }).catch(() => {});
+      });
     }
   }
 

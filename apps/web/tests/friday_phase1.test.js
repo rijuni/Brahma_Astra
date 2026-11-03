@@ -114,13 +114,13 @@ test('FRIDAY Phase 1 — Core Components & Services Exist', () => {
   }
 });
 
-test('FRIDAY Phase 2 — EDITH Studio Activation and Routing in App', () => {
-  const edithFeatureDir = path.join(webRoot, 'src', 'features', 'edith');
-  assert.ok(fs.existsSync(edithFeatureDir), 'EDITH feature directory must exist');
+test('BRAHMA Phase 2 — ASTRA Studio Activation and Routing in App', () => {
+  const astraFeatureDir = path.join(webRoot, 'src', 'features', 'astra');
+  assert.ok(fs.existsSync(astraFeatureDir), 'ASTRA feature directory must exist in Phase 2');
 
   const appContent = fs.readFileSync(path.join(webRoot, 'src', 'app', 'App.jsx'), 'utf8');
-  assert.ok(appContent.includes('EdithWorkspace'), 'App.jsx must mount EdithWorkspace');
-  assert.ok(appContent.includes('EdithLauncher'), 'App.jsx must mount EdithLauncher');
+  assert.ok(appContent.includes('AstraWorkspace'), 'App.jsx must mount AstraWorkspace in Phase 2');
+  assert.ok(appContent.includes('AstraLauncher'), 'App.jsx must mount AstraLauncher in Phase 2');
 });
 
 test('BRAHMA Phase 1 Defects — Settings Health Diagnostics bypasses /api/v1 prefix', () => {

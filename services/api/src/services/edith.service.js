@@ -208,12 +208,12 @@ class EdithService {
           exitCode: 1,
           completedAt: new Date()
         }
-      }).catch(() => {});
+      }).catch(() => { });
 
       await prisma.codingTask.update({
         where: { id: taskId },
         data: { status: 'failed' }
-      }).catch(() => {});
+      }).catch(() => { });
     }
   }
 
