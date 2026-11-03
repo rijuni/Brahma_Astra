@@ -1,4 +1,4 @@
-// Centralized API Client for BRAHMA
+// Centralized API Client for FRIDAY
 
 class ApiClient {
   constructor() {
@@ -13,7 +13,7 @@ class ApiClient {
 
   getToken() {
     if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('brahma_token');
+      return localStorage.getItem('friday_token') || localStorage.getItem('brahma_token');
     }
     return this.memoryToken;
   }
@@ -22,8 +22,9 @@ class ApiClient {
     this.memoryToken = token;
     if (typeof localStorage !== 'undefined') {
       if (token) {
-        localStorage.setItem('brahma_token', token);
+        localStorage.setItem('friday_token', token);
       } else {
+        localStorage.removeItem('friday_token');
         localStorage.removeItem('brahma_token');
       }
     }

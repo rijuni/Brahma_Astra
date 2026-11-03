@@ -11,6 +11,7 @@ router.use(authenticate);
 router.post('/', validateBody(createConversationSchema), conversationController.create);
 router.get('/', conversationController.list);
 router.get('/:conversationId', conversationController.getById);
+router.delete('/:conversationId', conversationController.delete);
 router.post('/:conversationId/messages', validateBody(addMessageSchema), conversationController.addMessage);
 
 module.exports = router;

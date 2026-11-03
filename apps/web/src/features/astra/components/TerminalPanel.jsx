@@ -100,7 +100,7 @@ export default function TerminalPanel({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `astra-terminal-logs-${Date.now()}.txt`;
+    a.download = `edith-terminal-logs-${Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     a.remove();

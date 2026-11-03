@@ -60,7 +60,7 @@ export default function App() {
   if (isLoading) {
     return (
       <div className="cosmic-canvas flex items-center justify-center" style={{ minHeight: '100vh', width: '100vw' }}>
-        <LoadingSpinner size={44} label="Initializing BRAHMA Intelligence..." />
+        <LoadingSpinner size={44} label="Initializing FRIDAY Intelligence..." />
       </div>
     );
   }
@@ -69,12 +69,12 @@ export default function App() {
     return <AuthPage />;
   }
 
-  // ASTRA routes take over full screen with dedicated IDE Activity Bar and cosmic glass canvas
+  // EDITH routes take over full screen with dedicated IDE Activity Bar and cosmic glass canvas
   if (currentRoute === 'astra') {
     return (
       <AstraLauncher
         onEnterWorkspace={() => setCurrentRoute('astra-workspace')}
-        onBackToBrahma={() => setCurrentRoute('dashboard')}
+        onBackToFriday={() => setCurrentRoute('dashboard')}
       />
     );
   }
@@ -82,7 +82,7 @@ export default function App() {
   if (currentRoute === 'astra-workspace') {
     return (
       <AstraWorkspace
-        onBackToBrahma={() => setCurrentRoute('dashboard')}
+        onBackToFriday={() => setCurrentRoute('dashboard')}
       />
     );
   }

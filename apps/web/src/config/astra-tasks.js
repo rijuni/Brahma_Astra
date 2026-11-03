@@ -1,4 +1,4 @@
-// Central Task Types & Architecture Planning State Machine for ASTRA Assistant
+// Central Task Types & Architecture Planning State Machine for EDITH Assistant
 
 export const ASTRA_TASK_TYPES = [
   { id: 'feature', label: 'Create a Feature', description: 'Design and implement a new endpoint, module, or component.' },

@@ -59,6 +59,18 @@ class ConversationController {
       next(err);
     }
   }
+
+  async delete(req, res, next) {
+    try {
+      await conversationService.deleteConversation(req.params.conversationId, req.user.id);
+      res.status(200).json({
+        success: true,
+        data: { message: 'Conversation deleted successfully' }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = new ConversationController();

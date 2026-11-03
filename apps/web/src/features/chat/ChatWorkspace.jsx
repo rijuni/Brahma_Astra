@@ -8,7 +8,8 @@ import {
   Bot,
   User,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from 'lucide-react';
 import PromptComposer from './PromptComposer';
 import CodeBlock from './CodeBlock';
@@ -16,6 +17,7 @@ import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import EmptyState from '../../components/common/EmptyState';
+import Modal from '../../components/common/Modal';
 import FridayArcReactor from '../../components/brand/FridayArcReactor';
 import { conversationService } from '../../services/conversation-service';
 import { aiService } from '../../services/ai-service';
@@ -31,6 +33,8 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState(null);
+  const [convToDelete, setConvToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { addToast } = useToast();
   const messagesEndRef = useRef(null);
   const processedPromptRef = useRef(null);
@@ -105,6 +109,33 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
       addToast('New conversation initialized', 'info');
     } catch (err) {
       addToast('Failed to create new chat', 'error');
+    }
+  };
+
+  // Handle deleting a conversation
+  const handleDeleteChat = async () => {
+    if (!convToDelete) return;
+    setIsDeleting(true);
+    try {
+      await conversationService.delete(convToDelete.id);
+      const remaining = conversations.filter((c) => c.id !== convToDelete.id);
+      setConversations(remaining);
+
+      if (activeConversationId === convToDelete.id) {
+        if (remaining.length > 0) {
+          setActiveConversationId(remaining[0].id);
+        } else {
+          setActiveConversationId(null);
+          setMessages([]);
+        }
+      }
+
+      addToast(`Chat "${convToDelete.title || 'Untitled'}" deleted`, 'info');
+      setConvToDelete(null);
+    } catch (err) {
+      addToast(err.message || 'Failed to delete chat', 'error');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -317,35 +348,69 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
             filteredConversations.map((conv) => {
               const isActive = conv.id === activeConversationId;
               return (
-                <button
+                <div
                   key={conv.id}
                   onClick={() => setActiveConversationId(conv.id)}
-                  className="flex items-center gap-2.5 w-full text-left"
+                  className="flex items-center justify-between w-full text-left group"
                   style={{
-                    padding: '9px 12px',
+                    padding: '8px 10px',
                     borderRadius: '10px',
                     border: isActive ? '1px solid rgba(246, 200, 122, 0.5)' : '1px solid transparent',
                     background: isActive ? 'linear-gradient(90deg, rgba(246, 200, 122, 0.22) 0%, rgba(229, 169, 60, 0.08) 100%)' : 'transparent',
                     boxShadow: isActive ? '0 2px 10px rgba(246, 200, 122, 0.2)' : 'none',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    justifyContent: 'flex-start'
+                    position: 'relative'
                   }}
                 >
-                  <MessageSquare size={14} color={isActive ? '#FAD982' : 'rgba(255, 255, 255, 0.5)'} style={{ flexShrink: 0 }} />
-                  <span
+                  <div className="flex items-center gap-2.5 overflow-hidden" style={{ flex: 1, minWidth: 0, paddingRight: '6px' }}>
+                    <MessageSquare size={14} color={isActive ? '#FAD982' : 'rgba(255, 255, 255, 0.5)'} style={{ flexShrink: 0 }} />
+                    <span
+                      style={{
+                        fontSize: '13px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        fontWeight: isActive ? 600 : 400,
+                        color: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.72)'
+                      }}
+                    >
+                      {conv.title || 'Untitled Chat'}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConvToDelete(conv);
+                    }}
+                    title="Delete chat"
+                    aria-label={`Delete chat ${conv.title || 'Untitled'}`}
                     style={{
-                      fontSize: '13px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      fontWeight: isActive ? 600 : 400,
-                      color: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.72)'
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '4px 6px',
+                      borderRadius: '6px',
+                      color: 'rgba(255, 255, 255, 0.45)',
+                      transition: 'all 0.18s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = '#ef4444';
+                      e.currentTarget.style.background = 'rgba(239, 68, 68, 0.18)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.45)';
+                      e.currentTarget.style.background = 'transparent';
                     }}
                   >
-                    {conv.title || 'Untitled Chat'}
-                  </span>
-                </button>
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               );
             })
           )}
@@ -390,11 +455,47 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="telemetry-beacon-online" />
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold-light)', letterSpacing: '0.04em' }}>
-              NEURAL CORE ONLINE
-            </span>
+          <div className="flex items-center gap-3">
+            {activeConversationId && (
+              <button
+                onClick={() => {
+                  const current = conversations.find((c) => c.id === activeConversationId);
+                  if (current) setConvToDelete(current);
+                }}
+                className="flex items-center gap-1.5"
+                title="Delete this chat"
+                aria-label="Delete this conversation"
+                style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '8px',
+                  padding: '4px 10px',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: '11px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.22)';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+                  e.currentTarget.style.color = '#ff6b6b';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                }}
+              >
+                <Trash2 size={12} color="#ff6b6b" />
+                <span>Delete Chat</span>
+              </button>
+            )}
+            <div className="flex items-center gap-2">
+              <span className="telemetry-beacon-online" />
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold-light)', letterSpacing: '0.04em' }}>
+                NEURAL CORE ONLINE
+              </span>
+            </div>
           </div>
         </div>
 
@@ -489,6 +590,36 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           initialValue={initialPrompt || ''}
         />
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={!!convToDelete}
+        onClose={() => setConvToDelete(null)}
+        title="Confirm Chat Deletion"
+        maxWidth="440px"
+      >
+        <p className="body-regular text-muted" style={{ marginBottom: '20px', lineHeight: 1.6 }}>
+          Are you sure you want to delete <strong style={{ color: '#F6C87A' }}>"{convToDelete?.title || 'this chat'}"</strong>? All conversation messages and neural context in this thread will be permanently removed.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button variant="secondary" onClick={() => setConvToDelete(null)} disabled={isDeleting}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleDeleteChat}
+            isLoading={isDeleting}
+            style={{
+              background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+              borderColor: '#ef4444',
+              color: '#FFFFFF',
+              boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)'
+            }}
+          >
+            Delete Permanently
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

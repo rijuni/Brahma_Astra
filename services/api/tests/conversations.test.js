@@ -62,4 +62,19 @@ describe('Conversation Endpoints', () => {
     expect(res.body.data.messages.length).toBe(1);
     expect(res.body.data.messages[0].content).toBe('Design BRAHMA architecture.');
   });
+
+  it('DELETE /api/v1/conversations/:id deletes conversation and its messages', async () => {
+    const res = await request(app)
+      .delete(`/api/v1/conversations/${createdConvId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+
+    const checkRes = await request(app)
+      .get(`/api/v1/conversations/${createdConvId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(checkRes.statusCode).toBe(404);
+  });
 });

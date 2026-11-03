@@ -17,7 +17,7 @@ async function main() {
     create: {
       email: devEmail,
       passwordHash,
-      name: 'BRAHMA Astra Lead Developer',
+      name: 'FRIDAY Lead Developer',
       role: 'admin'
     }
   });
@@ -33,7 +33,7 @@ async function main() {
   if (!project) {
     project = await prisma.project.create({
       data: {
-        name: 'BRAHMA Core Workspace',
+        name: 'FRIDAY Core Workspace',
         description: 'Default intelligence and coding project workspace.',
         ownerId: user.id
       }
@@ -41,7 +41,7 @@ async function main() {
     console.log(`[Seed] Created project: ${project.name} (${project.id})`);
   }
 
-  // Create demo ASTRA workspace
+  // Create demo EDITH workspace
   const existingWorkspace = await prisma.astraWorkspace.findFirst({
     where: { projectId: project.id }
   });
@@ -50,11 +50,11 @@ async function main() {
     const workspace = await prisma.astraWorkspace.create({
       data: {
         projectId: project.id,
-        name: 'Primary Repository Workspace',
+        name: 'EDITH Primary Repository Workspace',
         status: 'active'
       }
     });
-    console.log(`[Seed] Created ASTRA workspace: ${workspace.name} (${workspace.id})`);
+    console.log(`[Seed] Created EDITH workspace: ${workspace.name} (${workspace.id})`);
   }
 
   // Create demo conversation
@@ -65,18 +65,18 @@ async function main() {
   if (!existingConversation) {
     const conversation = await prisma.conversation.create({
       data: {
-        title: 'Welcome to BRAHMA + ASTRA',
+        title: 'Welcome to FRIDAY + EDITH',
         projectId: project.id,
         userId: user.id,
         messages: {
           create: [
             {
               role: 'system',
-              content: 'BRAHMA intelligence platform initialized with ASTRA coding engine.'
+              content: 'FRIDAY intelligence platform initialized with EDITH coding engine.'
             },
             {
               role: 'assistant',
-              content: 'Hello! I am BRAHMA. Your ASTRA coding workspace is ready.'
+              content: 'Hello! I am FRIDAY. Your EDITH coding workspace is ready.'
             }
           ]
         }

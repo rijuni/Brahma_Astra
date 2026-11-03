@@ -68,6 +68,6 @@ export const aiService = {
       }
     }
 
-    throw new Error('AI task execution timed out. Brahma Core may be processing in the background.');
+    throw new Error('AI task execution timed out. FRIDAY Core may be processing in the background.');
   }
 };

@@ -134,7 +134,7 @@ export default function BrahmaNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
                 color: '#0B0F1A'
               }}
             >
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'B'}
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'F'}
             </div>
             <span className="body-regular" style={{ fontSize: '13px', fontWeight: 500, maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user?.name || user?.email || 'Amlan'}
@@ -165,7 +165,7 @@ export default function BrahmaNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
                 onClick={() => {
                   setShowProfileMenu(false);
                   logout();
-                  addToast('Logged out of BRAHMA successfully', 'info');
+                  addToast('Logged out of FRIDAY successfully', 'info');
                 }}
                 className="glass-btn-ghost flex items-center gap-2 w-full text-left"
                 style={{ padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer', color: 'var(--status-error)' }}

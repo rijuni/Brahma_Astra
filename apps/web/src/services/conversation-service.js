@@ -26,5 +26,9 @@ export const conversationService = {
       textContent = String(content ?? '');
     }
     return apiClient.post(`/conversations/${conversationId}/messages`, { content: textContent, role });
+  },
+
+  async delete(conversationId) {
+    return apiClient.delete(`/conversations/${conversationId}`);
   }
 };

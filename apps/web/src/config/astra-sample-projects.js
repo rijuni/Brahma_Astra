@@ -1,4 +1,4 @@
-// Rich Sample Projects and Demonstration Files for ASTRA Studio
+// Rich Sample Projects and Demonstration Files for EDITH Studio
 
 export const ASTRA_SAMPLE_PROJECTS = [
   {

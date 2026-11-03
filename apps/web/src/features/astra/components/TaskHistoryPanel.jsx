@@ -52,7 +52,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(allTasks, null, 2));
     const dl = document.createElement('a');
     dl.setAttribute('href', dataStr);
-    dl.setAttribute('download', `astra-task-history-${Date.now()}.json`);
+    dl.setAttribute('download', `edith-task-history-${Date.now()}.json`);
     document.body.appendChild(dl);
     dl.click();
     dl.remove();

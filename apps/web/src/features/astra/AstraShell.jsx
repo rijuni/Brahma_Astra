@@ -25,7 +25,7 @@ export default function AstraShell({
   onSelectNav,
   activeProject,
   activeFile,
-  onBackToBrahma,
+  onBackToFriday,
   onToggleZenMode,
   isZenMode,
   isSidebarOpen = true,
@@ -70,7 +70,7 @@ export default function AstraShell({
       }}
     >
       {/* Activity Bar (Leftmost Glass Strip) */}
-      <nav className="astra-activity-bar" aria-label="ASTRA Activity Bar">
+      <nav className="astra-activity-bar" aria-label="EDITH Activity Bar">
         <div
           className="flex flex-col items-center w-full px-1 overflow-y-auto flex-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -133,7 +133,7 @@ export default function AstraShell({
           })}
         </div>
 
-        {/* Bottom Actions: Settings & Return to BRAHMA */}
+        {/* Bottom Actions: Settings & Return to FRIDAY */}
         <div className="flex flex-col items-center w-full px-1 flex-shrink-0" style={{ paddingTop: '8px' }}>
           <button
             onClick={() => onSelectNav('settings')}
@@ -144,7 +144,7 @@ export default function AstraShell({
           </button>
 
           <button
-            onClick={onBackToBrahma}
+            onClick={onBackToFriday}
             className="astra-activity-btn"
             style={{ color: 'var(--brand-gold)' }}
             title="Return to FRIDAY Dashboard"
@@ -192,7 +192,7 @@ export default function AstraShell({
           <div className="flex items-center gap-3.5">
             <div className="flex items-center gap-2 px-2.5 py-1 rounded" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
               <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
-              <span className="body-small" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="ASTRA Engine :8002">
+              <span className="body-small" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="EDITH Engine :8002">
                 EDITH Engine :8002
               </span>
             </div>
@@ -262,7 +262,7 @@ export default function AstraShell({
             )}
 
             <button
-              onClick={onBackToBrahma}
+              onClick={onBackToFriday}
               className="glass-btn-ghost flex items-center gap-1.5"
               style={{
                 height: '32px',

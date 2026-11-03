@@ -18,6 +18,7 @@ test('Conversation Service — Endpoints Follow Express V1 API Contract', () => 
   assert.equal(typeof conversationService.get, 'function');
   assert.equal(typeof conversationService.create, 'function');
   assert.equal(typeof conversationService.addMessage, 'function');
+  assert.equal(typeof conversationService.delete, 'function');
 });
 
 test('Project Service — Methods Map to RESTful Endpoints', () => {

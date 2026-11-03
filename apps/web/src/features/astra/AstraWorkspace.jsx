@@ -41,7 +41,7 @@ import { ASTRA_SAMPLE_PROJECTS } from '../../config/astra-sample-projects';
 import { astraService } from '../../services/astra/astra-service';
 import { useToast } from '../../components/feedback/Toast';
 
-export default function AstraWorkspace({ onBackToBrahma }) {
+export default function AstraWorkspace({ onBackToFriday }) {
   const [projects, setProjects] = useState(ASTRA_SAMPLE_PROJECTS);
   const [activeProjectId, setActiveProjectId] = useState(ASTRA_SAMPLE_PROJECTS[0].id);
   const activeProject = projects.find((p) => p.id === activeProjectId) || projects[0];
@@ -121,7 +121,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
           path: 'app.py',
           name: 'app.py',
           language: 'python',
-          content: `# ${newProj.name}\\nprint("Initialized ASTRA project")\\n`
+          content: `# ${newProj.name}\\nprint("Initialized EDITH project")\\n`
         }
       ]
     };
@@ -180,7 +180,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
   // Run active file in sandboxed terminal
   const handleRunFile = (file) => {
     setDockPanel('terminal');
-    addToast(`Dispatching "${file.name}" to ASTRA execution boundary...`, 'info');
+    addToast(`Dispatching "${file.name}" to EDITH execution boundary...`, 'info');
   };
 
   // Add new file to active project
@@ -253,13 +253,13 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       prev.map((p) =>
         p.id === activeProjectId
           ? {
-              ...p,
-              files: p.files.map((f) =>
-                f.path === oldPath
-                  ? { ...f, path: cleanNew, name: cleanNew.split('/').pop() || cleanNew }
-                  : f
-              )
-            }
+            ...p,
+            files: p.files.map((f) =>
+              f.path === oldPath
+                ? { ...f, path: cleanNew, name: cleanNew.split('/').pop() || cleanNew }
+                : f
+            )
+          }
           : p
       )
     );
@@ -276,10 +276,10 @@ export default function AstraWorkspace({ onBackToBrahma }) {
     addToast(`Renamed to "${cleanNew}"`, 'success');
   };
 
-  // Submit coding task to ASTRA Assistant & backend
+  // Submit coding task to EDITH Assistant & backend
   const handleGenerateTask = async ({ instruction, taskType, targetFile }) => {
     setIsGenerating(true);
-    addToast('ASTRA Assistant analyzing task...', 'info');
+    addToast('EDITH Assistant analyzing task...', 'info');
 
     try {
       const created = await astraService.createCodingTask(
@@ -400,7 +400,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
   // Dedicated single-tool fullscreen views for specific activity bar items
   if (activeNav === 'terminal') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><TerminalPanel /></div>
       </AstraShell>
     );
@@ -408,7 +408,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'database') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><DatabasePanel /></div>
       </AstraShell>
     );
@@ -416,7 +416,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'deploy') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><DeployPanel /></div>
       </AstraShell>
     );
@@ -424,7 +424,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'testing') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><TestRunnerPanel /></div>
       </AstraShell>
     );
@@ -432,7 +432,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'history') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><TaskHistoryPanel tasks={taskHistory} onRestoreTask={(t) => setActiveTask(t)} /></div>
       </AstraShell>
     );
@@ -440,7 +440,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'git') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><GitPanel /></div>
       </AstraShell>
     );
@@ -448,7 +448,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'api_client') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><ApiClientPanel /></div>
       </AstraShell>
     );
@@ -456,7 +456,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'debug') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><DebugPanel /></div>
       </AstraShell>
     );
@@ -464,7 +464,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'pipelines') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><PipelinesPanel /></div>
       </AstraShell>
     );
@@ -472,7 +472,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'assistant') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full" style={{ maxWidth: '820px', margin: '0 auto' }}>
           <AstraAssistant
             activeFile={activeFile}
@@ -488,7 +488,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
 
   if (activeNav === 'settings') {
     return (
-      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToBrahma={onBackToBrahma}>
+      <AstraShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
         <div className="p-4 h-full"><AstraSettingsPanel /></div>
       </AstraShell>
     );
@@ -501,7 +501,7 @@ export default function AstraWorkspace({ onBackToBrahma }) {
       onSelectNav={setActiveNav}
       activeProject={activeProject}
       activeFile={activeFile}
-      onBackToBrahma={onBackToBrahma}
+      onBackToFriday={onBackToFriday}
       isZenMode={isZenMode}
       onToggleZenMode={() => setIsZenMode((p) => !p)}
       isSidebarOpen={isSidebarOpen}
@@ -638,8 +638,8 @@ export default function AstraWorkspace({ onBackToBrahma }) {
                 dockState === 'minimized'
                   ? '38px'
                   : dockState === 'maximized'
-                  ? '58vh'
-                  : 'var(--astra-dock-height, 260px)',
+                    ? '58vh'
+                    : 'var(--astra-dock-height, 260px)',
               borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
               flexShrink: 0,

@@ -3,7 +3,7 @@ import { Sparkles, ArrowRight, ShieldCheck, Terminal, Play, Cpu, Code2 } from 'l
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 
-export default function AstraLauncher({ onEnterWorkspace, onBackToBrahma }) {
+export default function AstraLauncher({ onEnterWorkspace, onBackToFriday }) {
   const [animationStep, setAnimationStep] = useState(1);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -62,9 +62,9 @@ export default function AstraLauncher({ onEnterWorkspace, onBackToBrahma }) {
         </div>
 
         <div className="flex items-center gap-3">
-          {onBackToBrahma && (
+          {onBackToFriday && (
             <button
-              onClick={onBackToBrahma}
+              onClick={onBackToFriday}
               className="glass-btn-ghost body-small"
               style={{ padding: '8px 16px', borderRadius: 'var(--radius-pill)', color: 'var(--text-secondary)' }}
               title="Return to FRIDAY Platform"

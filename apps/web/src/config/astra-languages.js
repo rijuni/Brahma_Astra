@@ -1,4 +1,4 @@
-// Centralized Multi-Language Registry for ASTRA Studio (30+ Languages)
+// Centralized Multi-Language Registry for EDITH Studio (30+ Languages)
 
 export const ASTRA_LANGUAGES = [
   {
@@ -20,7 +20,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 app = FastAPI(
-    title="ASTRA Microservice API",
+    title="EDITH Microservice API",
     version="1.0.0",
     description="High-performance backend service"
 )
@@ -114,12 +114,12 @@ export function validateSession(session: UserSession): boolean {
 use tokio::sync::Mutex;
 
 #[derive(Debug, Clone)]
-pub struct AstraCluster {
+pub struct EdithCluster {
     pub name: String,
     pub nodes: usize,
 }
 
-impl AstraCluster {
+impl EdithCluster {
     pub fn new(name: &str, nodes: usize) -> Self {
         Self {
             name: name.to_string(),
@@ -157,7 +157,7 @@ type StatusResponse struct {
 
 func main() {
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(StatusResponse{Status: "ready", Engine: "astra-runner"})
+		json.NewEncoder(w).Encode(StatusResponse{Status: "ready", Engine: "edith-runner"})
 	})
 	http.ListenAndServe(":8080", nil)
 }
@@ -177,9 +177,9 @@ func main() {
       testing: false,
       debugging: false
     },
-    sampleCode: `public class AstraApplication {
+    sampleCode: `public class EdithApplication {
     public static void main(String[] args) {
-        System.out.println("ASTRA Java runtime container initialized.");
+        System.out.println("EDITH Java runtime container initialized.");
     }
 }
 `
@@ -198,7 +198,7 @@ func main() {
       testing: false,
       debugging: false
     },
-    sampleCode: `namespace Astra.Core;
+    sampleCode: `namespace Edith.Core;
 
 public record AgentTask(string Id, string Name, bool IsCompleted);
 `
@@ -221,7 +221,7 @@ public record AgentTask(string Id, string Name, bool IsCompleted);
 #include <vector>
 
 int main() {
-    std::cout << "ASTRA High Performance Core Engine\\n";
+    std::cout << "EDITH High Performance Core Engine\\n";
     return 0;
 }
 `
@@ -253,7 +253,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'html',
     iconColor: '#EA580C',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: true, testing: false, debugging: false },
-    sampleCode: `<!DOCTYPE html>\n<html lang="en">\n<head><title>ASTRA</title></head>\n<body><h1>ASTRA Studio</h1></body>\n</html>`
+    sampleCode: `<!DOCTYPE html>\n<html lang="en">\n<head><title>EDITH</title></head>\n<body><h1>EDITH Studio</h1></body>\n</html>`
   },
   {
     id: 'css',
@@ -271,7 +271,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'json',
     iconColor: '#10B981',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: false, testing: true, debugging: false },
-    sampleCode: `{\n  "name": "astra-workspace",\n  "version": "1.0.0",\n  "private": true\n}`
+    sampleCode: `{\n  "name": "edith-workspace",\n  "version": "1.0.0",\n  "private": true\n}`
   },
   {
     id: 'yaml',
@@ -280,7 +280,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'yaml',
     iconColor: '#F59E0B',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: false, testing: true, debugging: false },
-    sampleCode: `version: "3.9"\nservices:\n  astra-engine:\n    image: astra/engine:v1\n    ports:\n      - "8002:8002"\n`
+    sampleCode: `version: "3.9"\nservices:\n  edith-engine:\n    image: edith/engine:v1\n    ports:\n      - "8002:8002"\n`
   },
   {
     id: 'markdown',
@@ -289,7 +289,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'markdown',
     iconColor: '#94A3B8',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: false, testing: false, debugging: false },
-    sampleCode: `# ASTRA Architecture RFC\n\n- Multi-pane IDE\n- AI Planning State Machine\n- Sandboxed Execution\n`
+    sampleCode: `# EDITH Architecture RFC\n\n- Multi-pane IDE\n- AI Planning State Machine\n- Sandboxed Execution\n`
   },
   {
     id: 'shell',
@@ -298,7 +298,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'shell',
     iconColor: '#10B981',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: true, testing: true, debugging: false },
-    sampleCode: `#!/usr/bin/env bash\necho "Starting ASTRA background services..."\n`
+    sampleCode: `#!/usr/bin/env bash\necho "Starting EDITH background services..."\n`
   },
   {
     id: 'powershell',
@@ -307,7 +307,7 @@ SELECT id, name, email FROM users WHERE role = 'admin' LIMIT 10;
     mode: 'powershell',
     iconColor: '#3B82F6',
     capabilities: { editing: true, aiAssisted: true, compilation: false, execution: true, testing: true, debugging: false },
-    sampleCode: `Write-Host "ASTRA Windows Native Environment Active" -ForegroundColor Cyan`
+    sampleCode: `Write-Host "EDITH Windows Native Environment Active" -ForegroundColor Cyan`
   },
   {
     id: 'dockerfile',

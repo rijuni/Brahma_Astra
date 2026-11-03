@@ -1,5 +1,6 @@
 const prisma = require('../repositories/prisma');
 const { AppError } = require('../middleware/errorHandler');
+const auditService = require('./audit.service');
 
 class ConversationService {
   async createConversation({ title, projectId = null, userId }) {
@@ -80,6 +81,23 @@ class ConversationService {
     });
 
     return message;
+  }
+
+  async deleteConversation(conversationId, userId) {
+    await this.getConversation(conversationId, userId);
+
+    await prisma.conversation.delete({
+      where: { id: conversationId }
+    });
+
+    await auditService.record({
+      userId,
+      action: 'CONVERSATION_DELETED',
+      resourceType: 'Conversation',
+      resourceId: conversationId
+    });
+
+    return true;
   }
 }
 

@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
       } catch {
         const demoUser = {
           id: 'demo-user-amlan',
-          email: 'amlan.nanda@brahma.ai',
+          email: 'amlan.nanda@friday.ai',
           name: 'Amlan Nanda',
           role: 'admin'
         };
