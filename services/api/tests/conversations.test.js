@@ -3,7 +3,7 @@ const app = require('../src/app');
 const prisma = require('../src/repositories/prisma');
 
 describe('Conversation Endpoints', () => {
-  const userEmail = `c_user_${Date.now()}@brahma-astra.local`;
+  const userEmail = `c_user_${Date.now()}@friday-edith.local`;
   let token;
   let userId;
   let createdConvId;

@@ -3,7 +3,7 @@ const app = require('../src/app');
 const prisma = require('../src/repositories/prisma');
 
 describe('Auth Endpoints', () => {
-  const testEmail = `test_${Date.now()}@brahma-astra.local`;
+  const testEmail = `test_${Date.now()}@friday-edith.local`;
   const testPassword = 'SecurePassword123!';
   let authToken;
 

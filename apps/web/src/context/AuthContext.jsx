@@ -60,7 +60,7 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     try {
       const res = await authService.login({
-        email: 'developer@brahma-astra.local',
+        email: 'developer@friday-edith.local',
         password: 'DevPassword123!'
       });
       setUser(res.user);
@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
     } catch {
       try {
         const regRes = await authService.register({
-          email: 'amlan@brahma-astra.local',
+          email: 'amlan@friday-edith.local',
           password: 'DevPassword123!',
           name: 'Amlan Nanda'
         });

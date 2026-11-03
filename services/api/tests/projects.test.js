@@ -3,8 +3,8 @@ const app = require('../src/app');
 const prisma = require('../src/repositories/prisma');
 
 describe('Project Endpoints', () => {
-  const user1Email = `p_user1_${Date.now()}@brahma-astra.local`;
-  const user2Email = `p_user2_${Date.now()}@brahma-astra.local`;
+  const user1Email = `p_user1_${Date.now()}@friday-edith.local`;
+  const user2Email = `p_user2_${Date.now()}@friday-edith.local`;
   let token1, token2;
   let user1Id;
   let createdProjectId;

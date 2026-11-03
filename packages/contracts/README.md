@@ -1,6 +1,6 @@
-# @brahma-astra/contracts
+# @friday-edith/contracts
 
-Shared contracts, status enums, error shapes, and OpenAPI schemas for the BRAHMA intelligence platform and ASTRA coding workspace.
+Shared contracts, status enums, error shapes, and OpenAPI schemas for the FRIDAY intelligence platform and EDITH coding workspace.
 
 ## Error Format
 All services conform to the standard error shape:
@@ -18,5 +18,5 @@ All services conform to the standard error shape:
 
 ## Status Lifecycles
 - **AI Task Lifecycle**: `pending` -> `running` -> `completed` / `failed` / `cancelled`
-- **ASTRA Coding Task Lifecycle**: `proposed` -> `approved` -> `running` -> `completed` / `failed` / `cancelled`
+- **EDITH Coding Task Lifecycle**: `proposed` -> `approved` -> `running` -> `completed` / `failed` / `cancelled`
 - **Runner Job Lifecycle**: `queued` -> `running` -> `succeeded` / `failed` / `timed_out` / `cancelled`
