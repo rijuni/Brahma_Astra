@@ -1,5 +1,5 @@
 const prisma = require('../repositories/prisma');
-const brahmaCoreClient = require('../clients/brahmaCore.client');
+const fridayCoreClient = require('../clients/fridayCore.client');
 const { AppError } = require('../middleware/errorHandler');
 const auditService = require('./audit.service');
 
@@ -33,20 +33,20 @@ class AiService {
       details: { taskType }
     });
 
-    // Asynchronously or background dispatch to Brahma Core
-    this.dispatchToBrahmaCore(task.id, prompt, taskType, context);
+    // Asynchronously or background dispatch to FRIDAY Core
+    this.dispatchToFridayCore(task.id, prompt, taskType, context);
 
     return task;
   }
 
-  async dispatchToBrahmaCore(taskId, prompt, taskType, context) {
+  async dispatchToFridayCore(taskId, prompt, taskType, context) {
     try {
       await prisma.aiTask.update({
         where: { id: taskId },
         data: { status: 'running' }
       });
 
-      const response = await brahmaCoreClient.executeTask({
+      const response = await fridayCoreClient.executeTask({
         taskId,
         prompt,
         taskType,
@@ -61,9 +61,9 @@ class AiService {
           provider: response.provider || 'mock',
           completedAt: new Date()
         }
-      });
+      }).catch(() => {});
     } catch (err) {
-      // In case Brahma Core is offline or errors
+      // In case FRIDAY Core is offline or errors
       await prisma.aiTask.update({
         where: { id: taskId },
         data: {
@@ -101,7 +101,7 @@ class AiService {
       throw new AppError(`Cannot cancel task in state ${task.status}`, 409, 'CONFLICT');
     }
 
-    await brahmaCoreClient.cancelTask(taskId);
+    await fridayCoreClient.cancelTask(taskId);
 
     const updated = await prisma.aiTask.update({
       where: { id: taskId },

@@ -6,7 +6,7 @@ const prisma = require('./repositories/prisma');
 const PORT = env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
-  logger.info(`BRAHMA + ASTRA Application API listening on port ${PORT}`, {
+  logger.info(`FRIDAY + EDITH Application API listening on port ${PORT}`, {
     port: PORT,
     environment: env.NODE_ENV,
     prefix: env.API_PREFIX

@@ -299,10 +299,12 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
     <div
       className="flex gap-4 animate-entrance"
       style={{
-        height: 'calc(100vh - var(--header-height) - 48px)',
-        maxHeight: '880px',
-        maxWidth: '1380px',
-        margin: '0 auto'
+        height: '100%',
+        width: '100%',
+        maxHeight: 'none',
+        maxWidth: 'none',
+        margin: 0,
+        flex: 1
       }}
     >
       {/* Left Conversations Rail */}

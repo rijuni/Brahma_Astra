@@ -1,8 +1,8 @@
 {
-  "name": "@brahma-astra/api",
+  "name": "@friday-edith/api",
   "version": "1.0.0",
   "private": true,
-  "description": "Main Application API for BRAHMA + ASTRA (Node.js + Express + Prisma)",
+  "description": "Main Application API for FRIDAY + EDITH (Node.js + Express + Prisma)",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

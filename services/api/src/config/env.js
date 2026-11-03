@@ -15,8 +15,10 @@ const env = {
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
   BCRYPT_SALT_ROUNDS: parseInt(process.env.BCRYPT_SALT_ROUNDS, 10) || 10,
   INTERNAL_SERVICE_KEY: process.env.INTERNAL_SERVICE_KEY || 'dev_internal_service_key_change_in_production',
-  BRAHMA_CORE_URL: process.env.BRAHMA_CORE_URL || 'http://localhost:8001',
-  ASTRA_ENGINE_URL: process.env.ASTRA_ENGINE_URL || 'http://localhost:8002',
+  FRIDAY_CORE_URL: process.env.FRIDAY_CORE_URL || process.env.BRAHMA_CORE_URL || 'http://localhost:8001',
+  EDITH_ENGINE_URL: process.env.EDITH_ENGINE_URL || process.env.ASTRA_ENGINE_URL || 'http://localhost:8002',
+  BRAHMA_CORE_URL: process.env.FRIDAY_CORE_URL || process.env.BRAHMA_CORE_URL || 'http://localhost:8001',
+  ASTRA_ENGINE_URL: process.env.EDITH_ENGINE_URL || process.env.ASTRA_ENGINE_URL || 'http://localhost:8002',
   RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000, // 15 minutes
   RATE_LIMIT_MAX: parseInt(process.env.RATE_LIMIT_MAX, 10) || 500
 };

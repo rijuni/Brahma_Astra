@@ -1,13 +1,13 @@
 {
-  "name": "@brahma-astra/contracts",
+  "name": "@friday-edith/contracts",
   "version": "1.0.0",
-  "description": "Shared API contracts, error shapes, and status constants for BRAHMA + ASTRA",
+  "description": "Shared API contracts, error shapes, and status constants for FRIDAY + EDITH",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Shared contracts validated.\""
   },
-  "keywords": ["brahma", "astra", "contracts"],
-  "author": "BRAHMA + ASTRA Team",
+  "keywords": ["friday", "edith", "contracts"],
+  "author": "FRIDAY + EDITH Team",
   "license": "UNLICENSED"
 }

@@ -53,7 +53,7 @@ export default function SettingsWorkspace() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 animate-entrance" style={{ maxWidth: '1120px', margin: '0 auto' }}>
+    <div className="flex flex-col gap-6 animate-entrance" style={{ width: '100%', maxWidth: 'none', margin: 0, paddingBottom: '32px' }}>
       {/* Header */}
       <div>
         <div

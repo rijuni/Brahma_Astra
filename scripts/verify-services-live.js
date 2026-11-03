@@ -28,7 +28,7 @@ function fetchJson(url, headers = {}) {
 }
 
 async function verifyAllLive() {
-  console.log('=== Verifying Native Windows Live Services Startup ===\n');
+  console.log('=== Verifying Native Windows Live Services Startup (FRIDAY + EDITH) ===\n');
 
   const rootDir = path.resolve(__dirname, '..');
   const pythonExe = path.join(rootDir, '.venv', 'Scripts', 'python.exe');
@@ -44,26 +44,26 @@ async function verifyAllLive() {
     });
     procs.push(apiProc);
 
-    // 2. Start BRAHMA Core
-    console.log('[2/4] Spawning BRAHMA Core (port 8001)...');
+    // 2. Start FRIDAY Core
+    console.log('[2/4] Spawning FRIDAY Core (port 8001)...');
     const coreProc = spawn(pythonExe, ['-m', 'uvicorn', 'app.main:app', '--port', '8001'], {
-      cwd: path.join(rootDir, 'services', 'brahma-core'),
+      cwd: path.join(rootDir, 'services', 'friday-core'),
       stdio: 'pipe'
     });
     procs.push(coreProc);
 
-    // 3. Start ASTRA Engine
-    console.log('[3/4] Spawning ASTRA Engine (port 8002)...');
+    // 3. Start EDITH Engine
+    console.log('[3/4] Spawning EDITH Engine (port 8002)...');
     const engineProc = spawn(pythonExe, ['-m', 'uvicorn', 'app.main:app', '--port', '8002'], {
-      cwd: path.join(rootDir, 'services', 'astra-engine'),
+      cwd: path.join(rootDir, 'services', 'edith-engine'),
       stdio: 'pipe'
     });
     procs.push(engineProc);
 
-    // 4. Start ASTRA Runner
-    console.log('[4/4] Spawning ASTRA Runner (port 8003)...');
+    // 4. Start EDITH Runner
+    console.log('[4/4] Spawning EDITH Runner (port 8003)...');
     const runnerProc = spawn(pythonExe, ['-m', 'uvicorn', 'app.main:app', '--port', '8003'], {
-      cwd: path.join(rootDir, 'services', 'astra-runner'),
+      cwd: path.join(rootDir, 'services', 'edith-runner'),
       stdio: 'pipe'
     });
     procs.push(runnerProc);
@@ -77,23 +77,23 @@ async function verifyAllLive() {
     const apiReady = await fetchJson('http://127.0.0.1:3000/health/ready');
     console.log('  [OK] Application API /health/ready:', apiReady.data);
 
-    // Verify BRAHMA Core
+    // Verify FRIDAY Core
     const coreHealth = await fetchJson('http://127.0.0.1:8001/health/live');
-    console.log('  [OK] BRAHMA Core /health/live:', coreHealth.data);
+    console.log('  [OK] FRIDAY Core /health/live:', coreHealth.data);
     const coreReady = await fetchJson('http://127.0.0.1:8001/health/ready');
-    console.log('  [OK] BRAHMA Core /health/ready:', coreReady.data);
+    console.log('  [OK] FRIDAY Core /health/ready:', coreReady.data);
 
-    // Verify ASTRA Engine
+    // Verify EDITH Engine
     const engineHealth = await fetchJson('http://127.0.0.1:8002/health/live');
-    console.log('  [OK] ASTRA Engine /health/live:', engineHealth.data);
+    console.log('  [OK] EDITH Engine /health/live:', engineHealth.data);
     const engineReady = await fetchJson('http://127.0.0.1:8002/health/ready');
-    console.log('  [OK] ASTRA Engine /health/ready:', engineReady.data);
+    console.log('  [OK] EDITH Engine /health/ready:', engineReady.data);
 
-    // Verify ASTRA Runner
+    // Verify EDITH Runner
     const runnerHealth = await fetchJson('http://127.0.0.1:8003/health/live');
-    console.log('  [OK] ASTRA Runner /health/live:', runnerHealth.data);
+    console.log('  [OK] EDITH Runner /health/live:', runnerHealth.data);
     const runnerSec = await fetchJson('http://127.0.0.1:8003/api/v1/security-status');
-    console.log('  [OK] ASTRA Runner /api/v1/security-status:', runnerSec.data.execution_mode, `(verified: ${runnerSec.data.verified})`);
+    console.log('  [OK] EDITH Runner /api/v1/security-status:', runnerSec.data.execution_mode, `(verified: ${runnerSec.data.verified})`);
 
     console.log('\n=== All 4 Native Windows Services Verified Live and Healthy! ===');
   } finally {

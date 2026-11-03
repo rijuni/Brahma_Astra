@@ -105,12 +105,12 @@ export default function PromptComposer({
         style={{
           padding: '8px 12px',
           borderRadius: '20px',
-          border: '1.5px solid rgba(246, 200, 122, 0.35)',
-          borderTop: '1.5px solid rgba(255, 255, 255, 0.4)',
-          background: 'rgba(10, 9, 20, 0.7)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1)'
+          border: '1.5px solid rgba(246, 200, 122, 0.45)',
+          borderTop: '1.5px solid rgba(255, 240, 190, 0.6)',
+          background: 'rgba(14, 12, 24, 0.94)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.18)'
         }}
       >
         <input

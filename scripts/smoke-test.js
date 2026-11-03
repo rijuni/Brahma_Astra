@@ -1,5 +1,5 @@
 /**
- * BRAHMA + ASTRA Smoke Test
+ * FRIDAY + EDITH Smoke Test
  *
  * Verifies live service health and security configuration over HTTP.
  * This script only performs non-mutating HTTP requests and NEVER starts, stops,
@@ -111,7 +111,7 @@ const checks = [
     }
   },
   {
-    name: 'BRAHMA Core Liveness',
+    name: 'FRIDAY Core Liveness',
     url: 'http://localhost:8001/health/live',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -120,7 +120,7 @@ const checks = [
     }
   },
   {
-    name: 'BRAHMA Core Readiness',
+    name: 'FRIDAY Core Readiness',
     url: 'http://localhost:8001/health/ready',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -129,7 +129,7 @@ const checks = [
     }
   },
   {
-    name: 'ASTRA Engine Liveness',
+    name: 'EDITH Engine Liveness',
     url: 'http://localhost:8002/health/live',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -138,7 +138,7 @@ const checks = [
     }
   },
   {
-    name: 'ASTRA Engine Readiness',
+    name: 'EDITH Engine Readiness',
     url: 'http://localhost:8002/health/ready',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -147,7 +147,7 @@ const checks = [
     }
   },
   {
-    name: 'ASTRA Runner Liveness',
+    name: 'EDITH Runner Liveness',
     url: 'http://localhost:8003/health/live',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -156,7 +156,7 @@ const checks = [
     }
   },
   {
-    name: 'ASTRA Runner Security Policy (Disabled Execution)',
+    name: 'EDITH Runner Security Policy (Disabled Execution)',
     url: 'http://localhost:8003/api/v1/security-status',
     validator: (status, data) => {
       if (status !== 200) return { pass: false, message: `Expected HTTP 200, got ${status}` };
@@ -189,7 +189,7 @@ const checks = [
 
 async function main() {
   console.log('===============================================================');
-  console.log('  BRAHMA + ASTRA — Live Services HTTP Smoke Test');
+  console.log('  FRIDAY + EDITH — Live Services HTTP Smoke Test');
   console.log('===============================================================\n');
 
   let passedCount = 0;

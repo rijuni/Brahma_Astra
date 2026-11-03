@@ -81,7 +81,7 @@ export default function ProjectsWorkspace({ onNavigate }) {
   );
 
   return (
-    <div className="flex flex-col gap-6 animate-entrance" style={{ maxWidth: '1380px', margin: '0 auto' }}>
+    <div className="flex flex-col gap-6 animate-entrance" style={{ width: '100%', maxWidth: 'none', margin: 0, paddingBottom: '32px' }}>
       {/* Top Header Bar */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -261,14 +261,14 @@ export default function ProjectsWorkspace({ onNavigate }) {
                   Project Documentation & Files
                 </span>
                 <div className="flex flex-col gap-2">
-                  <div className="glass-card flex items-center justify-between p-2" style={{ padding: '8px 12px', background: 'rgba(255, 255, 255, 0.02)' }}>
+                  <div className="glass-card flex items-center justify-between p-2" style={{ padding: '8px 12px', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <div className="flex items-center gap-2">
                       <FileText size={14} color="var(--brand-cyan)" />
                       <span className="body-small">Architecture_Notes.md</span>
                     </div>
                     <span className="badge badge-cyan" style={{ fontSize: '10px' }}>Indexed</span>
                   </div>
-                  <div className="glass-card flex items-center justify-between p-2" style={{ padding: '8px 12px', background: 'rgba(255, 255, 255, 0.02)' }}>
+                  <div className="glass-card flex items-center justify-between p-2" style={{ padding: '8px 12px', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <div className="flex items-center gap-2">
                       <FileText size={14} color="var(--brand-gold)" />
                       <span className="body-small">Requirements_v1.pdf</span>

@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './components/feedback/Toast';
 import './design-system/globals.css';
-import './styles/astra.css';
+import './styles/edith.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

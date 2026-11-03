@@ -134,10 +134,14 @@ function UsageSummary({ projects, conversations, aiTasks, auditLogs, isLoading }
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: '14px',
-        background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(12, 10, 22, 0.90)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(246, 200, 122, 0.32)',
+        borderTop: '1.5px solid rgba(255, 240, 190, 0.55)',
         borderRadius: '18px',
-        padding: '20px 24px'
+        padding: '20px 24px',
+        boxShadow: '0 16px 44px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(246, 200, 122, 0.04)'
       }}
     >
       {tiles.map(({ label, value, icon: Icon, color, glow }) => (
@@ -150,8 +154,10 @@ function UsageSummary({ projects, conversations, aiTasks, auditLogs, isLoading }
             gap: '10px',
             padding: '16px 12px',
             borderRadius: '14px',
-            background: 'rgba(255,255,255,0.03)',
-            border: `1px solid rgba(255,255,255,0.07)`,
+            background: 'rgba(20, 17, 34, 0.90)',
+            border: '1px solid rgba(246, 200, 122, 0.22)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.6)',
             transition: 'all 0.2s ease',
             position: 'relative',
             overflow: 'hidden'
@@ -167,8 +173,8 @@ function UsageSummary({ projects, conversations, aiTasks, auditLogs, isLoading }
 
           <div style={{
             width: 40, height: 40, borderRadius: '12px',
-            background: `rgba(${color === '#7DD3FC' ? '56,189,248' : color === '#F6C87A' ? '246,200,122' : color === '#A78BFA' ? '167,139,250' : '16,185,129'},0.12)`,
-            border: `1px solid rgba(${color === '#7DD3FC' ? '56,189,248' : color === '#F6C87A' ? '246,200,122' : color === '#A78BFA' ? '167,139,250' : '16,185,129'},0.3)`,
+            background: `rgba(${color === '#7DD3FC' ? '56,189,248' : color === '#F6C87A' ? '246,200,122' : color === '#A78BFA' ? '167,139,250' : '16,185,129'},0.15)`,
+            border: `1px solid rgba(${color === '#7DD3FC' ? '56,189,248' : color === '#F6C87A' ? '246,200,122' : color === '#A78BFA' ? '167,139,250' : '16,185,129'},0.35)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: `0 0 14px ${glow}`
           }}>
@@ -190,7 +196,7 @@ function UsageSummary({ projects, conversations, aiTasks, auditLogs, isLoading }
           )}
 
           <span style={{
-            fontSize: '10.5px', color: 'rgba(255,255,255,0.5)',
+            fontSize: '10.5px', color: 'rgba(255,255,255,0.78)',
             textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600
           }}>
             {label}
@@ -514,7 +520,7 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
   return (
     <div
       className="flex flex-col gap-6 animate-entrance"
-      style={{ maxWidth: '1420px', margin: '0 auto', paddingBottom: '32px' }}
+      style={{ width: '100%', maxWidth: 'none', margin: 0, paddingBottom: '32px' }}
     >
       {/* ── Hero ── */}
       <div

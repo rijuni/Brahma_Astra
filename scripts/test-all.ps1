@@ -1,11 +1,11 @@
 # ==========================================================
-# BRAHMA + ASTRA Monorepo Automated Test Suite (Windows)
+# FRIDAY + EDITH Monorepo Automated Test Suite (Windows)
 # ==========================================================
 
 $ErrorActionPreference = "Continue"
 
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "  BRAHMA + ASTRA Monorepo Automated Test Suite" -ForegroundColor Cyan
+Write-Host "  FRIDAY + EDITH Monorepo Automated Test Suite" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 $results = @()
@@ -26,32 +26,32 @@ $apiCode = $LASTEXITCODE
 Pop-Location
 $results += [PSCustomObject]@{ Suite = "Application API (Node.js/Jest)"; Passed = ($apiCode -eq 0) }
 
-# 3. BRAHMA Core (Pytest)
-Write-Host "`n[3/5] Testing BRAHMA Core (pytest)..." -ForegroundColor Yellow
-Push-Location "services\brahma-core"
+# 3. FRIDAY Core (Pytest)
+Write-Host "`n[3/5] Testing FRIDAY Core (pytest)..." -ForegroundColor Yellow
+Push-Location "services\friday-core"
 ..\..\.venv\Scripts\pytest -v
 $coreCode = $LASTEXITCODE
 Pop-Location
-$results += [PSCustomObject]@{ Suite = "BRAHMA Core (FastAPI/pytest)"; Passed = ($coreCode -eq 0) }
+$results += [PSCustomObject]@{ Suite = "FRIDAY Core (FastAPI/pytest)"; Passed = ($coreCode -eq 0) }
 
-# 4. ASTRA Engine (Pytest)
-Write-Host "`n[4/5] Testing ASTRA Engine (pytest)..." -ForegroundColor Yellow
-Push-Location "services\astra-engine"
+# 4. EDITH Engine (Pytest)
+Write-Host "`n[4/5] Testing EDITH Engine (pytest)..." -ForegroundColor Yellow
+Push-Location "services\edith-engine"
 ..\..\.venv\Scripts\pytest -v
 $engineCode = $LASTEXITCODE
 Pop-Location
-$results += [PSCustomObject]@{ Suite = "ASTRA Engine (FastAPI/pytest)"; Passed = ($engineCode -eq 0) }
+$results += [PSCustomObject]@{ Suite = "EDITH Engine (FastAPI/pytest)"; Passed = ($engineCode -eq 0) }
 
-# 5. ASTRA Runner (Pytest)
-Write-Host "`n[5/6] Testing ASTRA Runner Security Boundary (pytest)..." -ForegroundColor Yellow
-Push-Location "services\astra-runner"
+# 5. EDITH Runner (Pytest)
+Write-Host "`n[5/6] Testing EDITH Runner Security Boundary (pytest)..." -ForegroundColor Yellow
+Push-Location "services\edith-runner"
 ..\..\.venv\Scripts\pytest -v
 $runnerCode = $LASTEXITCODE
 Pop-Location
-$results += [PSCustomObject]@{ Suite = "ASTRA Runner (Security Boundary)"; Passed = ($runnerCode -eq 0) }
+$results += [PSCustomObject]@{ Suite = "EDITH Runner (Security Boundary)"; Passed = ($runnerCode -eq 0) }
 
 # 6. Frontend Web (Node test)
-Write-Host "`n[6/6] Testing Frontend Web Foundation (@brahma-astra/web)..." -ForegroundColor Yellow
+Write-Host "`n[6/6] Testing Frontend Web Foundation (@friday-edith/web)..." -ForegroundColor Yellow
 Push-Location "apps\web"
 npm test
 $webCode = $LASTEXITCODE

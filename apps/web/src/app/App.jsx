@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import AuthPage from '../features/auth/AuthPage';
-import BrahmaShell from '../components/layout/BrahmaShell';
+import FridayShell from '../components/layout/FridayShell';
 import HomeDashboard from '../features/dashboard/HomeDashboard';
 import ChatWorkspace from '../features/chat/ChatWorkspace';
 import ProjectsWorkspace from '../features/projects/ProjectsWorkspace';
@@ -10,8 +10,8 @@ import SettingsWorkspace from '../features/settings/SettingsWorkspace';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Modal from '../components/common/Modal';
 import Input from '../components/common/Input';
-import AstraLauncher from '../features/astra/AstraLauncher';
-import AstraWorkspace from '../features/astra/AstraWorkspace';
+import EdithLauncher from '../features/edith/EdithLauncher';
+import EdithWorkspace from '../features/edith/EdithWorkspace';
 import { Search } from 'lucide-react';
 
 export default function App() {
@@ -72,7 +72,7 @@ export default function App() {
   // EDITH routes take over full screen with dedicated IDE Activity Bar and cosmic glass canvas
   if (currentRoute === 'astra') {
     return (
-      <AstraLauncher
+      <EdithLauncher
         onEnterWorkspace={() => setCurrentRoute('astra-workspace')}
         onBackToFriday={() => setCurrentRoute('dashboard')}
       />
@@ -81,7 +81,7 @@ export default function App() {
 
   if (currentRoute === 'astra-workspace') {
     return (
-      <AstraWorkspace
+      <EdithWorkspace
         onBackToFriday={() => setCurrentRoute('dashboard')}
       />
     );
@@ -110,7 +110,7 @@ export default function App() {
   };
 
   return (
-    <BrahmaShell
+    <FridayShell
       currentRoute={currentRoute}
       onNavigate={setCurrentRoute}
       onOpenSearch={() => setIsSearchOpen(true)}
@@ -162,6 +162,6 @@ export default function App() {
           )}
         </div>
       </Modal>
-    </BrahmaShell>
+    </FridayShell>
   );
 }

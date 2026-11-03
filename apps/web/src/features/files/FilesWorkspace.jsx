@@ -98,7 +98,7 @@ export default function FilesWorkspace() {
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-entrance" style={{ maxWidth: '1380px', margin: '0 auto' }}>
+    <div className="flex flex-col gap-6 animate-entrance" style={{ width: '100%', maxWidth: 'none', margin: 0, paddingBottom: '32px' }}>
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>

@@ -4,9 +4,9 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('[Seed] Seeding initial development data...');
+  console.log('[Seed] Seeding initial development data for FRIDAY + EDITH...');
 
-  const devEmail = process.env.DEV_USER_EMAIL || 'developer@brahma-astra.local';
+  const devEmail = process.env.DEV_USER_EMAIL || 'developer@friday-edith.local';
   const devPassword = process.env.DEV_USER_PASSWORD || 'DevPassword123!';
   const passwordHash = await bcrypt.hash(devPassword, 10);
 
@@ -25,11 +25,10 @@ async function main() {
   console.log(`[Seed] Seeded user: ${user.email} (${user.id})`);
 
   // Create demo project
-  const existingProject = await prisma.project.findFirst({
+  let project = await prisma.project.findFirst({
     where: { ownerId: user.id }
   });
 
-  let project = existingProject;
   if (!project) {
     project = await prisma.project.create({
       data: {
@@ -42,12 +41,12 @@ async function main() {
   }
 
   // Create demo EDITH workspace
-  const existingWorkspace = await prisma.astraWorkspace.findFirst({
+  let workspace = await prisma.edithWorkspace.findFirst({
     where: { projectId: project.id }
   });
 
-  if (!existingWorkspace) {
-    const workspace = await prisma.astraWorkspace.create({
+  if (!workspace) {
+    workspace = await prisma.edithWorkspace.create({
       data: {
         projectId: project.id,
         name: 'EDITH Primary Repository Workspace',
@@ -58,12 +57,12 @@ async function main() {
   }
 
   // Create demo conversation
-  const existingConversation = await prisma.conversation.findFirst({
+  let conversation = await prisma.conversation.findFirst({
     where: { userId: user.id }
   });
 
-  if (!existingConversation) {
-    const conversation = await prisma.conversation.create({
+  if (!conversation) {
+    conversation = await prisma.conversation.create({
       data: {
         title: 'Welcome to FRIDAY + EDITH',
         projectId: project.id,

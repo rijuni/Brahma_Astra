@@ -1,10 +1,10 @@
 const request = require('supertest');
 const app = require('../src/app');
 const prisma = require('../src/repositories/prisma');
-const brahmaCoreClient = require('../src/clients/brahmaCore.client');
+const fridayCoreClient = require('../src/clients/fridayCore.client');
 
 describe('AI Orchestration Endpoints', () => {
-  const userEmail = `ai_user_${Date.now()}@brahma-astra.local`;
+  const userEmail = `ai_user_${Date.now()}@friday-edith.local`;
   let token;
   let userId;
   let taskId;
@@ -13,7 +13,7 @@ describe('AI Orchestration Endpoints', () => {
 
   beforeAll(async () => {
     // Mock the external network call so unit tests stay isolated and predictable
-    executeSpy = jest.spyOn(brahmaCoreClient, 'executeTask').mockImplementation(async ({ taskId }) => {
+    executeSpy = jest.spyOn(fridayCoreClient, 'executeTask').mockImplementation(async ({ taskId }) => {
       // simulate in-progress / mock execution
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -27,7 +27,7 @@ describe('AI Orchestration Endpoints', () => {
       });
     });
 
-    cancelSpy = jest.spyOn(brahmaCoreClient, 'cancelTask').mockResolvedValue(true);
+    cancelSpy = jest.spyOn(fridayCoreClient, 'cancelTask').mockResolvedValue(true);
 
     const res = await request(app)
       .post('/api/v1/auth/register')

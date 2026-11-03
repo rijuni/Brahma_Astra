@@ -1,9 +1,9 @@
 {
-  "name": "@brahma-astra/web",
+  "name": "@friday-edith/web",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "BRAHMA Intelligence Platform — Phase 1 Frontend (React 18 + JavaScript + Vite)",
+  "description": "FRIDAY Personal AI Platform — Frontend (React 18 + JavaScript + Vite)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -53,7 +53,7 @@ model Project {
   owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   members     ProjectMember[]
   conversations Conversation[]
-  workspaces  AstraWorkspace[]
+  workspaces  EdithWorkspace[]
 
   @@index([ownerId])
   @@map("projects")
@@ -125,7 +125,7 @@ model AiTask {
   @@map("ai_tasks")
 }
 
-model AstraWorkspace {
+model EdithWorkspace {
   id            String        @id @default(uuid())
   projectId     String
   name          String
@@ -138,7 +138,7 @@ model AstraWorkspace {
   codingTasks   CodingTask[]
 
   @@index([projectId])
-  @@map("astra_workspaces")
+  @@map("edith_workspaces")
 }
 
 model CodingTask {
@@ -151,7 +151,7 @@ model CodingTask {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  workspace     AstraWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace     EdithWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   executionJobs ExecutionJob[]
 
   @@index([workspaceId])
