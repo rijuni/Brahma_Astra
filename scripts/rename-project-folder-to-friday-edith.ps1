@@ -41,3 +41,4 @@ try {
     Write-Host "Make sure Antigravity IDE and all PowerShell terminal windows are closed." -ForegroundColor Red
     cmd /c mklink /J "M:\friday-edith" "M:\brahma-astra" 2>$null
 }
+

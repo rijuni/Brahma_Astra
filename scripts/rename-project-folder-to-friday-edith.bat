@@ -40,3 +40,4 @@ echo   2. Click "File" -^> "Open Folder..."
 echo   3. Select "M:\friday-edith"
 echo.
 pause
+
