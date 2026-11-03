@@ -111,6 +111,42 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
         className="flex-1 flex flex-col items-center justify-center relative w-full overflow-y-auto"
         style={{ padding: '20px 24px', minHeight: 0 }}
       >
+        {/* Ambient Drifting Space Asteroids */}
+        <img
+          src="/brand/floating-asteroid.png"
+          alt="Space Asteroid"
+          className="edith-floating-asteroid-1 hidden-mobile"
+          style={{
+            position: 'absolute',
+            left: '6%',
+            top: '52%',
+            width: '68px',
+            height: '68px',
+            opacity: 0.88,
+            filter: 'drop-shadow(0 0 14px rgba(56, 189, 248, 0.35))',
+            pointerEvents: 'none',
+            zIndex: 3
+          }}
+        />
+
+        <img
+          src="/brand/floating-asteroid.png"
+          alt="Space Asteroid"
+          className="edith-floating-asteroid-2 hidden-mobile"
+          style={{
+            position: 'absolute',
+            right: '8%',
+            top: '22%',
+            width: '44px',
+            height: '44px',
+            opacity: 0.72,
+            transform: 'scaleX(-1) rotate(42deg)',
+            filter: 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.25))',
+            pointerEvents: 'none',
+            zIndex: 3
+          }}
+        />
+
         <div
           className="flex flex-col items-center text-center z-10 animate-entrance my-auto"
           style={{ maxWidth: '820px', width: '100%' }}

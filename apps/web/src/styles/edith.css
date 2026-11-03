@@ -27,6 +27,25 @@
   50% { opacity: 0.95; transform: scaleX(1.1); }
 }
 
+/* Ambient Floating Space Asteroid Drift Animation */
+@keyframes edithAsteroidFloat1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-12px, -18px) rotate(4deg); }
+}
+
+@keyframes edithAsteroidFloat2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(14px, -15px) rotate(-5deg); }
+}
+
+.edith-floating-asteroid-1 {
+  animation: edithAsteroidFloat1 18s ease-in-out infinite;
+}
+
+.edith-floating-asteroid-2 {
+  animation: edithAsteroidFloat2 24s ease-in-out infinite;
+}
+
 .edith-reactor-spin-cw {
   animation: edithSpinClockwise 28s linear infinite;
   transform-origin: 50px 50px;
