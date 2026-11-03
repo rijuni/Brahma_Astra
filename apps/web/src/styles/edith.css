@@ -1,4 +1,51 @@
-/* ASTRA Studio — Glassy Transparent Design Extension */
+/* ASTRA / EDITH Studio — Glassy Transparent Design Extension */
+
+/* EDITH Arc Reactor Precision Animations */
+@keyframes edithSpinClockwise {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes edithSpinCounter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes edithPlasmaPulse {
+  0%, 100% {
+    transform: scale(0.96);
+    filter: drop-shadow(0 0 16px rgba(0, 210, 255, 0.75)) brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 28px rgba(56, 189, 248, 1)) brightness(1.25);
+  }
+}
+
+@keyframes edithFlarePulse {
+  0%, 100% { opacity: 0.6; transform: scaleX(0.95); }
+  50% { opacity: 0.95; transform: scaleX(1.1); }
+}
+
+.edith-reactor-spin-cw {
+  animation: edithSpinClockwise 28s linear infinite;
+  transform-origin: 50px 50px;
+}
+
+.edith-reactor-spin-ccw {
+  animation: edithSpinCounter 18s linear infinite;
+  transform-origin: 50px 50px;
+}
+
+.edith-reactor-plasma-pulse {
+  animation: edithPlasmaPulse 2.8s ease-in-out infinite;
+  transform-origin: 50px 49px;
+}
+
+.edith-flare-pulse {
+  animation: edithFlarePulse 3.5s ease-in-out infinite;
+  transform-origin: 50px 50px;
+}
 
 /* Opening Animation Keyframes */
 @keyframes astraYantraSpin {
@@ -89,10 +136,10 @@
 }
 
 .astra-activity-btn.active {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(56, 189, 248, 0.22) 100%);
-  color: var(--brand-gold);
-  border-color: var(--glass-border-violet);
-  box-shadow: 0 0 14px var(--brand-violet-glow);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(2, 132, 199, 0.18) 100%);
+  color: #FFFFFF;
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .astra-activity-btn.active::before {
@@ -103,7 +150,42 @@
   bottom: 8px;
   width: 3px;
   border-radius: 0 4px 4px 0;
-  background: var(--brand-gold);
+  background: #00D2FF;
+  box-shadow: 0 0 8px #00D2FF;
+}
+
+/* EDITH Sidebar Navigation Panel matching Master Spec */
+.edith-nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-family: var(--font-ui);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.edith-nav-pill:hover {
+  background: rgba(56, 189, 248, 0.08);
+  color: #FFFFFF;
+  border-color: rgba(56, 189, 248, 0.25);
+  transform: translateX(2px);
+}
+
+.edith-nav-pill.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(2, 132, 199, 0.16) 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Activity Bar Group Separator */

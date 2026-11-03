@@ -19,6 +19,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import Badge from '../../components/common/Badge';
+import EdithArcReactor from '../../components/brand/EdithArcReactor';
 
 export default function EdithShell({
   activeNav,
@@ -59,7 +60,7 @@ export default function EdithShell({
 
   return (
     <div
-      className="galaxy-canvas flex"
+      className="edith-canvas flex"
       style={{
         position: 'fixed',
         inset: 0,
@@ -70,7 +71,7 @@ export default function EdithShell({
       }}
     >
       {/* Activity Bar (Leftmost Glass Strip) */}
-      <nav className="astra-activity-bar" aria-label="EDITH Activity Bar">
+      <nav className="astra-activity-bar" aria-label="EDITH Activity Bar" style={{ background: 'rgba(6, 12, 24, 0.75)', borderRight: '1px solid rgba(56, 189, 248, 0.22)' }}>
         <div
           className="flex flex-col items-center w-full px-1 overflow-y-auto flex-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -78,23 +79,23 @@ export default function EdithShell({
           {/* EDITH Brand Icon */}
           <div
             style={{
-              width: '40px',
-              height: '40px',
+              width: '42px',
+              height: '42px',
               borderRadius: 'var(--radius-md)',
-              background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(2, 132, 199, 0.22) 100%)',
-              border: '1px solid rgba(56, 189, 248, 0.35)',
+              background: 'radial-gradient(circle, rgba(56, 189, 248, 0.24) 0%, rgba(2, 132, 199, 0.12) 100%)',
+              border: '1px solid rgba(56, 189, 248, 0.45)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '10px',
+              marginBottom: '12px',
               cursor: 'pointer',
               flexShrink: 0,
-              boxShadow: '0 0 14px rgba(56, 189, 248, 0.25)'
+              boxShadow: '0 0 16px rgba(56, 189, 248, 0.35)'
             }}
             onClick={() => onSelectNav('workspace')}
             title="EDITH Studio Workspace"
           >
-            <img src="/brand/edith-mark.svg" alt="EDITH" style={{ width: '24px', height: '24px' }} />
+            <EdithArcReactor size={28} showHud={false} animated={true} />
           </div>
 
           {/* Primary Workspace Navigation Group */}
@@ -171,10 +172,13 @@ export default function EdithShell({
         >
           {/* Breadcrumb Path */}
           <div className="flex items-center gap-3">
-            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--brand-cyan)', letterSpacing: '0.08em' }}>
-              EDITH
-            </span>
-            <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>/</span>
+            <div className="flex items-center gap-2">
+              <EdithArcReactor size={22} showHud={false} animated={false} />
+              <span style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--edith-cyan, #00D2FF)', letterSpacing: '0.12em', fontFamily: "'Michroma', sans-serif" }}>
+                EDITH
+              </span>
+            </div>
+            <span style={{ color: 'rgba(56, 189, 248, 0.4)', fontSize: '13px' }}>/</span>
             <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 600 }}>
               {activeProject?.name || 'Workspace'}
             </span>

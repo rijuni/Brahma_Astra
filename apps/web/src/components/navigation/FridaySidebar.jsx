@@ -17,6 +17,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../feedback/Toast';
 import FridayArcReactor from '../brand/FridayArcReactor';
+import EdithArcReactor from '../brand/EdithArcReactor';
 
 export default function FridaySidebar({
   currentRoute,
@@ -135,6 +136,7 @@ export default function FridaySidebar({
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentRoute === item.id;
+            const isEdith = item.id === 'astra';
 
             return (
               <button
@@ -144,17 +146,28 @@ export default function FridaySidebar({
                 style={{
                   padding: '10px 14px',
                   justifyContent: 'flex-start',
-                  width: '100%'
+                  width: '100%',
+                  ...(isEdith && isActive
+                    ? {
+                        background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%)',
+                        border: '1px solid rgba(56, 189, 248, 0.55)',
+                        boxShadow: '0 0 16px rgba(56, 189, 248, 0.35)'
+                      }
+                    : {})
                 }}
               >
-                <Icon
-                  size={18}
-                  color={isActive ? '#FAD982' : 'currentColor'}
-                  style={{
-                    flexShrink: 0,
-                    filter: isActive ? 'drop-shadow(0 0 8px rgba(246, 200, 122, 0.6))' : 'none'
-                  }}
-                />
+                {isEdith ? (
+                  <EdithArcReactor size={20} showHud={false} animated={isActive} />
+                ) : (
+                  <Icon
+                    size={18}
+                    color={isActive ? '#FAD982' : 'currentColor'}
+                    style={{
+                      flexShrink: 0,
+                      filter: isActive ? 'drop-shadow(0 0 8px rgba(246, 200, 122, 0.6))' : 'none'
+                    }}
+                  />
+                )}
                 <span
                   style={{
                     fontSize: '13.5px',
