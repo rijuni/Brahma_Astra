@@ -72,7 +72,7 @@ export default function DeployPanel() {
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Rocket size={16} color="var(--brand-cyan)" />
+          <Rocket size={16} color="#00D2FF" />
           <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Deployment Orchestrator</span>
           <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED CLOUD DEPLOY</Badge>
         </div>
@@ -144,7 +144,7 @@ export default function DeployPanel() {
               <div style={{ fontSize: '12.5px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
               <div className="body-small text-muted" style={{ fontSize: '11px' }}>Applies pre-flight health checks and initiates release.</div>
             </div>
-            <Button variant="gold" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}>
+            <Button variant="cyan" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}>
               Deploy
             </Button>
           </div>
@@ -192,7 +192,7 @@ export default function DeployPanel() {
               ENVIRONMENT VARIABLES ({envVars.length})
             </span>
             <button onClick={handleAddEnvVar} className="glass-btn-ghost flex items-center gap-1 text-muted hover:text-white" style={{ fontSize: '10px', padding: '1px 5px' }}>
-              <Plus size={10} color="var(--brand-gold)" /> Add Variable
+              <Plus size={10} color="#00D2FF" /> Add Variable
             </button>
           </div>
 
@@ -232,7 +232,7 @@ export default function DeployPanel() {
                       style={{ padding: '2px' }}
                       title={isMasked ? 'Reveal secret' : 'Hide secret'}
                     >
-                      {isMasked ? <Eye size={10} color="var(--brand-gold)" /> : <EyeOff size={10} color="var(--text-muted)" />}
+                      {isMasked ? <Eye size={10} color="#00D2FF" /> : <EyeOff size={10} color="var(--text-muted)" />}
                     </button>
                   )}
                   <button

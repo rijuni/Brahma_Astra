@@ -175,7 +175,7 @@ export default function DatabasePanel() {
       {/* DB Connection Bar */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Database size={16} color="var(--brand-gold)" />
+          <Database size={16} color="#38BDF8" />
           <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Active Database:</span>
           <select
             value={selectedDb}
@@ -193,7 +193,7 @@ export default function DatabasePanel() {
 
         <div className="flex items-center gap-2">
           <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SSL VERIFIED</Badge>
-          <Badge variant="gold" style={{ padding: '4px 8px', fontSize: '11px' }}>READ-ONLY SANDBOX</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>READ-ONLY SANDBOX</Badge>
         </div>
       </div>
 
@@ -261,7 +261,7 @@ export default function DatabasePanel() {
 
               <div className="flex items-center gap-1.5">
                 <Button
-                  variant="gold"
+                  variant="cyan"
                   icon={Play}
                   onClick={() => handleExecute()}
                   style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
@@ -278,9 +278,10 @@ export default function DatabasePanel() {
               className="glass-input p-2.5 outline-none"
               style={{
                 fontFamily: 'var(--font-code)',
-                fontSize: '12.5px',
+                fontSize: '13px',
                 borderRadius: '6px',
-                background: 'rgba(7, 10, 24, 0.55)',
+                background: '#070B16',
+                border: '1px solid rgba(56, 189, 248, 0.25)',
                 minHeight: '56px'
               }}
             />
@@ -305,30 +306,30 @@ export default function DatabasePanel() {
           {/* Results Grid */}
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex items-center justify-between mb-1">
-              <span className="body-small text-muted" style={{ fontSize: '10px' }}>
+              <span className="body-small text-muted" style={{ fontSize: '11px' }}>
                 Results: {queryResult.rowCount} rows ({queryResult.executionTime})
               </span>
               <button
                 onClick={handleExportCsv}
                 className="glass-btn-ghost flex items-center gap-1 body-small text-muted hover:text-white"
-                style={{ padding: '1px 6px', fontSize: '10px' }}
+                style={{ padding: '2px 8px', fontSize: '11px' }}
                 title="Download CSV"
               >
-                <Download size={11} color="var(--brand-gold)" /> Export CSV
+                <Download size={12} color="#00D2FF" /> Export CSV
               </button>
             </div>
 
-            <div className="flex-1 overflow-auto" style={{ background: 'rgba(7, 10, 24, 0.6)', borderRadius: '4px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
+            <div className="flex-1 overflow-auto" style={{ background: '#070B16', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '6px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(255, 255, 255, 0.03)' }}>
-                    <th style={{ width: '30px', padding: '5px 8px', color: 'var(--text-muted)' }}>#</th>
+                  <tr style={{ borderBottom: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(56, 189, 248, 0.05)', position: 'sticky', top: 0, zIndex: 1 }}>
+                    <th style={{ width: '36px', padding: '7px 10px', color: 'var(--text-muted)' }}>#</th>
                     {queryResult.columns.map((col) => (
                       <th
                         key={col}
                         onClick={() => toggleSort(col)}
                         className="cursor-pointer select-none hover:text-white transition-colors"
-                        style={{ textAlign: 'left', padding: '5px 8px', color: 'var(--brand-gold-light)', fontWeight: 600 }}
+                        style={{ textAlign: 'left', padding: '7px 10px', color: '#00D2FF', fontWeight: 600 }}
                       >
                         <div className="flex items-center gap-1">
                           <span>{col}</span>
@@ -344,10 +345,10 @@ export default function DatabasePanel() {
                 </thead>
                 <tbody>
                   {sortedRows.map((row, rIdx) => (
-                    <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                      <td style={{ padding: '4px 8px', color: 'var(--text-muted)', fontSize: '10px' }}>{rIdx + 1}</td>
+                    <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
+                      <td style={{ padding: '6px 10px', color: 'var(--text-muted)', fontSize: '11px' }}>{rIdx + 1}</td>
                       {row.map((cell, cIdx) => (
-                        <td key={cIdx} style={{ padding: '4px 8px', color: 'var(--text-secondary)', fontFamily: 'var(--font-code)' }}>
+                        <td key={cIdx} style={{ padding: '6px 10px', color: 'var(--text-secondary)', fontFamily: 'var(--font-code)' }}>
                           {String(cell)}
                         </td>
                       ))}

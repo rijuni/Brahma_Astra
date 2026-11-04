@@ -82,11 +82,11 @@ export default function PatchReview({
         style={{
           height: '52px',
           borderBottom: '1px solid var(--glass-border)',
-          background: 'rgba(30, 27, 61, 0.6)'
+          background: 'rgba(11, 15, 26, 0.75)'
         }}
       >
         <div className="flex items-center gap-2.5">
-          <FileDiff size={18} color="var(--brand-gold)" />
+          <FileDiff size={18} color="#38BDF8" />
           <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
             Proposed Patch Review
           </span>
@@ -114,8 +114,8 @@ export default function PatchReview({
                 padding: '0 12px',
                 fontSize: '12px',
                 fontWeight: 500,
-                background: diffMode === 'unified' ? 'rgba(139, 92, 246, 0.3)' : 'transparent',
-                color: diffMode === 'unified' ? 'var(--brand-gold)' : 'var(--text-muted)'
+                background: diffMode === 'unified' ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
+                color: diffMode === 'unified' ? '#FFFFFF' : 'var(--text-muted)'
               }}
               title="Unified diff view"
             >
@@ -129,8 +129,8 @@ export default function PatchReview({
                 padding: '0 12px',
                 fontSize: '12px',
                 fontWeight: 500,
-                background: diffMode === 'split' ? 'rgba(139, 92, 246, 0.3)' : 'transparent',
-                color: diffMode === 'split' ? 'var(--brand-gold)' : 'var(--text-muted)'
+                background: diffMode === 'split' ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
+                color: diffMode === 'split' ? '#FFFFFF' : 'var(--text-muted)'
               }}
               title="Side-by-side split diff view"
             >
@@ -158,7 +158,7 @@ export default function PatchReview({
           </Button>
 
           <Button
-            variant="gold"
+            variant="cyan"
             icon={Check}
             onClick={onApprove}
             isLoading={isApplying}
@@ -180,7 +180,7 @@ export default function PatchReview({
           }}
         >
           <div className="flex items-center justify-between mb-1">
-            <span style={{ fontWeight: 600, color: 'var(--brand-gold)' }}>
+            <span style={{ fontWeight: 600, color: '#00D2FF' }}>
               Static Analysis & Security Audit:
             </span>
             <button onClick={() => setShowRiskDetails(false)} className="text-muted hover:text-white">
@@ -194,11 +194,11 @@ export default function PatchReview({
             </div>
             <div className="p-2 rounded bg-white/5">
               <div className="text-muted" style={{ fontSize: '10px' }}>Sandbox Restrictions</div>
-              <div style={{ color: 'var(--brand-cyan)', fontWeight: 600 }}>0 Prohibited Calls</div>
+              <div style={{ color: '#00D2FF', fontWeight: 600 }}>0 Prohibited Calls</div>
             </div>
             <div className="p-2 rounded bg-white/5">
               <div className="text-muted" style={{ fontSize: '10px' }}>Breakage Probability</div>
-              <div style={{ color: 'var(--brand-gold)', fontWeight: 600 }}>Low (Additive only)</div>
+              <div style={{ color: '#38BDF8', fontWeight: 600 }}>Low (Additive only)</div>
             </div>
           </div>
         </div>
@@ -235,8 +235,8 @@ export default function PatchReview({
                 padding: '2px 8px',
                 fontSize: '11px',
                 borderRadius: '4px',
-                color: selectedFileIndex === idx ? 'var(--brand-gold)' : 'var(--text-muted)',
-                background: selectedFileIndex === idx ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+                color: selectedFileIndex === idx ? '#00D2FF' : 'var(--text-muted)',
+                background: selectedFileIndex === idx ? 'rgba(0, 210, 255, 0.15)' : 'transparent'
               }}
             >
               <span>{file.file_path}</span>
@@ -250,9 +250,9 @@ export default function PatchReview({
         className="flex-1 overflow-y-auto p-3"
         style={{
           fontFamily: 'var(--font-code)',
-          fontSize: '12px',
+          fontSize: '13px',
           lineHeight: '1.6',
-          background: 'rgba(7, 10, 24, 0.6)'
+          background: '#070B16'
         }}
       >
         {diffMode === 'unified' ? (

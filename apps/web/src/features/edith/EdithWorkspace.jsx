@@ -72,6 +72,97 @@ export default function EdithWorkspace({ onBackToFriday }) {
   const [isZenMode, setIsZenMode] = useState(false);
   const { addToast } = useToast();
 
+  // Resizable panel dimensions
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem('edith_sidebar_width');
+    return saved ? parseInt(saved, 10) : 260;
+  });
+  const [assistantWidth, setAssistantWidth] = useState(() => {
+    const saved = localStorage.getItem('edith_assistant_width');
+    return saved ? parseInt(saved, 10) : 365;
+  });
+  const [dockHeight, setDockHeight] = useState(() => {
+    const saved = localStorage.getItem('edith_dock_height');
+    return saved ? parseInt(saved, 10) : 260;
+  });
+
+  // Resizing handlers
+  const handleSidebarResizeStart = (e) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = sidebarWidth;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    const onMouseMove = (moveEvent) => {
+      const delta = moveEvent.clientX - startX;
+      const newWidth = Math.min(Math.max(startWidth + delta, 220), 400);
+      setSidebarWidth(newWidth);
+    };
+
+    const onMouseUp = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      localStorage.setItem('edith_sidebar_width', sidebarWidth.toString());
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+  const handleAssistantResizeStart = (e) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = assistantWidth;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    const onMouseMove = (moveEvent) => {
+      const delta = startX - moveEvent.clientX;
+      const newWidth = Math.min(Math.max(startWidth + delta, 300), 520);
+      setAssistantWidth(newWidth);
+    };
+
+    const onMouseUp = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      localStorage.setItem('edith_assistant_width', assistantWidth.toString());
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+  const handleDockResizeStart = (e) => {
+    e.preventDefault();
+    const startY = e.clientY;
+    const startHeight = dockHeight;
+    document.body.style.cursor = 'row-resize';
+    document.body.style.userSelect = 'none';
+
+    const onMouseMove = (moveEvent) => {
+      const delta = startY - moveEvent.clientY;
+      const newHeight = Math.min(Math.max(startHeight + delta, 160), 550);
+      setDockHeight(newHeight);
+      if (dockState === 'minimized') setDockState('standard');
+    };
+
+    const onMouseUp = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      localStorage.setItem('edith_dock_height', dockHeight.toString());
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
   // Keyboard shortcuts: Ctrl+B (Zen), Ctrl+E (Explorer), Ctrl+J (Assistant), Ctrl+` (Dock)
   React.useEffect(() => {
     function handleKeyDown(e) {
@@ -409,7 +500,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'database') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><DatabasePanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><DatabasePanel /></div>
       </EdithShell>
     );
   }
@@ -417,7 +508,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'deploy') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><DeployPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><DeployPanel /></div>
       </EdithShell>
     );
   }
@@ -425,7 +516,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'testing') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><TestRunnerPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><TestRunnerPanel /></div>
       </EdithShell>
     );
   }
@@ -433,7 +524,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'history') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><TaskHistoryPanel tasks={taskHistory} onRestoreTask={(t) => setActiveTask(t)} /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><TaskHistoryPanel tasks={taskHistory} onRestoreTask={(t) => setActiveTask(t)} /></div>
       </EdithShell>
     );
   }
@@ -441,7 +532,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'git') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><GitPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><GitPanel /></div>
       </EdithShell>
     );
   }
@@ -449,7 +540,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'api_client') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><ApiClientPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><ApiClientPanel /></div>
       </EdithShell>
     );
   }
@@ -457,7 +548,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'debug') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><DebugPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><DebugPanel /></div>
       </EdithShell>
     );
   }
@@ -465,7 +556,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'pipelines') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><PipelinesPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><PipelinesPanel /></div>
       </EdithShell>
     );
   }
@@ -473,7 +564,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'assistant') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full" style={{ maxWidth: '820px', margin: '0 auto' }}>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2">
           <EdithAssistant
             activeFile={activeFile}
             activeProject={activeProject}
@@ -489,7 +580,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'settings') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="p-4 h-full"><EdithSettingsPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><EdithSettingsPanel /></div>
       </EdithShell>
     );
   }
@@ -510,26 +601,33 @@ export default function EdithWorkspace({ onBackToFriday }) {
       onToggleAssistant={() => setIsAssistantOpen((p) => !p)}
     >
       <div
-        className="flex h-full"
+        className="flex h-full w-full"
         style={{
-          padding: 'var(--astra-canvas-padding, 10px)',
-          gap: 'var(--astra-canvas-gap, 10px)',
+          padding: 0,
+          margin: 0,
+          gap: '0px',
           overflow: 'hidden',
           minHeight: 0,
-          flex: 1
+          minWidth: 0,
+          flex: 1,
+          width: '100%',
+          height: '100%'
         }}
       >
         {/* Left Secondary Rail (Projects + File Tree) - hidden in Zen Mode or when collapsed */}
         {!isZenMode && isSidebarOpen && (
           <div
-            className="astra-luminous-panel flex flex-col"
+            className="flex flex-col"
             style={{
-              width: 'var(--astra-sidebar-width, 240px)',
-              borderRadius: 'var(--radius-lg)',
+              width: `${sidebarWidth}px`,
+              height: '100%',
+              borderRadius: 0,
+              background: '#0A101E',
+              borderRight: '1px solid rgba(56, 189, 248, 0.18)',
               overflow: 'hidden',
               flexShrink: 0,
               minHeight: 0,
-              transition: 'width 0.2s ease'
+              transition: 'none'
             }}
           >
             {/* Sub-tab Switcher: Projects vs File Explorer + Collapse button */}
@@ -547,9 +645,9 @@ export default function EdithWorkspace({ onBackToFriday }) {
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: activeNav === 'workspace' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                  borderBottom: activeNav === 'workspace' ? '2px solid var(--brand-gold)' : 'none',
-                  background: activeNav === 'workspace' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
+                  color: activeNav === 'workspace' ? '#00D2FF' : 'var(--text-muted)',
+                  borderBottom: activeNav === 'workspace' ? '2px solid #00D2FF' : 'none',
+                  background: activeNav === 'workspace' ? 'rgba(0, 210, 255, 0.08)' : 'transparent'
                 }}
               >
                 Files
@@ -560,9 +658,9 @@ export default function EdithWorkspace({ onBackToFriday }) {
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: activeNav === 'projects_rail' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                  borderBottom: activeNav === 'projects_rail' ? '2px solid var(--brand-gold)' : 'none',
-                  background: activeNav === 'projects_rail' ? 'rgba(246, 200, 122, 0.05)' : 'transparent'
+                  color: activeNav === 'projects_rail' ? '#00D2FF' : 'var(--text-muted)',
+                  borderBottom: activeNav === 'projects_rail' ? '2px solid #00D2FF' : 'none',
+                  background: activeNav === 'projects_rail' ? 'rgba(0, 210, 255, 0.08)' : 'transparent'
                 }}
               >
                 Projects
@@ -603,8 +701,18 @@ export default function EdithWorkspace({ onBackToFriday }) {
           </div>
         )}
 
+        {/* Left Rail Resizer */}
+        {!isZenMode && isSidebarOpen && (
+          <div
+            className="edith-resizer-h"
+            onMouseDown={handleSidebarResizeStart}
+            onDoubleClick={() => setSidebarWidth(260)}
+            title="Drag to resize explorer (Double-click to reset)"
+          />
+        )}
+
         {/* Center Main Work Area (Editor + Patch Review + Bottom Docks) */}
-        <div className="flex flex-col flex-1 gap-2.5 overflow-hidden" style={{ minHeight: 0, minWidth: 0 }}>
+        <div className="flex flex-col flex-1 overflow-hidden" style={{ minHeight: 0, minWidth: 0 }}>
           {/* Top Half: Code Editor or Patch Review */}
           <div className="flex-1 overflow-hidden flex flex-col" style={{ minHeight: 0 }}>
             {patchProposal ? (
@@ -630,21 +738,34 @@ export default function EdithWorkspace({ onBackToFriday }) {
             )}
           </div>
 
+          {/* Bottom Dock Resizer */}
+          {dockState !== 'minimized' && (
+            <div
+              className="edith-resizer-v"
+              onMouseDown={handleDockResizeStart}
+              onDoubleClick={() => setDockHeight(260)}
+              title="Drag to resize dock (Double-click to reset)"
+            />
+          )}
+
           {/* Bottom Half: Unified Single-Tier Dock Panels (Reclaims 38px vertical height) */}
           <div
-            className="astra-luminous-panel flex flex-col"
+            className="flex flex-col"
             style={{
+              width: '100%',
               height:
                 dockState === 'minimized'
                   ? '38px'
                   : dockState === 'maximized'
-                    ? '58vh'
-                    : 'var(--astra-dock-height, 260px)',
-              borderRadius: 'var(--radius-lg)',
+                    ? '60vh'
+                    : `${dockHeight}px`,
+              borderRadius: 0,
+              background: '#060A14',
+              borderTop: '1px solid rgba(56, 189, 248, 0.18)',
               overflow: 'hidden',
               flexShrink: 0,
               minHeight: 0,
-              transition: 'height 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
+              transition: 'none'
             }}
           >
             {/* Unified Single Dock Switcher & Diagnostics Tab Bar */}
@@ -682,12 +803,13 @@ export default function EdithWorkspace({ onBackToFriday }) {
                         fontSize: '11.5px',
                         fontWeight: isActive ? 600 : 500,
                         borderRadius: '5px',
-                        color: isActive ? 'var(--brand-gold)' : 'var(--text-muted)',
-                        background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
-                        border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
+                        color: isActive ? '#FFFFFF' : 'var(--text-muted)',
+                        background: isActive ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%)' : 'transparent',
+                        border: isActive ? '1px solid rgba(56, 189, 248, 0.55)' : '1px solid transparent',
+                        boxShadow: isActive ? '0 0 10px rgba(56, 189, 248, 0.25)' : 'none'
                       }}
                     >
-                      <Icon size={12} color={isActive ? 'var(--brand-gold)' : 'currentColor'} />
+                      <Icon size={12} color={isActive ? '#00D2FF' : 'currentColor'} />
                       <span>{item.label}</span>
                     </button>
                   );
@@ -720,12 +842,13 @@ export default function EdithWorkspace({ onBackToFriday }) {
                         fontSize: '11.5px',
                         fontWeight: isActive ? 600 : 500,
                         borderRadius: '5px',
-                        color: isActive ? 'var(--brand-gold)' : 'var(--text-muted)',
-                        background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
-                        border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent'
+                        color: isActive ? '#FFFFFF' : 'var(--text-muted)',
+                        background: isActive ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%)' : 'transparent',
+                        border: isActive ? '1px solid rgba(56, 189, 248, 0.55)' : '1px solid transparent',
+                        boxShadow: isActive ? '0 0 10px rgba(56, 189, 248, 0.25)' : 'none'
                       }}
                     >
-                      <Icon size={12} color={isActive ? 'var(--brand-gold)' : 'currentColor'} />
+                      <Icon size={12} color={isActive ? '#00D2FF' : 'currentColor'} />
                       <span>{item.label}</span>
                     </button>
                   );
@@ -769,17 +892,30 @@ export default function EdithWorkspace({ onBackToFriday }) {
           </div>
         </div>
 
-        {/* Right Side Pane: Astra Assistant AI Panel - hidden in Zen Mode or when collapsed */}
+        {/* Right Assistant Resizer */}
         {!isZenMode && isAssistantOpen && (
           <div
-            className="astra-luminous-panel flex flex-col"
+            className="edith-resizer-h"
+            onMouseDown={handleAssistantResizeStart}
+            onDoubleClick={() => setAssistantWidth(365)}
+            title="Drag to resize assistant (Double-click to reset)"
+          />
+        )}
+
+        {/* Right Side Pane: Assistant AI Panel - hidden in Zen Mode or when collapsed */}
+        {!isZenMode && isAssistantOpen && (
+          <div
+            className="flex flex-col"
             style={{
-              width: 'var(--astra-assistant-width, 365px)',
-              borderRadius: 'var(--radius-lg)',
+              width: `${assistantWidth}px`,
+              height: '100%',
+              borderRadius: 0,
+              background: '#0A1020',
+              borderLeft: '1px solid rgba(56, 189, 248, 0.18)',
               flexShrink: 0,
               overflow: 'hidden',
               minHeight: 0,
-              transition: 'width 0.2s ease'
+              transition: 'none'
             }}
           >
             <EdithAssistant

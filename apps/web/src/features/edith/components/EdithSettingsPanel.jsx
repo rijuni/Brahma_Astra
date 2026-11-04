@@ -81,7 +81,7 @@ export default function EdithSettingsPanel() {
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 mb-3.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Settings size={17} color="var(--brand-gold)" />
+          <Settings size={17} color="#38BDF8" />
           <span style={{ fontSize: '14px', fontWeight: 600 }}>EDITH Studio Settings & System Health</span>
         </div>
         <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>STUDIO ENVIRONMENT</Badge>
@@ -131,7 +131,7 @@ export default function EdithSettingsPanel() {
             <div className="flex flex-col gap-1.5">
               {shortcuts.map((s, idx) => (
                 <div key={idx} className="flex items-center justify-between p-2 px-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)', fontSize: '12px' }}>
-                  <kbd className="code-inline" style={{ fontSize: '11px', color: 'var(--brand-gold)', padding: '2px 7px' }}>{s.key}</kbd>
+                  <kbd className="code-inline" style={{ fontSize: '11px', color: '#00D2FF', padding: '2px 7px' }}>{s.key}</kbd>
                   <span className="body-small text-secondary" style={{ fontSize: '11.5px' }}>{s.desc}</span>
                 </div>
               ))}
@@ -178,7 +178,7 @@ export default function EdithSettingsPanel() {
                           width: '7px',
                           height: '7px',
                           borderRadius: '50%',
-                          background: isOnline ? 'var(--status-success)' : isChecking ? 'var(--brand-gold)' : 'var(--status-error)',
+                          background: isOnline ? 'var(--status-success)' : isChecking ? '#00D2FF' : 'var(--status-error)',
                           boxShadow: isOnline ? '0 0 8px rgba(16, 185, 129, 0.6)' : 'none'
                         }}
                       />
@@ -187,7 +187,7 @@ export default function EdithSettingsPanel() {
 
                     <div className="flex items-center gap-2">
                       <span className="text-muted" style={{ fontSize: '10px' }}>{s.latency}</span>
-                      <Badge variant={isOnline ? 'cyan' : isChecking ? 'gold' : 'error'} size="small">
+                      <Badge variant={isOnline ? 'cyan' : isChecking ? 'cyan' : 'error'} size="small">
                         {isOnline ? 'ONLINE' : isChecking ? 'PINGING' : 'OFFLINE'}
                       </Badge>
                     </div>
@@ -200,8 +200,8 @@ export default function EdithSettingsPanel() {
           {/* Reality Matrix & Security Disclosures */}
           <div className="p-2.5 rounded bg-white/5 border border-white/5">
             <div className="flex items-center gap-1.5 mb-1">
-              <Shield size={12} color="var(--brand-gold)" />
-              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold)' }}>
+              <Shield size={12} color="#00D2FF" />
+              <span style={{ fontSize: '11px', fontWeight: 600, color: '#00D2FF' }}>
                 System Architecture Disclosures
               </span>
             </div>

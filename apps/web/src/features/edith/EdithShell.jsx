@@ -156,17 +156,18 @@ export default function EdithShell({
       </nav>
 
       {/* Main Workspace Frame */}
-      <div className="flex flex-col flex-1" style={{ overflow: 'hidden', minHeight: 0 }}>
+      <div className="flex flex-col flex-1" style={{ width: 'calc(100vw - 56px)', height: '100vh', overflow: 'hidden', minHeight: 0, minWidth: 0 }}>
         {/* Top Header Glass Bar */}
         <header
           className="glass-panel flex items-center justify-between"
           style={{
-            height: 'var(--astra-header-height)',
-            padding: '0 22px',
+            width: '100%',
+            height: 'var(--astra-header-height, 50px)',
+            padding: '0 18px',
             borderTop: 'none',
             borderLeft: 'none',
             borderRight: 'none',
-            borderBottom: '1px solid var(--glass-border)',
+            borderBottom: '1px solid rgba(56, 189, 248, 0.22)',
             flexShrink: 0
           }}
         >
@@ -214,9 +215,9 @@ export default function EdithShell({
                   borderRadius: 'var(--radius-pill)',
                   fontSize: '12px',
                   fontWeight: 500,
-                  color: isSidebarOpen ? 'var(--brand-gold)' : 'var(--text-muted)',
-                  background: isSidebarOpen ? 'rgba(246, 200, 122, 0.12)' : 'transparent',
-                  border: isSidebarOpen ? '1px solid rgba(246, 200, 122, 0.35)' : '1px solid transparent'
+                  color: isSidebarOpen ? '#38BDF8' : 'var(--text-muted)',
+                  background: isSidebarOpen ? 'rgba(56, 189, 248, 0.14)' : 'transparent',
+                  border: isSidebarOpen ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid transparent'
                 }}
                 title={isSidebarOpen ? 'Collapse Explorer (Ctrl+E)' : 'Expand Explorer (Ctrl+E)'}
               >
@@ -235,9 +236,9 @@ export default function EdithShell({
                   borderRadius: 'var(--radius-pill)',
                   fontSize: '12px',
                   fontWeight: 500,
-                  color: isAssistantOpen ? 'var(--brand-violet-light)' : 'var(--text-muted)',
-                  background: isAssistantOpen ? 'rgba(139, 92, 246, 0.18)' : 'transparent',
-                  border: isAssistantOpen ? '1px solid rgba(139, 92, 246, 0.45)' : '1px solid transparent'
+                  color: isAssistantOpen ? '#7DD3FC' : 'var(--text-muted)',
+                  background: isAssistantOpen ? 'rgba(56, 189, 248, 0.14)' : 'transparent',
+                  border: isAssistantOpen ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid transparent'
                 }}
                 title={isAssistantOpen ? 'Hide AI Assistant (Ctrl+J)' : 'Show AI Assistant (Ctrl+J)'}
               >
@@ -256,7 +257,9 @@ export default function EdithShell({
                   borderRadius: 'var(--radius-pill)',
                   fontSize: '12px',
                   fontWeight: 500,
-                  color: isZenMode ? 'var(--brand-gold)' : 'var(--text-secondary)'
+                  color: isZenMode ? '#00D2FF' : 'var(--text-secondary)',
+                  background: isZenMode ? 'rgba(0, 210, 255, 0.14)' : 'transparent',
+                  border: isZenMode ? '1px solid rgba(0, 210, 255, 0.4)' : '1px solid transparent'
                 }}
                 title={isZenMode ? 'Exit Zen Mode (Ctrl+B)' : 'Zen Editor Mode (Ctrl+B)'}
               >
@@ -287,7 +290,7 @@ export default function EdithShell({
         </header>
 
         {/* Content Region */}
-        <main className="flex-1" style={{ overflow: 'hidden', position: 'relative', minHeight: 0 }}>
+        <main className="flex-1 flex flex-col" style={{ width: '100%', height: 'calc(100vh - 50px)', minHeight: 0, minWidth: 0, overflow: 'hidden', position: 'relative', margin: 0, padding: 0 }}>
           {children}
         </main>
       </div>

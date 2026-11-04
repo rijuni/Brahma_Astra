@@ -93,9 +93,7 @@
   width: 100vw;
   background-color: #030611;
   background-image:
-    radial-gradient(ellipse 100% 45% at 50% 102%, rgba(0, 180, 255, 0.28) 0%, rgba(2, 132, 199, 0.12) 45%, transparent 75%),
-    radial-gradient(circle at 50% 45%, rgba(14, 165, 233, 0.12) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(3, 6, 17, 0.4) 0%, rgba(3, 6, 17, 0.72) 100%),
+    linear-gradient(180deg, rgba(3, 6, 17, 0.15) 0%, rgba(3, 6, 17, 0.45) 100%),
     url('/backgrounds/edith-space-clean.jpg');
   background-size: cover;
   background-position: center bottom;

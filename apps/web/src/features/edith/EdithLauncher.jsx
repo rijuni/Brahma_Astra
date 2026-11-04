@@ -193,20 +193,32 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
               }}
             />
 
-            {/* High-Fidelity Arc Reactor Component (10 segmented chambers + inverted triangle core) */}
+            {/* High-Fidelity Master Arc Reactor Component (Photo-realistic 3D Segmented Reactor Core) */}
             <div
               style={{
                 position: 'relative',
                 zIndex: 5,
-                transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.8)',
+                width: '190px',
+                height: '190px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.85)',
                 opacity: animationStep >= 1 ? 1 : 0,
                 transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
-              <EdithArcReactor
-                size={168}
-                showHud={true}
-                animated={true}
+              <img
+                src="/brand/edith-reactor-hero.png"
+                alt="EDITH Arc Reactor Core"
+                style={{
+                  width: '172px',
+                  height: '172px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  filter: 'drop-shadow(0 0 30px rgba(0, 210, 255, 0.8)) drop-shadow(0 0 55px rgba(56, 189, 248, 0.5)) drop-shadow(0 4px 18px rgba(0, 0, 0, 0.95))',
+                  animation: 'edithPlasmaPulse 3.5s ease-in-out infinite'
+                }}
               />
             </div>
           </div>
@@ -214,8 +226,8 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
           {/* Brand Reveal Typography: Exact match to Master Spec Sheet */}
           <div
             style={{
-              opacity: animationStep >= 2 ? 1 : 0.2,
-              transform: animationStep >= 2 ? 'translateY(0)' : 'translateY(12px)',
+              opacity: animationStep >= 2 ? 1 : 0.85,
+              transform: animationStep >= 2 ? 'translateY(0)' : 'translateY(6px)',
               transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
@@ -295,8 +307,8 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
               width: '100%',
               maxWidth: '720px',
               marginBottom: '24px',
-              opacity: animationStep >= 3 ? 1 : 0.25,
-              transform: animationStep >= 3 ? 'translateY(0)' : 'translateY(10px)',
+              opacity: animationStep >= 3 ? 1 : 0.85,
+              transform: animationStep >= 3 ? 'translateY(0)' : 'translateY(6px)',
               transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >

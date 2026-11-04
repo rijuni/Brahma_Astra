@@ -72,15 +72,15 @@ export default function PipelinesPanel() {
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Layers size={16} color="var(--brand-violet)" />
+          <Layers size={16} color="#38BDF8" />
           <span style={{ fontSize: '12.5px', fontWeight: 600 }}>CI/CD Pipeline Stages</span>
           <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED PIPELINE</Badge>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Badge variant="gold" style={{ padding: '4px 8px', fontSize: '11px' }}>Pipeline #142 Passed</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>Pipeline #142 Passed</Badge>
           <Button
-            variant="gold"
+            variant="cyan"
             icon={isRunning ? RotateCw : Play}
             onClick={handleRerun}
             isLoading={isRunning}
@@ -103,8 +103,8 @@ export default function PipelinesPanel() {
                 onClick={() => setSelectedStage(isSelected ? null : stage)}
                 className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:bg-white/5"
                 style={{
-                  background: isSelected ? 'rgba(139, 92, 246, 0.18)' : 'rgba(7, 10, 24, 0.45)',
-                  border: isSelected ? '1px solid var(--brand-violet)' : '1px solid rgba(255, 255, 255, 0.04)'
+                  background: isSelected ? 'rgba(0, 210, 255, 0.15)' : 'rgba(7, 10, 24, 0.45)',
+                  border: isSelected ? '1px solid #00D2FF' : '1px solid rgba(255, 255, 255, 0.04)'
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -127,7 +127,7 @@ export default function PipelinesPanel() {
         <div className="flex flex-col gap-2 overflow-hidden p-3 rounded-lg bg-black/50 border border-white/5">
           <div className="flex items-center justify-between pb-2 border-b border-white/5">
             <div className="flex items-center gap-2">
-              <Terminal size={14} color="var(--brand-gold)" />
+              <Terminal size={14} color="#00D2FF" />
               <span className="text-muted" style={{ fontSize: '11.5px', fontWeight: 600 }}>
                 {selectedStage ? `STAGE LOGS: ${selectedStage.name}` : 'SELECT A STAGE TO VIEW LOGS'}
               </span>
@@ -141,7 +141,7 @@ export default function PipelinesPanel() {
 
           <pre
             className="flex-1 overflow-y-auto font-mono text-muted p-2"
-            style={{ fontSize: '11.5px', whiteSpace: 'pre-wrap', lineHeight: '1.5', margin: 0, color: '#34D399' }}
+            style={{ fontSize: '12px', whiteSpace: 'pre-wrap', lineHeight: '1.5', margin: 0, color: '#34D399' }}
           >
             {selectedStage
               ? selectedStage.logs

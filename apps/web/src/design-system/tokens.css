@@ -24,6 +24,24 @@
   --edith-pill-active: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(2, 132, 199, 0.18) 100%);
   --edith-border-glow: rgba(56, 189, 248, 0.55);
 
+  /* EDITH Ergonomic Sizing & Layout Tokens */
+  --edith-canvas-padding: 0px;
+  --edith-canvas-gap: 0px;
+  --edith-header-height: 50px;
+  --edith-activity-width: 56px;
+  --edith-activity-btn-size: 40px;
+  --edith-sidebar-default-width: 260px;
+  --edith-sidebar-min-width: 220px;
+  --edith-sidebar-max-width: 380px;
+  --edith-assistant-default-width: 365px;
+  --edith-dock-default-height: 260px;
+  --edith-tab-height: 38px;
+  --edith-row-height: 32px;
+  --edith-btn-height: 34px;
+  --edith-surface-opaque: #080D1A;
+  --edith-surface-elevated: #0C1424;
+  --edith-surface-terminal: #060A14;
+
   /* Deep Cosmic Palette */
   --bg-deep-space: #060812;
   --bg-base: #0B0F1A;

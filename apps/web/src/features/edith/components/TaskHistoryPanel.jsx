@@ -64,7 +64,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <History size={16} color="var(--brand-gold)" />
+          <History size={16} color="#38BDF8" />
           <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Task & Session History</span>
           <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>{filtered.length} Sessions</Badge>
         </div>
@@ -76,7 +76,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
             style={{ fontSize: '11.5px', height: '28px', padding: '0 10px', borderRadius: '6px' }}
             title="Export History JSON"
           >
-            <Download size={13} color="var(--brand-gold)" /> Export JSON
+            <Download size={13} color="#00D2FF" /> Export JSON
           </button>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-muted" style={{ fontSize: '10.5px' }}>{t.timestamp}</span>
-                  <Badge variant={t.status === 'completed' ? 'cyan' : 'gold'} style={{ padding: '3px 7px', fontSize: '10.5px' }}>{t.status}</Badge>
+                  <Badge variant="cyan" style={{ padding: '3px 7px', fontSize: '10.5px' }}>{t.status}</Badge>
                 </div>
               </div>
 
@@ -136,7 +136,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
                       addToast(`Restored task "${t.title || t.id}" into active studio`, 'info');
                     }}
                     className="glass-btn-ghost body-small flex items-center gap-1.5 hover:text-white"
-                    style={{ height: '28px', padding: '0 10px', fontSize: '11.5px', color: 'var(--brand-gold)', borderRadius: '5px' }}
+                    style={{ height: '28px', padding: '0 10px', fontSize: '11.5px', color: '#00D2FF', borderRadius: '5px' }}
                   >
                     <RotateCcw size={12} />
                     <span>Restore Session</span>

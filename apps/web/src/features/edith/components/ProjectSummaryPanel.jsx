@@ -24,7 +24,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
       {/* Title & Path */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <FolderKanban size={17} color="var(--brand-gold)" />
+          <FolderKanban size={17} color="#38BDF8" />
           <span style={{ fontSize: '14px', fontWeight: 600 }}>{project.name}</span>
           <Badge variant="cyan" style={{ padding: '3px 8px', fontSize: '11px' }}>{project.status || 'active'}</Badge>
         </div>
@@ -50,7 +50,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
           <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
             <Code2 size={13} /> Lines of Code
           </div>
-          <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--brand-gold)' }}>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: '#00D2FF' }}>
             ~{totalLines.toLocaleString()}
           </span>
         </div>
@@ -59,7 +59,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
           <div className="flex items-center gap-1.5 text-muted" style={{ fontSize: '11px' }}>
             <GitCommit size={13} /> Commits
           </div>
-          <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--brand-violet-light)' }}>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: '#38BDF8' }}>
             {project.stats?.commits || 128}
           </span>
         </div>
@@ -82,7 +82,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
           </span>
           <div className="flex flex-wrap gap-1">
             {(project.techStack || []).map((t) => (
-              <Badge key={t} variant="violet" size="small">{t}</Badge>
+              <Badge key={t} variant="cyan" size="small">{t}</Badge>
             ))}
           </div>
         </div>

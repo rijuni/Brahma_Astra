@@ -135,8 +135,9 @@ export default function TerminalPanel({
                   fontSize: '12px',
                   fontWeight: 500,
                   borderRadius: '6px',
-                  color: activeTab === tab.id ? 'var(--brand-gold)' : 'var(--text-muted)',
-                  background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+                  color: activeTab === tab.id ? '#FFFFFF' : 'var(--text-muted)',
+                  background: activeTab === tab.id ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
+                  border: activeTab === tab.id ? '1px solid rgba(0, 210, 255, 0.4)' : '1px solid transparent'
                 }}
               >
                 {tab.label}
@@ -174,14 +175,14 @@ export default function TerminalPanel({
           <div
             ref={terminalBodyRef}
             className="edith-terminal-body flex-1 overflow-y-auto p-3"
-            style={{ fontFamily: 'var(--font-code)', fontSize: '12.5px' }}
+            style={{ fontFamily: 'var(--font-code)', fontSize: '13.5px', background: 'var(--edith-surface-terminal, #060A14)' }}
           >
             {logHistory.map((line, idx) => {
               let lineStyle = { whiteSpace: 'pre-wrap', marginBottom: '3px' };
               if (line.includes('INFO:')) lineStyle.color = '#38BDF8';
               else if (line.includes('ERROR:') || line.includes('[BLOCKED]') || line.includes('Prohibited')) lineStyle.color = '#F87171';
               else if (line.includes('PASS') || line.includes('200 OK') || line.includes('complete')) lineStyle.color = '#34D399';
-              else if (line.startsWith('(venv)')) lineStyle.color = 'var(--brand-gold-light)';
+              else if (line.startsWith('(venv)')) lineStyle.color = '#38BDF8';
               else lineStyle.color = '#E2E8F0';
 
               return (
@@ -197,14 +198,14 @@ export default function TerminalPanel({
             onSubmit={handleCommandSubmit}
             className="flex items-center gap-2.5 px-4"
             style={{
-              height: '36px',
-              background: 'rgba(7, 10, 24, 0.85)',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              height: '38px',
+              background: '#060A14',
+              borderTop: '1px solid rgba(56, 189, 248, 0.18)',
               fontFamily: 'var(--font-code)',
-              fontSize: '12.5px'
+              fontSize: '13.5px'
             }}
           >
-            <span style={{ color: 'var(--brand-cyan)', fontWeight: 500 }}>(venv) user@edith:~$</span>
+            <span style={{ color: '#00D2FF', fontWeight: 500 }}>(venv) user@edith:~$</span>
             <input
               ref={inputRef}
               type="text"
@@ -219,7 +220,7 @@ export default function TerminalPanel({
                 outline: 'none',
                 color: '#F8FAFC',
                 fontFamily: 'var(--font-code)',
-                fontSize: '12.5px'
+                fontSize: '13.5px'
               }}
             />
           </form>

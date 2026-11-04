@@ -139,8 +139,8 @@ export default function EdithAssistant({
       className="astra-assistant-container glass-card flex flex-col h-full overflow-hidden"
       style={{
         borderRadius: 'var(--radius-lg)',
-        background: 'rgba(18, 14, 38, 0.65)',
-        border: '1px solid var(--glass-border)'
+        background: 'rgba(10, 16, 32, 0.88)',
+        border: '1px solid rgba(56, 189, 248, 0.2)'
       }}
     >
       {/* Header */}
@@ -158,11 +158,11 @@ export default function EdithAssistant({
               width: '30px',
               height: '30px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-cyan) 100%)',
+              background: 'linear-gradient(135deg, #00D2FF 0%, #0284C7 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 12px rgba(139, 92, 246, 0.45)',
+              boxShadow: '0 0 12px rgba(0, 210, 255, 0.45)',
               flexShrink: 0
             }}
           >
@@ -195,9 +195,9 @@ export default function EdithAssistant({
             style={{
               fontSize: '11px',
               padding: '2.5px 8px',
-              color: 'var(--brand-gold)',
-              background: 'rgba(246, 200, 122, 0.08)',
-              border: '1px solid rgba(246, 200, 122, 0.25)',
+              color: '#38BDF8',
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
               borderRadius: '6px',
               fontWeight: 500
             }}
@@ -234,7 +234,7 @@ export default function EdithAssistant({
         }}
       >
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          <Sparkles size={13} color="var(--brand-violet-light)" />
+          <Sparkles size={13} color="#00D2FF" />
           <span className="text-secondary" style={{ fontSize: '11.5px', fontWeight: 500 }}>
             Task Mode:
           </span>
@@ -248,7 +248,7 @@ export default function EdithAssistant({
             padding: '0 10px',
             fontSize: '12px',
             borderRadius: '8px',
-            border: '1px solid rgba(139, 92, 246, 0.25)',
+            border: '1px solid rgba(56, 189, 248, 0.25)',
             background: 'rgba(11, 15, 26, 0.85)',
             color: 'var(--text-primary)',
             cursor: 'pointer'
@@ -293,14 +293,15 @@ export default function EdithAssistant({
             className="glass-card flex flex-col gap-2.5 p-4 animate-entrance ai-think-wave"
             style={{
               borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--glass-border-violet)',
-              background: 'rgba(139, 92, 246, 0.16)',
+              border: '1px solid rgba(0, 210, 255, 0.35)',
+              background: 'rgba(7, 16, 38, 0.75)',
+              boxShadow: '0 4px 16px rgba(0, 210, 255, 0.15)',
               animation: 'aiThinkWave 2.5s infinite ease-in-out'
             }}
           >
             <div className="flex items-center gap-2">
-              <span className="status-live-pulse" style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--brand-cyan)' }}>
+              <span className="status-live-pulse" style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#00D2FF' }} />
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#00D2FF' }}>
                 EDITH Engine synthesizing architecture plan...
               </span>
             </div>
@@ -314,7 +315,7 @@ export default function EdithAssistant({
                     style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}
                   >
                     <div className="flex items-center gap-2">
-                      {step.done ? <CheckCircle2 size={13} color="var(--status-success)" /> : <Clock size={13} color="var(--brand-gold)" />}
+                      {step.done ? <CheckCircle2 size={13} color="var(--status-success)" /> : <Clock size={13} color="#38BDF8" />}
                       <span style={{ fontWeight: 500 }}>{step.title}</span>
                     </div>
                     {expandedStep === step.id ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -345,15 +346,15 @@ export default function EdithAssistant({
                   maxWidth: isUser ? '88%' : '100%',
                   borderRadius: '12px',
                   padding: isUser ? '12px 16px' : '15px 18px',
-                  background: isUser ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(99, 102, 241, 0.25) 100%)' : 'rgba(25, 22, 54, 0.65)',
-                  border: isUser ? '1px solid rgba(139, 92, 246, 0.45)' : '1px solid rgba(139, 92, 246, 0.22)',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
+                  background: isUser ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(14, 116, 144, 0.25) 100%)' : 'rgba(10, 19, 36, 0.85)',
+                  border: isUser ? '1px solid rgba(56, 189, 248, 0.45)' : '1px solid rgba(56, 189, 248, 0.2)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)'
                 }}
               >
                 <div className="flex items-center justify-between gap-2.5 mb-2">
                   <div className="flex items-center gap-1.5">
-                    {!isUser && <Sparkles size={13} color="var(--brand-gold)" />}
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: isUser ? 'var(--brand-cyan)' : 'var(--brand-cyan)' }}>
+                    {!isUser && <Sparkles size={13} color="#00D2FF" />}
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: isUser ? '#38BDF8' : '#00D2FF' }}>
                       {isUser ? 'You' : 'EDITH'}
                     </span>
                   </div>
@@ -376,7 +377,7 @@ export default function EdithAssistant({
 
                 {m.plan && (
                   <div className="mt-3 pt-3 border-t border-white/10 flex flex-col gap-2">
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--brand-gold)' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#00D2FF' }}>
                       Architectural Plan Steps:
                     </span>
                     <div className="flex flex-col gap-1.5">
@@ -418,7 +419,7 @@ export default function EdithAssistant({
             type="button"
             onClick={() => handleAddContextPill(`@project:${activeProject?.name || 'workspace'}`)}
             className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(139, 92, 246, 0.15)', border: '1px solid rgba(139, 92, 246, 0.25)', color: 'var(--brand-violet-light)' }}
+            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#38BDF8' }}
             title="Inject project context"
           >
             <Cpu size={12} /> @Project
@@ -427,7 +428,7 @@ export default function EdithAssistant({
             type="button"
             onClick={() => handleAddContextPill('@selection')}
             className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245, 158, 11, 0.25)', color: 'var(--brand-gold)' }}
+            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(0, 210, 255, 0.12)', border: '1px solid rgba(0, 210, 255, 0.25)', color: '#00D2FF' }}
             title="Inject editor selection"
           >
             <Zap size={12} /> @Selection
@@ -480,8 +481,8 @@ export default function EdithAssistant({
               padding: 0,
               flexShrink: 0,
               opacity: prompt.trim() && !isGenerating ? 1 : 0.45,
-              background: prompt.trim() && !isGenerating ? 'linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-cyan) 100%)' : undefined,
-              boxShadow: prompt.trim() && !isGenerating ? '0 0 12px rgba(139, 92, 246, 0.5)' : 'none'
+              background: prompt.trim() && !isGenerating ? 'linear-gradient(135deg, #00D2FF 0%, #0284C7 100%)' : undefined,
+              boxShadow: prompt.trim() && !isGenerating ? '0 0 14px rgba(0, 210, 255, 0.5)' : 'none'
             }}
             title="Send instruction to EDITH"
           >
@@ -491,7 +492,7 @@ export default function EdithAssistant({
 
         <div className="flex items-center justify-between mt-2 px-1 text-muted" style={{ fontSize: '10.5px' }}>
           <span>↵ Send • Shift+↵ New Line</span>
-          <span style={{ color: 'var(--brand-violet-light)' }}>AST-aware engine</span>
+          <span style={{ color: '#38BDF8' }}>AST-aware engine</span>
         </div>
       </form>
     </div>

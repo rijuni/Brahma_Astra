@@ -144,7 +144,7 @@ export default function FileTree({
             style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="New File"
           >
-            <Plus size={15} color="var(--brand-gold)" />
+            <Plus size={15} color="#38BDF8" />
           </button>
           <button
             onClick={() => {
@@ -156,7 +156,7 @@ export default function FileTree({
             style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="New Folder"
           >
-            <FolderPlus size={15} color="var(--brand-cyan)" />
+            <FolderPlus size={15} color="#00D2FF" />
           </button>
           {onCollapse && (
             <button
@@ -219,7 +219,7 @@ export default function FileTree({
                 padding: '4px 8px',
                 fontSize: '11px',
                 borderRadius: 'var(--radius-sm)',
-                borderColor: isCreatingFolder ? 'var(--brand-cyan)' : 'var(--brand-gold)'
+                borderColor: isCreatingFolder ? '#00D2FF' : '#38BDF8'
               }}
             />
             <Button variant="ghost" size="small" type="button" onClick={() => { setIsCreatingFile(false); setIsCreatingFolder(false); }}>
@@ -247,7 +247,7 @@ export default function FileTree({
                   <button
                     onClick={() => toggleFolder(folderName)}
                     className="flex items-center gap-2 w-full text-left py-1.5 px-2 rounded-md transition-all hover:bg-white/5"
-                    style={{ fontSize: '12.5px', color: 'var(--text-primary)', fontWeight: 500, minHeight: '30px' }}
+                    style={{ fontSize: '12.5px', color: 'var(--text-primary)', fontWeight: 500, minHeight: '32px' }}
                   >
                     {isExpanded ? (
                       <ChevronDown size={14} color="var(--text-muted)" />
@@ -255,9 +255,9 @@ export default function FileTree({
                       <ChevronRight size={14} color="var(--text-muted)" />
                     )}
                     {isExpanded ? (
-                      <FolderOpen size={15} color="var(--brand-gold)" />
+                      <FolderOpen size={15} color="#38BDF8" />
                     ) : (
-                      <Folder size={15} color="var(--brand-gold)" />
+                      <Folder size={15} color="#38BDF8" />
                     )}
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{folderName}</span>
                     <span className="text-muted" style={{ fontSize: '11px', marginLeft: 'auto' }}>
@@ -300,7 +300,7 @@ export default function FileTree({
             <Button variant="ghost" size="small" type="button" onClick={() => setRenamingFile(null)}>
               Cancel
             </Button>
-            <Button variant="gold" size="small" type="submit">
+            <Button variant="cyan" size="small" type="submit">
               Save
             </Button>
           </div>
@@ -346,10 +346,10 @@ export default function FileTree({
         className="flex items-center justify-between w-full text-left cursor-pointer transition-all rounded-md relative group"
         style={{
           padding: '6px 8px',
-          minHeight: '30px',
-          background: isActive ? 'rgba(139, 92, 246, 0.22)' : 'transparent',
-          border: isActive ? '1px solid var(--glass-border-violet)' : '1px solid transparent',
-          color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+          minHeight: '32px',
+          background: isActive ? 'rgba(0, 210, 255, 0.14)' : 'transparent',
+          border: isActive ? '1px solid rgba(0, 210, 255, 0.35)' : '1px solid transparent',
+          color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
           fontSize: '12.5px'
         }}
       >
@@ -365,7 +365,7 @@ export default function FileTree({
             <span
               title="Unsaved changes"
               style={{
-                color: 'var(--brand-gold)',
+                color: '#00D2FF',
                 fontSize: '13px',
                 lineHeight: '1'
               }}
@@ -419,9 +419,9 @@ export default function FileTree({
                 setActiveMenuPath(null);
               }}
               className="flex items-center gap-2 p-1.5 text-left body-small hover:bg-white/10 rounded"
-              style={{ fontSize: '11px', color: 'var(--brand-gold)' }}
+              style={{ fontSize: '11px', color: '#38BDF8' }}
             >
-              <Edit2 size={11} color="var(--brand-gold)" /> Rename
+              <Edit2 size={11} color="#38BDF8" /> Rename
             </button>
             {files.length > 1 && (
               <button

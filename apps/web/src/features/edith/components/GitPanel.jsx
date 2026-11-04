@@ -98,7 +98,7 @@ export default function GitPanel() {
       {/* Git Header */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <GitBranch size={16} color="var(--brand-gold)" />
+          <GitBranch size={16} color="#38BDF8" />
           <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Branch:</span>
           <select
             value={activeBranch}
@@ -107,7 +107,7 @@ export default function GitPanel() {
               addToast(`Switched to branch "${e.target.value}"`, 'info');
             }}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px', color: 'var(--brand-gold)' }}
+            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px', color: '#00D2FF' }}
           >
             {branches.map((b) => (
               <option key={b} value={b} style={{ background: '#0B0F1A' }}>
@@ -122,7 +122,7 @@ export default function GitPanel() {
             style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
             title="Create new branch"
           >
-            <Plus size={14} color="var(--brand-gold)" />
+            <Plus size={14} color="#00D2FF" />
           </button>
         </div>
 
@@ -134,7 +134,7 @@ export default function GitPanel() {
             style={{ height: '30px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
             title="Toggle Commit Log"
           >
-            <History size={13} color={showHistory ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+            <History size={13} color={showHistory ? '#00D2FF' : 'var(--text-muted)'} />
             <span>History</span>
           </button>
           <button
@@ -162,7 +162,7 @@ export default function GitPanel() {
             style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '12.5px', flex: 1 }}
           />
           <Button
-            variant="gold"
+            variant="cyan"
             type="submit"
             disabled={!commitMsg.trim() || stagedFiles.length === 0}
             style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
@@ -186,8 +186,8 @@ export default function GitPanel() {
                 style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--glass-border)' }}
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <GitCommit size={13} color="var(--brand-violet)" />
-                  <span className="code-inline" style={{ fontSize: '10px', color: 'var(--brand-gold)' }}>{c.hash}</span>
+                  <GitCommit size={13} color="#00D2FF" />
+                  <span className="code-inline" style={{ fontSize: '10px', color: '#38BDF8' }}>{c.hash}</span>
                   <span style={{ fontSize: '11px', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {c.msg}
                   </span>
@@ -281,7 +281,7 @@ export default function GitPanel() {
             <Button variant="ghost" size="small" type="button" onClick={() => setIsNewBranchOpen(false)}>
               Cancel
             </Button>
-            <Button variant="gold" size="small" type="submit">
+            <Button variant="cyan" size="small" type="submit">
               Create & Checkout
             </Button>
           </div>

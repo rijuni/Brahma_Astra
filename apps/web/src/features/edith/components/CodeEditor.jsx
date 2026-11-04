@@ -353,7 +353,7 @@ export default function CodeEditor({
             style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Save (Ctrl+S)"
           >
-            <Save size={15} color="var(--brand-gold)" />
+            <Save size={15} color="#38BDF8" />
           </button>
 
           <button
@@ -365,7 +365,7 @@ export default function CodeEditor({
             style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Find & Replace (Ctrl+H)"
           >
-            <Replace size={15} color={isFindOpen && isReplaceMode ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+            <Replace size={15} color={isFindOpen && isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
           </button>
 
           <button
@@ -377,7 +377,7 @@ export default function CodeEditor({
             style={{ width: '32px', height: '32px', borderRadius: '6px' }}
             title="Find in file (Ctrl+F)"
           >
-            <Search size={15} color={isFindOpen && !isReplaceMode ? 'var(--brand-cyan)' : 'var(--text-muted)'} />
+            <Search size={15} color={isFindOpen && !isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
           </button>
 
           <button
@@ -405,14 +405,15 @@ export default function CodeEditor({
         <div
           className="flex flex-col gap-2 px-4 py-2.5 animate-entrance"
           style={{
-            background: 'rgba(23, 20, 50, 0.95)',
-            borderBottom: '1px solid var(--glass-border-violet)',
-            fontSize: '12px'
+            background: 'rgba(9, 14, 28, 0.98)',
+            borderBottom: '1px solid rgba(56, 189, 248, 0.35)',
+            fontSize: '12px',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)'
           }}
         >
           {/* Find row */}
           <div className="flex items-center gap-2.5">
-            <Search size={14} color="var(--brand-cyan)" />
+            <Search size={14} color="#00D2FF" />
             <input
               type="text"
               placeholder="Find in file..."
@@ -428,14 +429,14 @@ export default function CodeEditor({
                 borderRadius: 'var(--radius-sm)'
               }}
             />
-            <span className="text-muted" style={{ fontSize: '10px' }}>
+            <span className="text-muted" style={{ fontSize: '10.5px' }}>
               {findQuery ? `${matchCount} matches` : 'Type query'}
             </span>
 
             <button
               onClick={() => setIsReplaceMode(!isReplaceMode)}
               className="glass-btn-ghost body-small text-muted"
-              style={{ padding: '2px 6px', fontSize: '10px', marginLeft: 'auto' }}
+              style={{ padding: '2px 8px', fontSize: '10.5px', marginLeft: 'auto', borderRadius: '4px' }}
             >
               {isReplaceMode ? 'Hide Replace' : 'Toggle Replace'}
             </button>
@@ -452,7 +453,7 @@ export default function CodeEditor({
           {/* Replace row */}
           {isReplaceMode && (
             <div className="flex items-center gap-2 mt-1">
-              <Replace size={12} color="var(--brand-gold)" />
+              <Replace size={12} color="#00D2FF" />
               <input
                 type="text"
                 placeholder="Replace with..."
@@ -486,9 +487,9 @@ export default function CodeEditor({
                   padding: '2px 8px',
                   fontSize: '10px',
                   borderRadius: '3px',
-                  background: 'rgba(245, 158, 11, 0.15)',
-                  border: '1px solid rgba(245, 158, 11, 0.3)',
-                  color: 'var(--brand-gold)'
+                  background: 'rgba(0, 210, 255, 0.15)',
+                  border: '1px solid rgba(0, 210, 255, 0.4)',
+                  color: '#00D2FF'
                 }}
               >
                 Replace All
@@ -543,10 +544,10 @@ export default function CodeEditor({
           ref={gutterRef}
           className="astra-line-number flex flex-col py-3 select-none overflow-hidden"
           style={{
-            background: 'rgba(7, 10, 24, 0.65)',
-            borderRight: '1px solid var(--glass-border)',
+            background: '#070B16',
+            borderRight: '1px solid rgba(56, 189, 248, 0.15)',
             fontFamily: 'var(--font-code)',
-            fontSize: '13px',
+            fontSize: '13.5px',
             lineHeight: '22px'
           }}
         >
@@ -555,7 +556,7 @@ export default function CodeEditor({
               key={i}
               style={{
                 height: '22px',
-                color: cursorPos.line === i + 1 ? 'var(--brand-gold)' : 'rgba(255, 255, 255, 0.25)',
+                color: cursorPos.line === i + 1 ? '#00D2FF' : 'rgba(255, 255, 255, 0.3)',
                 fontWeight: cursorPos.line === i + 1 ? 600 : 400
               }}
             >
@@ -565,7 +566,7 @@ export default function CodeEditor({
         </div>
 
         {/* Code Editor Surface: Syntax Highlight Layer + Editable Transparent Textarea */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden" style={{ background: 'var(--edith-surface-opaque, #080D1A)' }}>
           {/* Syntax Highlight Layer */}
           <div
             ref={syntaxLayerRef}
@@ -573,7 +574,7 @@ export default function CodeEditor({
             className="absolute inset-0 p-3 pointer-events-none select-none overflow-hidden"
             style={{
               fontFamily: 'var(--font-code)',
-              fontSize: '13px',
+              fontSize: '13.5px',
               lineHeight: '22px',
               tabSize: 2,
               whiteSpace: 'pre',
@@ -601,10 +602,10 @@ export default function CodeEditor({
             style={{
               background: 'transparent',
               fontFamily: 'var(--font-code)',
-              fontSize: '13px',
+              fontSize: '13.5px',
               lineHeight: '22px',
               color: 'transparent',
-              caretColor: 'var(--brand-gold)',
+              caretColor: '#00D2FF',
               tabSize: 2,
               whiteSpace: 'pre',
               zIndex: 1
@@ -696,8 +697,8 @@ export default function CodeEditor({
                   }}
                   className="flex items-center justify-between p-2 rounded text-left transition-all hover:bg-white/5"
                   style={{
-                    background: isSelected ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
-                    border: isSelected ? '1px solid var(--brand-violet)' : '1px solid transparent'
+                    background: isSelected ? 'rgba(0, 210, 255, 0.15)' : 'transparent',
+                    border: isSelected ? '1px solid #00D2FF' : '1px solid transparent'
                   }}
                 >
                   <div className="flex items-center gap-2">
@@ -709,7 +710,7 @@ export default function CodeEditor({
                       ({lang.extensions.join(', ')})
                     </span>
                   </div>
-                  {isSelected && <Check size={13} color="var(--brand-gold)" />}
+                  {isSelected && <Check size={13} color="#00D2FF" />}
                 </button>
               );
             })}

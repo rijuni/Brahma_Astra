@@ -87,8 +87,9 @@ export default function TestRunnerPanel() {
                 fontSize: '11.5px',
                 fontWeight: 500,
                 borderRadius: '5px',
-                color: filter === 'all' ? 'var(--brand-gold)' : 'var(--text-muted)',
-                background: filter === 'all' ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+                color: filter === 'all' ? '#FFFFFF' : 'var(--text-muted)',
+                background: filter === 'all' ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
+                border: filter === 'all' ? '1px solid rgba(0, 210, 255, 0.4)' : '1px solid transparent'
               }}
             >
               All ({testResults.length})
@@ -103,7 +104,8 @@ export default function TestRunnerPanel() {
                 fontWeight: 500,
                 borderRadius: '5px',
                 color: filter === 'passed' ? 'var(--status-success)' : 'var(--text-muted)',
-                background: filter === 'passed' ? 'rgba(16, 185, 129, 0.15)' : 'transparent'
+                background: filter === 'passed' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                border: filter === 'passed' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid transparent'
               }}
             >
               Passed ({passedCount})
@@ -118,7 +120,8 @@ export default function TestRunnerPanel() {
                 fontWeight: 500,
                 borderRadius: '5px',
                 color: filter === 'failed' ? 'var(--status-error)' : 'var(--text-muted)',
-                background: filter === 'failed' ? 'rgba(239, 68, 68, 0.15)' : 'transparent'
+                background: filter === 'failed' ? 'rgba(239, 68, 68, 0.15)' : 'transparent',
+                border: filter === 'failed' ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent'
               }}
             >
               Failed ({failedCount})
@@ -129,7 +132,7 @@ export default function TestRunnerPanel() {
         <div className="flex items-center gap-2.5">
           <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SANDBOXED RUNNER</Badge>
           <Button
-            variant="gold"
+            variant="cyan"
             icon={isRunning ? RefreshCw : Play}
             onClick={handleRunAll}
             isLoading={isRunning}
@@ -148,7 +151,7 @@ export default function TestRunnerPanel() {
         </div>
         <div>
           <span className="text-muted" style={{ fontSize: '9px', display: 'block' }}>Branches</span>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold)' }}>88.5%</span>
+          <span style={{ fontSize: '11px', fontWeight: 600, color: '#00D2FF' }}>88.5%</span>
         </div>
         <div>
           <span className="text-muted" style={{ fontSize: '9px', display: 'block' }}>Functions</span>

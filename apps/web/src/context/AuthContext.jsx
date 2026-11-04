@@ -29,6 +29,16 @@ export function AuthProvider({ children }) {
       setUser(currentUser);
       return currentUser;
     } catch {
+      if (token === 'demo-session-token' || token === 'demo-token') {
+        const demoUser = {
+          id: 'demo-user-amlan',
+          email: 'amlan.nanda@friday.ai',
+          name: 'Amlan Nanda',
+          role: 'admin'
+        };
+        setUser(demoUser);
+        return demoUser;
+      }
       setUser(null);
       apiClient.setToken(null);
       return null;

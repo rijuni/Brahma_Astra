@@ -98,7 +98,7 @@ export default function DebugPanel() {
       {/* Header Controls & Stepping Toolbar */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Bug size={16} color="var(--brand-violet)" />
+          <Bug size={16} color="#38BDF8" />
           <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
             Run & Debug
           </span>
@@ -111,7 +111,7 @@ export default function DebugPanel() {
             <button
               onClick={handleStartDebug}
               className="glass-btn flex items-center justify-center gap-1.5"
-              style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600, color: 'var(--status-success)', borderRadius: '6px' }}
+              style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600, color: '#34D399', borderRadius: '6px' }}
               title="Start Debugging (F5)"
             >
               <Play size={13} fill="currentColor" />
@@ -134,7 +134,7 @@ export default function DebugPanel() {
                 style={{ height: '30px', padding: '0 10px', fontSize: '11.5px', borderRadius: '5px' }}
                 title="Step Into (F11)"
               >
-                <ArrowDown size={13} color="var(--brand-gold)" />
+                <ArrowDown size={13} color="#00D2FF" />
                 <span>Step Into</span>
               </button>
               <button
@@ -158,7 +158,7 @@ export default function DebugPanel() {
           <div className="flex items-center justify-between pb-1">
             <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>BREAKPOINTS</span>
             <button onClick={() => setIsAddingBp(!isAddingBp)} className="glass-btn-ghost" style={{ padding: '1px 4px' }} title="Add breakpoint">
-              <Plus size={11} color="var(--brand-gold)" />
+              <Plus size={11} color="#00D2FF" />
             </button>
           </div>
 
@@ -181,7 +181,7 @@ export default function DebugPanel() {
                   className="glass-input flex-1"
                   style={{ padding: '2px 4px', fontSize: '10px' }}
                 />
-                <Button variant="gold" size="small" type="submit" style={{ padding: '2px 6px', fontSize: '10px' }}>
+                <Button variant="cyan" size="small" type="submit" style={{ padding: '2px 6px', fontSize: '10px' }}>
                   Add
                 </Button>
               </div>
@@ -242,9 +242,9 @@ export default function DebugPanel() {
             <div
               key={idx}
               className="flex flex-col px-2 py-1 rounded"
-              style={{ background: idx === 0 ? 'rgba(139, 92, 246, 0.15)' : 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}
+              style={{ background: idx === 0 ? 'rgba(0, 210, 255, 0.15)' : 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)' }}
             >
-              <span style={{ color: 'var(--brand-gold-light)', fontFamily: 'var(--font-code)', fontSize: '11px' }}>{cs.frame}</span>
+              <span style={{ color: '#00D2FF', fontFamily: 'var(--font-code)', fontSize: '11px' }}>{cs.frame}</span>
               <span className="text-muted" style={{ fontSize: '9px' }}>{cs.file}:{cs.line}</span>
             </div>
           ))}
@@ -260,7 +260,7 @@ export default function DebugPanel() {
               style={{ background: 'rgba(7, 10, 24, 0.4)', border: '1px solid var(--glass-border)', fontSize: '10px' }}
             >
               <span style={{ color: 'var(--brand-cyan)', fontFamily: 'var(--font-code)' }}>{v.name}</span>
-              <span style={{ color: 'var(--brand-gold-light)', fontFamily: 'var(--font-code)' }}>{v.value}</span>
+              <span style={{ color: '#38BDF8', fontFamily: 'var(--font-code)' }}>{v.value}</span>
             </div>
           ))}
         </div>

@@ -97,19 +97,89 @@
   100% { transform: scale(0.9); opacity: 0.4; }
 }
 
-/* ASTRA Studio Ergonomic Sizing & Spacing Tokens */
+/* ASTRA / EDITH Studio Ergonomic Sizing & Spacing Tokens */
 :root {
-  --astra-canvas-padding: 10px;
-  --astra-canvas-gap: 10px;
+  --astra-canvas-padding: 0px;
+  --astra-canvas-gap: 0px;
   --astra-header-height: 50px;
-  --astra-activity-width: 58px;
+  --astra-activity-width: 56px;
   --astra-activity-btn-size: 40px;
-  --astra-sidebar-width: 240px;
+  --astra-sidebar-width: 260px;
   --astra-assistant-width: 365px;
   --astra-dock-height: 260px;
   --astra-btn-height-sm: 28px;
   --astra-btn-height-md: 34px;
   --astra-tab-height: 38px;
+  --edith-accent-gold: var(--brand-gold);
+}
+
+/* Multi-Pane Drag Resizer Bars */
+.edith-resizer-h {
+  width: 6px;
+  cursor: col-resize;
+  background: transparent;
+  position: relative;
+  transition: background 0.15s ease;
+  z-index: 20;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.edith-resizer-h:hover,
+.edith-resizer-h.resizing {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+.edith-resizer-h::after {
+  content: '';
+  width: 2px;
+  height: 28px;
+  border-radius: 1px;
+  background: rgba(56, 189, 248, 0.6);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.edith-resizer-h:hover::after,
+.edith-resizer-h.resizing::after {
+  opacity: 1;
+}
+
+.edith-resizer-v {
+  height: 6px;
+  cursor: row-resize;
+  background: transparent;
+  position: relative;
+  transition: background 0.15s ease;
+  z-index: 20;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.edith-resizer-v:hover,
+.edith-resizer-v.resizing {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+.edith-resizer-v::after {
+  content: '';
+  height: 2px;
+  width: 36px;
+  border-radius: 1px;
+  background: rgba(56, 189, 248, 0.6);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.edith-resizer-v:hover::after,
+.edith-resizer-v.resizing::after {
+  opacity: 1;
 }
 
 /* Activity Bar */
@@ -219,11 +289,11 @@
 /* Luminous Cosmic Glass Panel */
 .astra-luminous-panel {
   position: relative;
-  background: rgba(11, 14, 26, 0.92);
+  background: rgba(10, 16, 30, 0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .astra-luminous-panel::before {
@@ -233,23 +303,26 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(246, 200, 122, 0.6) 0%, rgba(139, 92, 246, 0.6) 50%, rgba(56, 189, 248, 0.5) 100%);
+  background: linear-gradient(90deg, rgba(0, 210, 255, 0.7) 0%, rgba(56, 189, 248, 0.5) 50%, rgba(2, 132, 199, 0.3) 100%);
   pointer-events: none;
   z-index: 2;
 }
 
-/* IDE Code Editor */
+/* IDE Code Editor — Opaque Surface for 100% Code Legibility */
 .astra-editor-container {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: rgba(9, 12, 22, 0.94);
-  backdrop-filter: blur(24px);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: #080D1A;
+  border-radius: 0;
+  border: none;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: none;
 }
 
 .astra-editor-container::before {
@@ -259,7 +332,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(246, 200, 122, 0.6) 0%, rgba(139, 92, 246, 0.6) 50%, rgba(56, 189, 248, 0.5) 100%);
+  background: linear-gradient(90deg, rgba(0, 210, 255, 0.7) 0%, rgba(56, 189, 248, 0.5) 50%, rgba(2, 132, 199, 0.3) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -268,8 +341,8 @@
   display: flex;
   align-items: center;
   height: var(--astra-tab-height);
-  background: rgba(7, 10, 24, 0.7);
-  border-bottom: 1px solid var(--glass-border);
+  background: #060A14;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.18);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -284,7 +357,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
-  border-right: 1px solid var(--glass-border);
+  border-right: 1px solid rgba(56, 189, 248, 0.12);
   background: transparent;
   cursor: pointer;
   white-space: nowrap;
@@ -298,10 +371,10 @@
 }
 
 .astra-editor-tab.active {
-  background: linear-gradient(180deg, rgba(139, 92, 246, 0.22) 0%, rgba(11, 15, 26, 0.8) 100%);
-  color: var(--brand-gold-light);
-  border-bottom: 2px solid var(--brand-gold);
-  box-shadow: inset 0 1px 0 rgba(246, 200, 122, 0.4), 0 0 12px rgba(139, 92, 246, 0.25);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.18) 0%, #080D1A 100%);
+  color: #FFFFFF;
+  border-bottom: 2px solid #00D2FF;
+  box-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.4), 0 0 12px rgba(0, 210, 255, 0.25);
 }
 
 .astra-code-line {
@@ -327,42 +400,43 @@
 }
 
 /* Vibrant Cosmic Syntax Token Colors */
-.tok-keyword { color: #C084FC; font-weight: 600; }
-.tok-fn { color: #38BDF8; font-weight: 500; }
-.tok-str { color: #F6C87A; }
-.tok-cls { color: #FBBF24; font-weight: 600; }
-.tok-comment { color: #94A3B8; font-style: italic; opacity: 0.8; }
+.tok-keyword { color: #38BDF8; font-weight: 600; }
+.tok-fn { color: #67E8F9; font-weight: 500; }
+.tok-str { color: #A7F3D0; }
+.tok-cls { color: #BAE6FD; font-weight: 600; }
+.tok-comment { color: #64748B; font-style: italic; opacity: 0.85; }
 .tok-num { color: #34D399; }
-.tok-prop { color: #67E8F9; }
-.tok-decorator { color: #F472B6; font-weight: 500; }
-.tok-builtin { color: #818CF8; }
+.tok-prop { color: #93C5FD; }
+.tok-decorator { color: #818CF8; font-weight: 500; }
+.tok-builtin { color: #38BDF8; }
 .tok-punct { color: #94A3B8; }
 
 /* Diff Viewer */
 .diff-line-add {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.18);
   border-left: 3px solid #10B981;
   color: #6EE7B7;
 }
 
 .diff-line-del {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.18);
   border-left: 3px solid #EF4444;
   color: #FCA5A5;
 }
 
 .diff-line-hunk {
-  background: rgba(56, 189, 248, 0.1);
+  background: rgba(56, 189, 248, 0.12);
   color: #38BDF8;
   font-style: italic;
 }
 
-/* Terminal output */
-.astra-terminal-body {
+/* Terminal output — Opaque Terminal Canvas */
+.astra-terminal-body,
+.edith-terminal-body {
   font-family: var(--font-code);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.65;
-  background: rgba(7, 10, 24, 0.75);
+  background: #060A14;
   border-radius: var(--radius-md);
   padding: 14px 16px;
   color: #CBD5E1;
@@ -371,7 +445,7 @@
 
 /* Astra Assistant Spacious Ergonomics */
 .astra-assistant-container {
-  background: rgba(18, 14, 38, 0.55);
+  background: rgba(10, 16, 32, 0.88);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
 }
@@ -387,13 +461,13 @@
 }
 
 .astra-composer-box {
-  background: rgba(11, 15, 26, 0.75);
-  border: 1px solid var(--glass-border);
+  background: rgba(8, 13, 26, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.22);
   transition: all 0.2s ease;
 }
 .astra-composer-box:focus-within {
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 210, 255, 0.6);
+  box-shadow: 0 0 16px rgba(0, 210, 255, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 /* Grid layout utilities */

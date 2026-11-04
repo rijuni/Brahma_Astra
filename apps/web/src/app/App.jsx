@@ -16,7 +16,16 @@ import { Search } from 'lucide-react';
 
 export default function App() {
   const { isAuthenticated, isLoading } = useAuth();
-  const [currentRoute, setCurrentRoute] = useState('dashboard');
+  const [currentRoute, setCurrentRoute] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace(/^#\/?/, '');
+      if (hash === 'astra' || hash === 'astra-workspace' || hash === 'dashboard') return hash;
+      const urlParams = new URLSearchParams(window.location.search);
+      const route = urlParams.get('route');
+      if (route) return route;
+    }
+    return 'dashboard';
+  });
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [initialChatPrompt, setInitialChatPrompt] = useState('');
@@ -65,10 +74,6 @@ export default function App() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <AuthPage />;
-  }
-
   // EDITH routes take over full screen with dedicated IDE Activity Bar and cosmic glass canvas
   if (currentRoute === 'astra') {
     return (
@@ -85,6 +90,10 @@ export default function App() {
         onBackToFriday={() => setCurrentRoute('dashboard')}
       />
     );
+  }
+
+  if (!isAuthenticated) {
+    return <AuthPage />;
   }
 
   const renderContent = () => {

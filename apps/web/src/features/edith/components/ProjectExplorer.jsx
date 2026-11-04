@@ -110,7 +110,7 @@ export default function ProjectExplorer({
       {/* Top Header & New Project CTA */}
       <div className="flex items-center justify-between" style={{ marginBottom: '12px' }}>
         <div className="flex items-center gap-2">
-          <FolderKanban size={16} color="var(--brand-gold)" />
+          <FolderKanban size={16} color="#38BDF8" />
           <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.06em' }}>
             WORKSPACES ({projects.length})
           </span>
@@ -123,12 +123,12 @@ export default function ProjectExplorer({
             height: '28px',
             borderRadius: '6px',
             padding: 0,
-            background: 'rgba(245, 158, 11, 0.12)',
-            border: '1px solid rgba(245, 158, 11, 0.35)'
+            background: 'rgba(0, 210, 255, 0.12)',
+            border: '1px solid rgba(0, 210, 255, 0.35)'
           }}
           title="New Project"
         >
-          <Plus size={15} color="var(--brand-gold)" />
+          <Plus size={15} color="#00D2FF" />
         </button>
       </div>
 
@@ -196,15 +196,15 @@ export default function ProjectExplorer({
                 style={{
                   padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  background: isActive ? 'rgba(139, 92, 246, 0.18)' : 'rgba(255, 255, 255, 0.03)',
-                  borderColor: isActive ? 'var(--brand-violet)' : 'var(--glass-border)',
-                  boxShadow: isActive ? '0 4px 14px var(--brand-violet-glow)' : 'none'
+                  background: isActive ? 'rgba(0, 210, 255, 0.12)' : 'rgba(255, 255, 255, 0.03)',
+                  borderColor: isActive ? 'rgba(0, 210, 255, 0.4)' : 'rgba(56, 189, 248, 0.15)',
+                  boxShadow: isActive ? '0 4px 14px rgba(0, 210, 255, 0.15)' : 'none'
                 }}
               >
                 {/* Header row: Icon, Name, Active Badge & Menu */}
                 <div className="flex items-center justify-between" style={{ marginBottom: '6px' }}>
                   <div className="flex items-center gap-2 overflow-hidden">
-                    <FolderKanban size={16} color={isActive ? 'var(--brand-gold)' : 'var(--brand-cyan)'} />
+                    <FolderKanban size={16} color={isActive ? '#00D2FF' : '#38BDF8'} />
                     <span
                       style={{
                         fontSize: '13px',
@@ -219,7 +219,7 @@ export default function ProjectExplorer({
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    {isActive && <Badge variant="gold" size="small">Active</Badge>}
+                    {isActive && <Badge variant="cyan" size="small">Active</Badge>}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -264,7 +264,7 @@ export default function ProjectExplorer({
                       className="flex items-center gap-2 p-1.5 text-left body-small hover:bg-white/10 rounded"
                       style={{ fontSize: '11px', color: 'var(--text-primary)' }}
                     >
-                      <Download size={12} color="var(--brand-gold)" /> Export JSON
+                      <Download size={12} color="#00D2FF" /> Export JSON
                     </button>
                     {projects.length > 1 && (
                       <button
@@ -384,12 +384,12 @@ export default function ProjectExplorer({
                   onClick={() => setSelectedTemplate(t.id)}
                   className="flex items-center gap-2 p-2 rounded text-left transition-all"
                   style={{
-                    background: selectedTemplate === t.id ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                    border: selectedTemplate === t.id ? '1px solid var(--brand-violet)' : '1px solid var(--glass-border)',
-                    color: selectedTemplate === t.id ? 'var(--text-primary)' : 'var(--text-muted)'
+                    background: selectedTemplate === t.id ? 'rgba(0, 210, 255, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                    border: selectedTemplate === t.id ? '1px solid #00D2FF' : '1px solid var(--glass-border)',
+                    color: selectedTemplate === t.id ? '#FFFFFF' : 'var(--text-muted)'
                   }}
                 >
-                  <FileCode size={13} color={selectedTemplate === t.id ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+                  <FileCode size={13} color={selectedTemplate === t.id ? '#00D2FF' : 'var(--text-muted)'} />
                   <span style={{ fontSize: '11px', fontWeight: selectedTemplate === t.id ? 600 : 400 }}>
                     {t.label}
                   </span>
@@ -402,7 +402,7 @@ export default function ProjectExplorer({
             <Button variant="ghost" type="button" onClick={() => setIsCreateOpen(false)}>
               Cancel
             </Button>
-            <Button variant="gold" type="submit">
+            <Button variant="cyan" type="submit">
               Create Workspace
             </Button>
           </div>

@@ -199,7 +199,7 @@ export default function ApiClientPanel() {
             fontWeight: 700,
             borderRadius: '6px',
             minWidth: '95px',
-            color: method === 'GET' ? 'var(--status-success)' : method === 'POST' ? 'var(--brand-cyan)' : 'var(--brand-gold)'
+            color: method === 'GET' ? '#34D399' : method === 'POST' ? '#00D2FF' : '#38BDF8'
           }}
         >
           {['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'].map((m) => (
@@ -219,7 +219,7 @@ export default function ApiClientPanel() {
         />
 
         <Button
-          variant="gold"
+          variant="cyan"
           icon={Send}
           onClick={handleSend}
           isLoading={isLoading}
@@ -242,11 +242,12 @@ export default function ApiClientPanel() {
             onClick={() => setActiveTab(tab.id)}
             className="glass-btn-ghost body-small"
             style={{
-              padding: '2px 8px',
-              fontSize: '10px',
-              borderRadius: '3px',
-              color: activeTab === tab.id ? 'var(--brand-gold)' : 'var(--text-muted)',
-              background: activeTab === tab.id ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+              padding: '4px 10px',
+              fontSize: '11px',
+              borderRadius: '5px',
+              color: activeTab === tab.id ? '#FFFFFF' : 'var(--text-muted)',
+              background: activeTab === tab.id ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
+              border: activeTab === tab.id ? '1px solid rgba(0, 210, 255, 0.4)' : '1px solid transparent'
             }}
           >
             {tab.label}
@@ -257,7 +258,7 @@ export default function ApiClientPanel() {
           <button
             onClick={handleFormatJson}
             className="glass-btn-ghost body-small text-muted hover:text-white"
-            style={{ marginLeft: 'auto', fontSize: '10px', padding: '2px 6px' }}
+            style={{ marginLeft: 'auto', fontSize: '11px', padding: '3px 8px' }}
             title="Prettify JSON syntax"
           >
             Format JSON
@@ -274,13 +275,14 @@ export default function ApiClientPanel() {
               value={requestBody}
               onChange={(e) => setRequestBody(e.target.value)}
               placeholder="Raw JSON Payload..."
-              className="flex-1 p-2 outline-none glass-input"
+              className="flex-1 p-3 outline-none glass-input"
               style={{
                 fontFamily: 'var(--font-code)',
-                fontSize: '11px',
+                fontSize: '13px',
                 borderRadius: 'var(--radius-sm)',
                 resize: 'none',
-                background: 'rgba(7, 10, 24, 0.4)'
+                background: '#070B16',
+                border: '1px solid rgba(56, 189, 248, 0.2)'
               }}
             />
           )}
@@ -466,12 +468,13 @@ export default function ApiClientPanel() {
           </div>
 
           <pre
-            className="flex-1 p-2 overflow-auto"
+            className="flex-1 p-3 overflow-auto"
             style={{
-              background: 'rgba(7, 10, 24, 0.7)',
+              background: '#070B16',
+              border: '1px solid rgba(56, 189, 248, 0.18)',
               borderRadius: 'var(--radius-sm)',
               fontFamily: 'var(--font-code)',
-              fontSize: '11px',
+              fontSize: '13px',
               color: isError ? '#F87171' : '#34D399',
               margin: 0,
               whiteSpace: 'pre-wrap',
