@@ -259,8 +259,8 @@ export default function CodeEditor({
   return (
     <div className="astra-editor-container flex flex-col h-full">
       {/* Editor Tab Bar */}
-      <div className="astra-editor-tabs flex items-center justify-between">
-        <div className="flex items-center overflow-x-auto flex-1">
+      <div className="astra-editor-tabs flex items-center justify-between" style={{ height: 'var(--astra-tab-height, 42px)' }}>
+        <div className="flex items-center overflow-x-auto flex-1" style={{ height: '100%' }}>
           {openFiles.map((file) => {
             const isActive = file.path === activeFile.path;
             const isDirty = dirtyFilePaths.has(file.path);
@@ -271,11 +271,12 @@ export default function CodeEditor({
                 key={file.path}
                 onClick={() => onSelectTab(file)}
                 className={`astra-editor-tab ${isActive ? 'active' : ''}`}
+                style={{ fontSize: '15.5px', padding: '0 18px' }}
               >
-                <span style={{ color: lang.iconColor, fontSize: '12px' }}>●</span>
+                <span style={{ color: lang.iconColor, fontSize: '14px' }}>●</span>
                 <span style={{ fontWeight: 500 }}>{file.name}</span>
                 {isDirty && (
-                  <span style={{ color: 'var(--brand-gold)', fontSize: '14px' }}>●</span>
+                  <span style={{ color: 'var(--brand-gold)', fontSize: '15px' }}>●</span>
                 )}
                 <button
                   type="button"
@@ -285,17 +286,17 @@ export default function CodeEditor({
                   }}
                   className="glass-btn-ghost flex items-center justify-center"
                   style={{
-                    width: '20px',
-                    height: '20px',
-                    borderRadius: '4px',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '5px',
                     border: 'none',
                     cursor: 'pointer',
                     color: 'var(--text-muted)',
-                    marginLeft: '4px'
+                    marginLeft: '6px'
                   }}
                   title="Close tab"
                 >
-                  <X size={13} />
+                  <X size={15} />
                 </button>
               </div>
             );
@@ -303,13 +304,13 @@ export default function CodeEditor({
         </div>
 
         {/* Tab Options & Toolbar Controls */}
-        <div className="flex items-center gap-2 px-3">
+        <div className="flex items-center gap-2.5 px-3">
           {openFiles.length > 1 && (
-            <div className="flex items-center gap-1.5 mr-2 border-r border-white/10 pr-3">
+            <div className="flex items-center gap-2 mr-2 border-r border-white/10 pr-3">
               <button
                 onClick={() => onCloseOtherTabs && onCloseOtherTabs(activeFile.path)}
                 className="glass-btn-ghost text-muted hover:text-white"
-                style={{ padding: '4px 10px', fontSize: '11.5px', borderRadius: '5px', fontWeight: 500 }}
+                style={{ padding: '6px 12px', fontSize: '14.5px', borderRadius: '6px', fontWeight: 500 }}
                 title="Close other tabs"
               >
                 Close Others
@@ -317,7 +318,7 @@ export default function CodeEditor({
               <button
                 onClick={() => onCloseAllTabs && onCloseAllTabs()}
                 className="glass-btn-ghost text-muted hover:text-white"
-                style={{ padding: '4px 10px', fontSize: '11.5px', borderRadius: '5px', fontWeight: 500 }}
+                style={{ padding: '6px 12px', fontSize: '14.5px', borderRadius: '6px', fontWeight: 500 }}
                 title="Close all open tabs"
               >
                 Close All
@@ -327,12 +328,12 @@ export default function CodeEditor({
 
           <button
             onClick={() => onRunFile && onRunFile(activeFile)}
-            className="glass-btn flex items-center justify-center gap-1.5"
+            className="glass-btn flex items-center justify-center gap-2"
             style={{
-              height: '32px',
-              padding: '0 12px',
+              height: '36px',
+              padding: '0 15px',
               borderRadius: '6px',
-              fontSize: '12px',
+              fontSize: '15px',
               fontWeight: 600,
               color: 'var(--status-success)',
               border: '1px solid rgba(16, 185, 129, 0.4)',
@@ -340,7 +341,7 @@ export default function CodeEditor({
             }}
             title="Execute file in sandboxed runner"
           >
-            <Play size={13} fill="currentColor" />
+            <Play size={15} fill="currentColor" />
             <span>Run</span>
           </button>
 
@@ -350,10 +351,10 @@ export default function CodeEditor({
               addToast(`Saved ${activeFile.name}`, 'success');
             }}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
+            style={{ width: '36px', height: '36px', borderRadius: '6px' }}
             title="Save (Ctrl+S)"
           >
-            <Save size={15} color="#38BDF8" />
+            <Save size={16} color="#38BDF8" />
           </button>
 
           <button
@@ -362,10 +363,10 @@ export default function CodeEditor({
               setIsReplaceMode(!isReplaceMode);
             }}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
+            style={{ width: '36px', height: '36px', borderRadius: '6px' }}
             title="Find & Replace (Ctrl+H)"
           >
-            <Replace size={15} color={isFindOpen && isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
+            <Replace size={16} color={isFindOpen && isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
           </button>
 
           <button
@@ -374,28 +375,28 @@ export default function CodeEditor({
               setIsReplaceMode(false);
             }}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
+            style={{ width: '36px', height: '36px', borderRadius: '6px' }}
             title="Find in file (Ctrl+F)"
           >
-            <Search size={15} color={isFindOpen && !isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
+            <Search size={16} color={isFindOpen && !isReplaceMode ? '#00D2FF' : 'var(--text-muted)'} />
           </button>
 
           <button
             onClick={() => setIsReadOnly((prev) => !prev)}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
+            style={{ width: '36px', height: '36px', borderRadius: '6px' }}
             title={isReadOnly ? 'Read-only locked' : 'Editable'}
           >
-            {isReadOnly ? <Lock size={15} color="var(--status-error)" /> : <Unlock size={15} color="var(--text-muted)" />}
+            {isReadOnly ? <Lock size={16} color="var(--status-error)" /> : <Unlock size={16} color="var(--text-muted)" />}
           </button>
 
           <button
             onClick={handleCopyCode}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '32px', height: '32px', borderRadius: '6px' }}
+            style={{ width: '36px', height: '36px', borderRadius: '6px' }}
             title="Copy code"
           >
-            {copied ? <Check size={15} color="var(--status-success)" /> : <Copy size={15} color="var(--text-muted)" />}
+            {copied ? <Check size={16} color="var(--status-success)" /> : <Copy size={16} color="var(--text-muted)" />}
           </button>
         </div>
       </div>
@@ -537,7 +538,7 @@ export default function CodeEditor({
         </div>
       )}
 
-      {/* Editor Workspace Area */}
+      {/* Editor Workspace Area (17px JetBrains Mono / 1.65 Line Height) */}
       <div className="flex flex-1 relative overflow-hidden" style={{ minHeight: 0 }}>
         {/* Line Numbers Gutter */}
         <div
@@ -547,15 +548,16 @@ export default function CodeEditor({
             background: '#070B16',
             borderRight: '1px solid rgba(56, 189, 248, 0.15)',
             fontFamily: 'var(--font-code)',
-            fontSize: '13.5px',
-            lineHeight: '22px'
+            fontSize: '14.5px',
+            lineHeight: '28px',
+            width: '56px'
           }}
         >
           {Array.from({ length: lineCount }).map((_, i) => (
             <div
               key={i}
               style={{
-                height: '22px',
+                height: '28px',
                 color: cursorPos.line === i + 1 ? '#00D2FF' : 'rgba(255, 255, 255, 0.3)',
                 fontWeight: cursorPos.line === i + 1 ? 600 : 400
               }}
@@ -574,15 +576,15 @@ export default function CodeEditor({
             className="absolute inset-0 p-3 pointer-events-none select-none overflow-hidden"
             style={{
               fontFamily: 'var(--font-code)',
-              fontSize: '13.5px',
-              lineHeight: '22px',
+              fontSize: '17px',
+              lineHeight: '28px',
               tabSize: 2,
               whiteSpace: 'pre',
               color: '#E2E8F0'
             }}
           >
             {fileLines.map((line, idx) => (
-              <div key={idx} style={{ height: '22px', minHeight: '22px' }}>
+              <div key={idx} style={{ height: '28px', minHeight: '28px' }}>
                 {highlightLine(line)}
               </div>
             ))}
@@ -602,8 +604,8 @@ export default function CodeEditor({
             style={{
               background: 'transparent',
               fontFamily: 'var(--font-code)',
-              fontSize: '13.5px',
-              lineHeight: '22px',
+              fontSize: '17px',
+              lineHeight: '28px',
               color: 'transparent',
               caretColor: '#00D2FF',
               tabSize: 2,
@@ -618,15 +620,15 @@ export default function CodeEditor({
       <div
         className="flex items-center justify-between px-4 py-1"
         style={{
-          height: '32px',
+          height: '34px',
           background: 'rgba(11, 15, 26, 0.7)',
           borderTop: '1px solid var(--glass-border)',
           fontFamily: 'var(--font-ui)',
-          fontSize: '12px',
+          fontSize: '13.5px',
           color: 'var(--text-muted)'
         }}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <button
             onClick={() => setIsGoToLineOpen(true)}
             className="hover:text-white transition-colors cursor-pointer font-medium"
@@ -639,10 +641,10 @@ export default function CodeEditor({
           <span>{lineCount} lines</span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <button
             onClick={() => setIsLangSwitcherOpen(true)}
-            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer"
             title="Click to switch language mode"
           >
             <span style={{ color: currentLang?.iconColor || 'var(--brand-cyan)' }}>●</span>

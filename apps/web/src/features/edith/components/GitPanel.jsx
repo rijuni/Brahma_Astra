@@ -94,12 +94,12 @@ export default function GitPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Git Header */}
-      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2.5">
-          <GitBranch size={16} color="#38BDF8" />
-          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Branch:</span>
+      <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-3">
+          <GitBranch size={18} color="#38BDF8" />
+          <span style={{ fontSize: '15px', fontWeight: 600 }}>Branch:</span>
           <select
             value={activeBranch}
             onChange={(e) => {
@@ -107,7 +107,7 @@ export default function GitPanel() {
               addToast(`Switched to branch "${e.target.value}"`, 'info');
             }}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px', color: '#00D2FF' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px', color: '#00D2FF' }}
           >
             {branches.map((b) => (
               <option key={b} value={b} style={{ background: '#0B0F1A' }}>
@@ -119,53 +119,53 @@ export default function GitPanel() {
           <button
             onClick={() => setIsNewBranchOpen(true)}
             className="glass-btn-ghost flex items-center justify-center"
-            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
+            style={{ width: '32px', height: '32px', borderRadius: '6px', padding: 0 }}
             title="Create new branch"
           >
-            <Plus size={14} color="#00D2FF" />
+            <Plus size={16} color="#00D2FF" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED GIT ENGINE</Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>SIMULATED GIT ENGINE</Badge>
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="glass-btn-ghost flex items-center gap-1.5"
-            style={{ height: '30px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            className="glass-btn-ghost flex items-center gap-2"
+            style={{ height: '34px', padding: '0 12px', fontSize: '14px', borderRadius: '6px' }}
             title="Toggle Commit Log"
           >
-            <History size={13} color={showHistory ? '#00D2FF' : 'var(--text-muted)'} />
+            <History size={15} color={showHistory ? '#00D2FF' : 'var(--text-muted)'} />
             <span>History</span>
           </button>
           <button
             onClick={handleSync}
             disabled={isSyncing}
-            className="glass-btn-ghost flex items-center gap-1.5"
-            style={{ height: '30px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            className="glass-btn-ghost flex items-center gap-2"
+            style={{ height: '34px', padding: '0 12px', fontSize: '14px', borderRadius: '6px' }}
             title="Fetch and sync upstream"
           >
-            <RotateCw size={13} className={isSyncing ? 'animate-spin' : ''} />
+            <RotateCw size={15} className={isSyncing ? 'animate-spin' : ''} />
             <span>Sync</span>
           </button>
         </div>
       </div>
 
       {/* Commit Input Box */}
-      <form onSubmit={handleCommit} className="mb-2.5">
-        <div className="glass-input flex items-center gap-2.5 p-2" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <form onSubmit={handleCommit} className="mb-3">
+        <div className="glass-input flex items-center gap-3 p-2 px-3" style={{ borderRadius: 'var(--radius-sm)' }}>
           <input
             type="text"
             placeholder={stagedFiles.length > 0 ? 'Commit message (e.g. feat: add route validation)...' : 'Stage changes below to enable commit...'}
             value={commitMsg}
             onChange={(e) => setCommitMsg(e.target.value)}
             disabled={stagedFiles.length === 0}
-            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '12.5px', flex: 1 }}
+            style={{ background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontSize: '15px', flex: 1, height: '38px' }}
           />
           <Button
             variant="cyan"
             type="submit"
             disabled={!commitMsg.trim() || stagedFiles.length === 0}
-            style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}
+            style={{ height: '38px', padding: '0 18px', fontSize: '15px', fontWeight: 600 }}
           >
             Commit
           </Button>
@@ -175,24 +175,24 @@ export default function GitPanel() {
       {/* Main Area: Staged/Unstaged or History Drawer */}
       <div className="flex-1 overflow-y-auto">
         {showHistory ? (
-          <div className="flex flex-col gap-1">
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600, marginBottom: '4px' }}>
+          <div className="flex flex-col gap-2">
+            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600, marginBottom: '6px' }}>
               RECENT COMMITS ({commitLog.length})
             </span>
             {commitLog.map((c) => (
               <div
                 key={c.hash}
-                className="flex items-center justify-between p-2 rounded"
+                className="flex items-center justify-between p-3 rounded"
                 style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--glass-border)' }}
               >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <GitCommit size={13} color="#00D2FF" />
-                  <span className="code-inline" style={{ fontSize: '10px', color: '#38BDF8' }}>{c.hash}</span>
-                  <span style={{ fontSize: '11px', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <GitCommit size={16} color="#00D2FF" />
+                  <span className="code-inline" style={{ fontSize: '13.5px', color: '#38BDF8' }}>{c.hash}</span>
+                  <span style={{ fontSize: '14.5px', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {c.msg}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-muted" style={{ fontSize: '10px', flexShrink: 0 }}>
+                <div className="flex items-center gap-2.5 text-muted" style={{ fontSize: '13px', flexShrink: 0 }}>
                   <span>{c.author}</span>
                   <span>•</span>
                   <span>{c.time}</span>
@@ -201,28 +201,28 @@ export default function GitPanel() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 h-full">
+          <div className="grid grid-cols-2 gap-4 h-full">
             {/* Staged Changes */}
-            <div className="flex flex-col gap-1 overflow-y-auto">
-              <div className="flex items-center justify-between pb-1">
-                <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>
+            <div className="flex flex-col gap-2 overflow-y-auto">
+              <div className="flex items-center justify-between pb-1.5">
+                <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>
                   STAGED CHANGES ({stagedFiles.length})
                 </span>
                 {stagedFiles.length > 0 && (
-                  <button onClick={handleUnstageAll} className="glass-btn-ghost text-muted hover:text-white" style={{ fontSize: '9px', padding: '1px 4px' }}>
+                  <button onClick={handleUnstageAll} className="glass-btn-ghost text-muted hover:text-white" style={{ fontSize: '13px', padding: '2px 8px' }}>
                     Unstage All
                   </button>
                 )}
               </div>
               {stagedFiles.length === 0 ? (
-                <div className="text-muted p-3 text-center body-small" style={{ fontSize: '10px', background: 'rgba(255,255,255,0.01)', borderRadius: '4px' }}>
+                <div className="text-muted p-4 text-center body-regular" style={{ fontSize: '14px', background: 'rgba(255,255,255,0.01)', borderRadius: '6px' }}>
                   No staged changes
                 </div>
               ) : (
                 stagedFiles.map((file) => (
-                  <div key={file} className="flex items-center justify-between px-2 py-1 rounded" style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '11px' }}>
+                  <div key={file} className="flex items-center justify-between px-3 py-2 rounded" style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '14.5px' }}>
                     <span style={{ color: '#6EE7B7' }}>{file}</span>
-                    <button onClick={() => handleUnstage(file)} className="glass-btn-ghost text-muted hover:text-white" style={{ padding: '1px 5px', fontSize: '9px' }}>
+                    <button onClick={() => handleUnstage(file)} className="glass-btn-ghost text-muted hover:text-white" style={{ padding: '2px 8px', fontSize: '13px' }}>
                       Unstage
                     </button>
                   </div>
@@ -231,26 +231,26 @@ export default function GitPanel() {
             </div>
 
             {/* Unstaged Changes */}
-            <div className="flex flex-col gap-1 overflow-y-auto">
-              <div className="flex items-center justify-between pb-1">
-                <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>
+            <div className="flex flex-col gap-2 overflow-y-auto">
+              <div className="flex items-center justify-between pb-1.5">
+                <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>
                   CHANGES ({unstagedFiles.length})
                 </span>
                 {unstagedFiles.length > 0 && (
-                  <button onClick={handleStageAll} className="glass-btn-ghost text-muted hover:text-white" style={{ fontSize: '9px', padding: '1px 4px' }}>
+                  <button onClick={handleStageAll} className="glass-btn-ghost text-muted hover:text-white" style={{ fontSize: '13px', padding: '2px 8px' }}>
                     Stage All
                   </button>
                 )}
               </div>
               {unstagedFiles.length === 0 ? (
-                <div className="text-muted p-3 text-center body-small" style={{ fontSize: '10px', background: 'rgba(255,255,255,0.01)', borderRadius: '4px' }}>
+                <div className="text-muted p-4 text-center body-regular" style={{ fontSize: '14px', background: 'rgba(255,255,255,0.01)', borderRadius: '6px' }}>
                   Working tree clean
                 </div>
               ) : (
                 unstagedFiles.map((file) => (
-                  <div key={file} className="flex items-center justify-between px-2 py-1 rounded" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--glass-border)', fontSize: '11px' }}>
+                  <div key={file} className="flex items-center justify-between px-3 py-2 rounded" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--glass-border)', fontSize: '14.5px' }}>
                     <span className="text-secondary">{file}</span>
-                    <button onClick={() => handleStage(file)} className="glass-btn-ghost text-muted hover:text-white" style={{ padding: '1px 5px', fontSize: '9px' }}>
+                    <button onClick={() => handleStage(file)} className="glass-btn-ghost text-muted hover:text-white" style={{ padding: '2px 8px', fontSize: '13px' }}>
                       Stage
                     </button>
                   </div>

@@ -68,13 +68,13 @@ export default function DeployPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2.5 mb-2.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2.5">
-          <Rocket size={16} color="#00D2FF" />
-          <span style={{ fontSize: '12.5px', fontWeight: 600 }}>Deployment Orchestrator</span>
-          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>SIMULATED CLOUD DEPLOY</Badge>
+      <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-3">
+          <Rocket size={18} color="#00D2FF" />
+          <span style={{ fontSize: '16px', fontWeight: 600 }}>Deployment Orchestrator</span>
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>SIMULATED CLOUD DEPLOY</Badge>
         </div>
         <div className="flex items-center gap-2">
           {deployedUrl && (
@@ -82,25 +82,25 @@ export default function DeployPanel() {
               href={deployedUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-muted hover:text-white"
-              style={{ fontSize: '11.5px' }}
+              className="flex items-center gap-2 text-muted hover:text-white"
+              style={{ fontSize: '13.5px' }}
             >
               <span>{deployedUrl}</span>
-              <ExternalLink size={12} />
+              <ExternalLink size={14} />
             </a>
           )}
         </div>
       </div>
 
       {/* Configuration Controls */}
-      <div className="grid grid-cols-3 gap-2.5 mb-2.5">
-        <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Environment</span>
+      <div className="grid grid-cols-3 gap-3 mb-3">
+        <div className="flex flex-col gap-1.5">
+          <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 500 }}>Environment</span>
           <select
             value={environment}
             onChange={(e) => setEnvironment(e.target.value)}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px' }}
           >
             <option value="preview" style={{ background: '#0B0F1A' }}>Preview Sandbox</option>
             <option value="docker" style={{ background: '#0B0F1A' }}>Docker Container</option>
@@ -109,13 +109,13 @@ export default function DeployPanel() {
           </select>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Strategy</span>
+        <div className="flex flex-col gap-1.5">
+          <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 500 }}>Strategy</span>
           <select
             value={target}
             onChange={(e) => setTarget(e.target.value)}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px' }}
           >
             <option value="development" style={{ background: '#0B0F1A' }}>Blue-Green Zero Downtime</option>
             <option value="canary" style={{ background: '#0B0F1A' }}>Canary 10% Rollout</option>
@@ -123,33 +123,33 @@ export default function DeployPanel() {
           </select>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="body-small text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Service Port</span>
+        <div className="flex flex-col gap-1.5">
+          <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 500 }}>Service Port</span>
           <input
             type="text"
             value={port}
             onChange={(e) => setPort(e.target.value)}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px' }}
           />
         </div>
       </div>
 
       {/* Main Grid: Release Gates & Environment Variables */}
-      <div className="grid grid-cols-2 gap-3.5 flex-1 overflow-hidden">
+      <div className="grid grid-cols-2 gap-4 flex-1 overflow-hidden">
         {/* Left: Verification Gates & Logs */}
-        <div className="flex flex-col gap-2 overflow-hidden">
-          <div className="flex items-center justify-between p-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
+        <div className="flex flex-col gap-2.5 overflow-hidden">
+          <div className="flex items-center justify-between p-3.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
             <div>
-              <div style={{ fontSize: '12.5px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
-              <div className="body-small text-muted" style={{ fontSize: '11px' }}>Applies pre-flight health checks and initiates release.</div>
+              <div style={{ fontSize: '15px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
+              <div className="body-regular text-muted" style={{ fontSize: '13.5px' }}>Applies pre-flight health checks and initiates release.</div>
             </div>
-            <Button variant="cyan" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '32px', padding: '0 14px', fontSize: '12px', fontWeight: 600 }}>
+            <Button variant="cyan" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '38px', padding: '0 18px', fontSize: '15px', fontWeight: 600 }}>
               Deploy
             </Button>
           </div>
 
-          <div className="flex flex-col gap-1 flex-1 overflow-y-auto">
+          <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto">
             {[
               { id: 1, title: 'Build & AST bundle verified' },
               { id: 2, title: 'Sandboxed test suites passed' },
@@ -160,24 +160,24 @@ export default function DeployPanel() {
               return (
                 <div
                   key={gate.id}
-                  className="flex items-center justify-between px-2 py-1 rounded"
+                  className="flex items-center justify-between px-3 py-2 rounded"
                   style={{
                     background: isDone ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
                     border: isDone ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid var(--glass-border)'
                   }}
                 >
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={12} color={isDone ? 'var(--status-success)' : 'var(--text-muted)'} />
-                    <span style={{ fontSize: '11px', color: isDone ? '#6EE7B7' : 'var(--text-muted)' }}>{gate.title}</span>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} color={isDone ? 'var(--status-success)' : 'var(--text-muted)'} />
+                    <span style={{ fontSize: '14px', color: isDone ? '#6EE7B7' : 'var(--text-muted)' }}>{gate.title}</span>
                   </div>
-                  <span className="code-inline" style={{ fontSize: '9px' }}>{isDone ? 'PASS' : 'WAIT'}</span>
+                  <span className="code-inline" style={{ fontSize: '12px' }}>{isDone ? 'PASS' : 'WAIT'}</span>
                 </div>
               );
             })}
           </div>
 
           {showLogs && (
-            <div className="p-2 rounded bg-black/50 border border-white/5 font-mono text-muted overflow-y-auto" style={{ maxHeight: '70px', fontSize: '10px' }}>
+            <div className="p-2.5 rounded bg-black/50 border border-white/5 font-mono text-muted overflow-y-auto" style={{ maxHeight: '85px', fontSize: '13px' }}>
               {deployLogs.map((l, i) => (
                 <div key={i}>{l}</div>
               ))}
@@ -186,21 +186,21 @@ export default function DeployPanel() {
         </div>
 
         {/* Right: Environment Variables & Secrets */}
-        <div className="flex flex-col gap-1 overflow-hidden">
-          <div className="flex items-center justify-between pb-1">
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>
+        <div className="flex flex-col gap-1.5 overflow-hidden">
+          <div className="flex items-center justify-between pb-1.5">
+            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>
               ENVIRONMENT VARIABLES ({envVars.length})
             </span>
-            <button onClick={handleAddEnvVar} className="glass-btn-ghost flex items-center gap-1 text-muted hover:text-white" style={{ fontSize: '10px', padding: '1px 5px' }}>
-              <Plus size={10} color="#00D2FF" /> Add Variable
+            <button onClick={handleAddEnvVar} className="glass-btn-ghost flex items-center gap-1.5 text-muted hover:text-white" style={{ fontSize: '13px', padding: '3px 8px' }}>
+              <Plus size={13} color="#00D2FF" /> Add Variable
             </button>
           </div>
 
-          <div className="flex flex-col gap-1 flex-1 overflow-y-auto">
+          <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto">
             {envVars.map((v, idx) => {
               const isMasked = v.isSecret && !showSecrets[idx];
               return (
-                <div key={idx} className="flex items-center gap-1 p-1 rounded bg-white/5">
+                <div key={idx} className="flex items-center gap-2 p-1.5 rounded bg-white/5">
                   <input
                     type="text"
                     placeholder="KEY"
@@ -211,7 +211,7 @@ export default function DeployPanel() {
                       setEnvVars(updated);
                     }}
                     className="glass-input"
-                    style={{ width: '100px', padding: '2px 5px', fontSize: '10px' }}
+                    style={{ width: '130px', padding: '6px 10px', fontSize: '14px' }}
                   />
                   <input
                     type={isMasked ? 'password' : 'text'}
@@ -223,24 +223,24 @@ export default function DeployPanel() {
                       setEnvVars(updated);
                     }}
                     className="glass-input flex-1"
-                    style={{ padding: '2px 5px', fontSize: '10px' }}
+                    style={{ padding: '6px 10px', fontSize: '14px' }}
                   />
                   {v.isSecret && (
                     <button
                       onClick={() => setShowSecrets((p) => ({ ...p, [idx]: !p[idx] }))}
                       className="glass-btn-ghost"
-                      style={{ padding: '2px' }}
+                      style={{ padding: '4px' }}
                       title={isMasked ? 'Reveal secret' : 'Hide secret'}
                     >
-                      {isMasked ? <Eye size={10} color="#00D2FF" /> : <EyeOff size={10} color="var(--text-muted)" />}
+                      {isMasked ? <Eye size={14} color="#00D2FF" /> : <EyeOff size={14} color="var(--text-muted)" />}
                     </button>
                   )}
                   <button
                     onClick={() => setEnvVars(envVars.filter((_, i) => i !== idx))}
                     className="glass-btn-ghost"
-                    style={{ padding: '2px' }}
+                    style={{ padding: '4px' }}
                   >
-                    <Trash2 size={10} color="var(--status-error)" />
+                    <Trash2 size={14} color="var(--status-error)" />
                   </button>
                 </div>
               );

@@ -170,14 +170,14 @@ export default function EdithAssistant({
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
+              <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.01em' }}>
                 EDITH Assistant
               </span>
               <span
                 className="status-live-pulse"
                 style={{
-                  width: '7px',
-                  height: '7px',
+                  width: '8px',
+                  height: '8px',
                   borderRadius: '50%',
                   backgroundColor: '#10B981',
                   display: 'inline-block',
@@ -191,10 +191,10 @@ export default function EdithAssistant({
 
         <div className="flex items-center gap-2">
           <span
-            className="code-inline flex items-center gap-1"
+            className="code-inline flex items-center gap-1.5"
             style={{
-              fontSize: '11px',
-              padding: '2.5px 8px',
+              fontSize: '13px',
+              padding: '3px 10px',
               color: '#38BDF8',
               background: 'rgba(56, 189, 248, 0.1)',
               border: '1px solid rgba(56, 189, 248, 0.25)',
@@ -202,24 +202,24 @@ export default function EdithAssistant({
               fontWeight: 500
             }}
           >
-            <Cpu size={11} /> edith-1
+            <Cpu size={13} /> edith-1
           </span>
           <button
             onClick={handleResetSession}
             className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white transition-colors"
-            style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
+            style={{ width: '32px', height: '32px', borderRadius: '6px', padding: 0 }}
             title="Reset assistant chat session"
           >
-            <RotateCcw size={14} />
+            <RotateCcw size={15} />
           </button>
           {onClose && (
             <button
               onClick={onClose}
               className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white transition-colors"
-              style={{ width: '28px', height: '28px', borderRadius: '6px', padding: 0 }}
+              style={{ width: '32px', height: '32px', borderRadius: '6px', padding: 0 }}
               title="Hide AI Assistant (Ctrl+J)"
             >
-              <X size={15} />
+              <X size={16} />
             </button>
           )}
         </div>
@@ -227,15 +227,15 @@ export default function EdithAssistant({
 
       {/* Task Type / Mode Selector Bar */}
       <div
-        className="px-4 py-2.5 flex items-center justify-between gap-3"
+        className="px-4 py-3 flex items-center justify-between gap-3"
         style={{
           borderBottom: '1px solid var(--glass-border)',
           background: 'rgba(15, 23, 42, 0.5)'
         }}
       >
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <Sparkles size={13} color="#00D2FF" />
-          <span className="text-secondary" style={{ fontSize: '11.5px', fontWeight: 500 }}>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Sparkles size={15} color="#00D2FF" />
+          <span className="text-secondary" style={{ fontSize: '15px', fontWeight: 500 }}>
             Task Mode:
           </span>
         </div>
@@ -244,9 +244,9 @@ export default function EdithAssistant({
           onChange={(e) => setSelectedTaskType(e.target.value)}
           className="glass-input flex-1"
           style={{
-            height: '34px',
-            padding: '0 10px',
-            fontSize: '12px',
+            height: '40px',
+            padding: '0 12px',
+            fontSize: '15px',
             borderRadius: '8px',
             border: '1px solid rgba(56, 189, 248, 0.25)',
             background: 'rgba(11, 15, 26, 0.85)',
@@ -264,22 +264,22 @@ export default function EdithAssistant({
 
       {/* Active Context Banner */}
       <div
-        className="px-4 py-2 flex items-center justify-between gap-2"
+        className="px-4 py-2.5 flex items-center justify-between gap-2"
         style={{
           background: 'rgba(56, 189, 248, 0.06)',
           borderBottom: '1px solid rgba(56, 189, 248, 0.14)',
-          fontSize: '11.5px'
+          fontSize: '14.5px'
         }}
       >
         <div className="flex items-center gap-2 overflow-hidden">
-          <FileCode size={13} color="var(--brand-cyan)" style={{ flexShrink: 0 }} />
+          <FileCode size={15} color="var(--brand-cyan)" style={{ flexShrink: 0 }} />
           <span style={{ color: 'var(--brand-cyan)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {activeFile ? `Active Context: ${activeFile.path || activeFile.name}` : `Context: ${activeProject?.name || 'Workspace'}`}
           </span>
         </div>
         <span
           className="text-muted"
-          style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}
+          style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0 }}
         >
           {activeFile?.language || 'All files'}
         </span>
@@ -300,28 +300,28 @@ export default function EdithAssistant({
             }}
           >
             <div className="flex items-center gap-2">
-              <span className="status-live-pulse" style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#00D2FF' }} />
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#00D2FF' }}>
+              <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#00D2FF' }} />
+              <span style={{ fontSize: '15px', fontWeight: 600, color: '#00D2FF' }}>
                 EDITH Engine synthesizing architecture plan...
               </span>
             </div>
 
-            <div className="flex flex-col gap-1.5 mt-1">
+            <div className="flex flex-col gap-2 mt-1">
               {planningSteps.map((step) => (
                 <div key={step.id} className="flex flex-col">
                   <button
                     onClick={() => setExpandedStep(expandedStep === step.id ? null : step.id)}
-                    className="flex items-center justify-between text-left py-1 px-1.5 rounded hover:bg-white/5 transition-colors"
-                    style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}
+                    className="flex items-center justify-between text-left py-1.5 px-2 rounded hover:bg-white/5 transition-colors"
+                    style={{ fontSize: '15px', color: 'var(--text-secondary)' }}
                   >
-                    <div className="flex items-center gap-2">
-                      {step.done ? <CheckCircle2 size={13} color="var(--status-success)" /> : <Clock size={13} color="#38BDF8" />}
+                    <div className="flex items-center gap-2.5">
+                      {step.done ? <CheckCircle2 size={15} color="var(--status-success)" /> : <Clock size={15} color="#38BDF8" />}
                       <span style={{ fontWeight: 500 }}>{step.title}</span>
                     </div>
-                    {expandedStep === step.id ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    {expandedStep === step.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                   </button>
                   {expandedStep === step.id && (
-                    <div className="text-muted pl-6 pr-2 py-1" style={{ fontSize: '11px', lineHeight: '1.45', background: 'rgba(0, 0, 0, 0.2)', borderRadius: '4px' }}>
+                    <div className="text-muted pl-7 pr-3 py-1.5" style={{ fontSize: '14px', lineHeight: '1.55', background: 'rgba(0, 0, 0, 0.2)', borderRadius: '4px' }}>
                       {step.detail}
                     </div>
                   )}
@@ -345,50 +345,50 @@ export default function EdithAssistant({
                   width: '100%',
                   maxWidth: isUser ? '88%' : '100%',
                   borderRadius: '12px',
-                  padding: isUser ? '12px 16px' : '15px 18px',
+                  padding: isUser ? '14px 18px' : '16px 20px',
                   background: isUser ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(14, 116, 144, 0.25) 100%)' : 'rgba(10, 19, 36, 0.85)',
                   border: isUser ? '1px solid rgba(56, 189, 248, 0.45)' : '1px solid rgba(56, 189, 248, 0.2)',
                   boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)'
                 }}
               >
-                <div className="flex items-center justify-between gap-2.5 mb-2">
-                  <div className="flex items-center gap-1.5">
-                    {!isUser && <Sparkles size={13} color="#00D2FF" />}
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: isUser ? '#38BDF8' : '#00D2FF' }}>
+                <div className="flex items-center justify-between gap-2.5 mb-2.5">
+                  <div className="flex items-center gap-2">
+                    {!isUser && <Sparkles size={15} color="#00D2FF" />}
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: isUser ? '#38BDF8' : '#00D2FF' }}>
                       {isUser ? 'You' : 'EDITH'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-muted" style={{ fontSize: '10.5px' }}>{m.timestamp}</span>
+                    <span className="text-muted" style={{ fontSize: '13px' }}>{m.timestamp}</span>
                     <button
                       onClick={() => handleCopyText(m.id, m.text)}
                       className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
-                      style={{ width: '22px', height: '22px', borderRadius: '4px', padding: 0 }}
+                      style={{ width: '26px', height: '26px', borderRadius: '4px', padding: 0 }}
                       title="Copy message"
                     >
-                      {copiedId === m.id ? <Check size={12} color="var(--status-success)" /> : <Copy size={12} />}
+                      {copiedId === m.id ? <Check size={14} color="var(--status-success)" /> : <Copy size={14} />}
                     </button>
                   </div>
                 </div>
 
-                <p className="body-small" style={{ fontSize: '13.5px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+                <p className="body-regular" style={{ fontSize: '16px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
                   {m.text}
                 </p>
 
                 {m.plan && (
-                  <div className="mt-3 pt-3 border-t border-white/10 flex flex-col gap-2">
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#00D2FF' }}>
+                  <div className="mt-3.5 pt-3 border-t border-white/10 flex flex-col gap-2">
+                    <span style={{ fontSize: '16px', fontWeight: 600, color: '#00D2FF' }}>
                       Architectural Plan Steps:
                     </span>
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       {m.plan.map((step, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2 p-2 rounded"
-                          style={{ background: 'rgba(11, 15, 26, 0.45)', border: '1px solid rgba(255, 255, 255, 0.05)', fontSize: '12px' }}
+                          className="flex items-start gap-2.5 p-2.5 rounded"
+                          style={{ background: 'rgba(11, 15, 26, 0.45)', border: '1px solid rgba(255, 255, 255, 0.05)', fontSize: '15px' }}
                         >
-                          <CheckCircle2 size={13} color="var(--status-success)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                          <div className="text-secondary leading-snug">
+                          <CheckCircle2 size={15} color="var(--status-success)" style={{ marginTop: '2px', flexShrink: 0 }} />
+                          <div className="text-secondary leading-normal">
                             <strong className="text-primary">{step.stage}:</strong> {step.detail}
                           </div>
                         </div>
@@ -405,46 +405,46 @@ export default function EdithAssistant({
       {/* Multiline Prompt Composer with Context Pills */}
       <form onSubmit={handleSend} className="p-4" style={{ borderTop: '1px solid var(--glass-border)', background: 'rgba(11, 15, 26, 0.75)' }}>
         {/* Context Pills */}
-        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
           <button
             type="button"
             onClick={() => handleAddContextPill(`@file:${activeFile?.name || 'app'}`)}
-            className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.25)', color: 'var(--brand-cyan)' }}
+            className="astra-context-pill glass-btn-ghost flex items-center gap-2"
+            style={{ padding: '6px 14px', fontSize: '14px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.25)', color: 'var(--brand-cyan)' }}
             title="Inject active file context"
           >
-            <FileCode size={12} /> @ActiveFile
+            <FileCode size={14} /> @ActiveFile
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill(`@project:${activeProject?.name || 'workspace'}`)}
-            className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#38BDF8' }}
+            className="astra-context-pill glass-btn-ghost flex items-center gap-2"
+            style={{ padding: '6px 14px', fontSize: '14px', fontWeight: 500, borderRadius: '6px', background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#38BDF8' }}
             title="Inject project context"
           >
-            <Cpu size={12} /> @Project
+            <Cpu size={14} /> @Project
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill('@selection')}
-            className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(0, 210, 255, 0.12)', border: '1px solid rgba(0, 210, 255, 0.25)', color: '#00D2FF' }}
+            className="astra-context-pill glass-btn-ghost flex items-center gap-2"
+            style={{ padding: '6px 14px', fontSize: '14px', fontWeight: 500, borderRadius: '6px', background: 'rgba(0, 210, 255, 0.12)', border: '1px solid rgba(0, 210, 255, 0.25)', color: '#00D2FF' }}
             title="Inject editor selection"
           >
-            <Zap size={12} /> @Selection
+            <Zap size={14} /> @Selection
           </button>
           <button
             type="button"
             onClick={() => handleAddContextPill('@terminal:output')}
-            className="astra-context-pill glass-btn-ghost flex items-center gap-1.5"
-            style={{ padding: '4.5px 10px', fontSize: '11px', fontWeight: 500, borderRadius: '6px', background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.25)', color: 'var(--status-success)' }}
+            className="astra-context-pill glass-btn-ghost flex items-center gap-2"
+            style={{ padding: '6px 14px', fontSize: '14px', fontWeight: 500, borderRadius: '6px', background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.25)', color: 'var(--status-success)' }}
             title="Inject terminal output"
           >
-            <Terminal size={12} /> @Terminal
+            <Terminal size={14} /> @Terminal
           </button>
         </div>
 
-        <div className="astra-composer-box flex items-end gap-2.5" style={{ padding: '10px 14px', borderRadius: 'var(--radius-md)' }}>
+        <div className="astra-composer-box flex items-end gap-3" style={{ padding: '12px 16px', borderRadius: 'var(--radius-md)' }}>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -461,13 +461,13 @@ export default function EdithAssistant({
               border: 'none',
               outline: 'none',
               color: 'var(--text-primary)',
-              fontSize: '13px',
+              fontSize: '16px',
               fontFamily: 'var(--font-ui)',
               width: '100%',
               resize: 'none',
               lineHeight: '1.5',
-              minHeight: '44px',
-              maxHeight: '120px'
+              minHeight: '52px',
+              maxHeight: '130px'
             }}
           />
           <button
@@ -475,8 +475,8 @@ export default function EdithAssistant({
             disabled={!prompt.trim() || isGenerating}
             className="glass-btn-primary flex items-center justify-center transition-all"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '40px',
+              height: '40px',
               borderRadius: '8px',
               padding: 0,
               flexShrink: 0,
@@ -486,7 +486,7 @@ export default function EdithAssistant({
             }}
             title="Send instruction to EDITH"
           >
-            <Send size={15} />
+            <Send size={17} />
           </button>
         </div>
 

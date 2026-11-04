@@ -155,26 +155,26 @@ export default function ApiClientPanel() {
   };
 
   return (
-    <div className="glass-card flex flex-col h-full overflow-hidden p-3.5" style={{ borderRadius: 'var(--radius-lg)' }}>
+    <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Top Bar: Quick Endpoints Dropdown + Reality Disclosure */}
-      <div className="flex items-center justify-between mb-2.5 pb-2.5 border-b border-white/5">
-        <div className="flex items-center gap-2.5">
-          <Globe size={16} color="var(--brand-cyan)" />
-          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px' }}>
+      <div className="flex items-center justify-between mb-3 pb-3 border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <Globe size={18} color="var(--brand-cyan)" />
+          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '15px' }}>
             REST & GRAPHQL API CLIENT
           </span>
-          <Badge variant="cyan" style={{ padding: '4px 8px', fontSize: '11px' }}>VERIFIED LIVE BROWSER HTTP</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>VERIFIED LIVE BROWSER HTTP</Badge>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-muted" style={{ fontSize: '11px' }}>Preset:</span>
+        <div className="flex items-center gap-2.5">
+          <span className="text-muted" style={{ fontSize: '13px' }}>Preset:</span>
           <select
             onChange={(e) => {
               const ep = QUICK_ENDPOINTS.find((q) => q.label === e.target.value);
               if (ep) handleSelectQuickEndpoint(ep);
             }}
             className="glass-input"
-            style={{ height: '32px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '14.5px', borderRadius: '6px' }}
           >
             <option value="">Select Local Service Endpoint...</option>
             {QUICK_ENDPOINTS.map((ep) => (
@@ -187,18 +187,18 @@ export default function ApiClientPanel() {
       </div>
 
       {/* URL & Method Bar */}
-      <div className="flex items-center gap-2.5 mb-2.5">
+      <div className="flex items-center gap-3 mb-3">
         <select
           value={method}
           onChange={(e) => setMethod(e.target.value)}
           className="glass-input"
           style={{
-            height: '36px',
-            padding: '0 12px',
-            fontSize: '12.5px',
+            height: '42px',
+            padding: '0 14px',
+            fontSize: '15px',
             fontWeight: 700,
             borderRadius: '6px',
-            minWidth: '95px',
+            minWidth: '105px',
             color: method === 'GET' ? '#34D399' : method === 'POST' ? '#00D2FF' : '#38BDF8'
           }}
         >
@@ -215,7 +215,7 @@ export default function ApiClientPanel() {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="http://localhost:3000/..."
           className="glass-input flex-1"
-          style={{ height: '36px', padding: '0 12px', fontSize: '12.5px', borderRadius: '6px' }}
+          style={{ height: '42px', padding: '0 14px', fontSize: '16px', borderRadius: '6px' }}
         />
 
         <Button
@@ -223,14 +223,14 @@ export default function ApiClientPanel() {
           icon={Send}
           onClick={handleSend}
           isLoading={isLoading}
-          style={{ height: '36px', padding: '0 18px', fontSize: '12.5px', fontWeight: 600 }}
+          style={{ height: '42px', padding: '0 20px', fontSize: '15px', fontWeight: 600 }}
         >
           Send
         </Button>
       </div>
 
       {/* Subtab Switcher (Body, Params, Headers, GraphQL) */}
-      <div className="flex items-center gap-1.5 mb-2.5 border-b border-white/5 pb-1.5">
+      <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
         {[
           { id: 'body', label: 'JSON Body' },
           { id: 'params', label: `Params (${queryParams.filter((p) => p.enabled).length})` },
@@ -242,9 +242,9 @@ export default function ApiClientPanel() {
             onClick={() => setActiveTab(tab.id)}
             className="glass-btn-ghost body-small"
             style={{
-              padding: '4px 10px',
-              fontSize: '11px',
-              borderRadius: '5px',
+              padding: '6px 14px',
+              fontSize: '14px',
+              borderRadius: '6px',
               color: activeTab === tab.id ? '#FFFFFF' : 'var(--text-muted)',
               background: activeTab === tab.id ? 'linear-gradient(135deg, rgba(0, 210, 255, 0.25) 0%, rgba(2, 132, 199, 0.2) 100%)' : 'transparent',
               border: activeTab === tab.id ? '1px solid rgba(0, 210, 255, 0.4)' : '1px solid transparent'
@@ -258,7 +258,7 @@ export default function ApiClientPanel() {
           <button
             onClick={handleFormatJson}
             className="glass-btn-ghost body-small text-muted hover:text-white"
-            style={{ marginLeft: 'auto', fontSize: '11px', padding: '3px 8px' }}
+            style={{ marginLeft: 'auto', fontSize: '13.5px', padding: '4px 10px' }}
             title="Prettify JSON syntax"
           >
             Format JSON
@@ -267,7 +267,7 @@ export default function ApiClientPanel() {
       </div>
 
       {/* Split: Request & Response */}
-      <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden">
+      <div className="grid grid-cols-2 gap-3.5 flex-1 overflow-hidden">
         {/* Request Area */}
         <div className="flex flex-col gap-1 overflow-hidden">
           {activeTab === 'body' && (
@@ -278,19 +278,20 @@ export default function ApiClientPanel() {
               className="flex-1 p-3 outline-none glass-input"
               style={{
                 fontFamily: 'var(--font-code)',
-                fontSize: '13px',
+                fontSize: '16px',
                 borderRadius: 'var(--radius-sm)',
                 resize: 'none',
                 background: '#070B16',
-                border: '1px solid rgba(56, 189, 248, 0.2)'
+                border: '1px solid rgba(56, 189, 248, 0.2)',
+                lineHeight: '1.55'
               }}
             />
           )}
 
           {activeTab === 'params' && (
-            <div className="flex flex-col gap-1 flex-1 overflow-y-auto p-1">
+            <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto p-1">
               {queryParams.map((p, idx) => (
-                <div key={idx} className="flex items-center gap-1">
+                <div key={idx} className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={p.enabled}
@@ -310,7 +311,7 @@ export default function ApiClientPanel() {
                       setQueryParams(updated);
                     }}
                     className="glass-input flex-1"
-                    style={{ padding: '3px 6px', fontSize: '11px' }}
+                    style={{ padding: '6px 10px', fontSize: '14px' }}
                   />
                   <input
                     type="text"
@@ -322,14 +323,14 @@ export default function ApiClientPanel() {
                       setQueryParams(updated);
                     }}
                     className="glass-input flex-1"
-                    style={{ padding: '3px 6px', fontSize: '11px' }}
+                    style={{ padding: '6px 10px', fontSize: '14px' }}
                   />
                   <button
                     onClick={() => setQueryParams(queryParams.filter((_, i) => i !== idx))}
                     className="glass-btn-ghost"
-                    style={{ padding: '2px' }}
+                    style={{ padding: '4px' }}
                   >
-                    <Trash2 size={11} color="var(--status-error)" />
+                    <Trash2 size={14} color="var(--status-error)" />
                   </button>
                 </div>
               ))}
@@ -338,7 +339,7 @@ export default function ApiClientPanel() {
                 size="small"
                 icon={Plus}
                 onClick={() => setQueryParams([...queryParams, { key: '', value: '', enabled: true }])}
-                style={{ alignSelf: 'flex-start', marginTop: '4px' }}
+                style={{ alignSelf: 'flex-start', marginTop: '6px', fontSize: '14px', height: '34px' }}
               >
                 Add Parameter
               </Button>
@@ -346,9 +347,9 @@ export default function ApiClientPanel() {
           )}
 
           {activeTab === 'headers' && (
-            <div className="flex flex-col gap-1 flex-1 overflow-y-auto p-1">
+            <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto p-1">
               {headers.map((h, idx) => (
-                <div key={idx} className="flex items-center gap-1">
+                <div key={idx} className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={h.enabled}
@@ -368,7 +369,7 @@ export default function ApiClientPanel() {
                       setHeaders(updated);
                     }}
                     className="glass-input flex-1"
-                    style={{ padding: '3px 6px', fontSize: '11px' }}
+                    style={{ padding: '6px 10px', fontSize: '14px' }}
                   />
                   <input
                     type="text"
@@ -380,14 +381,14 @@ export default function ApiClientPanel() {
                       setHeaders(updated);
                     }}
                     className="glass-input flex-1"
-                    style={{ padding: '3px 6px', fontSize: '11px' }}
+                    style={{ padding: '6px 10px', fontSize: '14px' }}
                   />
                   <button
                     onClick={() => setHeaders(headers.filter((_, i) => i !== idx))}
                     className="glass-btn-ghost"
-                    style={{ padding: '2px' }}
+                    style={{ padding: '4px' }}
                   >
-                    <Trash2 size={11} color="var(--status-error)" />
+                    <Trash2 size={14} color="var(--status-error)" />
                   </button>
                 </div>
               ))}
@@ -396,7 +397,7 @@ export default function ApiClientPanel() {
                 size="small"
                 icon={Plus}
                 onClick={() => setHeaders([...headers, { key: '', value: '', enabled: true }])}
-                style={{ alignSelf: 'flex-start', marginTop: '4px' }}
+                style={{ alignSelf: 'flex-start', marginTop: '6px', fontSize: '14px', height: '34px' }}
               >
                 Add Header
               </Button>
@@ -404,15 +405,15 @@ export default function ApiClientPanel() {
           )}
 
           {activeTab === 'graphql' && (
-            <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+            <div className="flex flex-col gap-2.5 flex-1 overflow-hidden">
               <textarea
                 value={graphqlQuery}
                 onChange={(e) => setGraphqlQuery(e.target.value)}
                 placeholder="GraphQL Query / Mutation..."
-                className="flex-1 p-2 outline-none glass-input"
+                className="flex-1 p-3 outline-none glass-input"
                 style={{
                   fontFamily: 'var(--font-code)',
-                  fontSize: '11px',
+                  fontSize: '15px',
                   borderRadius: 'var(--radius-sm)',
                   resize: 'none',
                   background: 'rgba(7, 10, 24, 0.4)'
@@ -423,10 +424,10 @@ export default function ApiClientPanel() {
                 onChange={(e) => setGraphqlVars(e.target.value)}
                 placeholder="Variables (JSON)..."
                 rows={3}
-                className="p-2 outline-none glass-input"
+                className="p-2.5 outline-none glass-input"
                 style={{
                   fontFamily: 'var(--font-code)',
-                  fontSize: '11px',
+                  fontSize: '14px',
                   borderRadius: 'var(--radius-sm)',
                   resize: 'none',
                   background: 'rgba(7, 10, 24, 0.4)'
@@ -439,30 +440,30 @@ export default function ApiClientPanel() {
         {/* Response Area */}
         <div className="flex flex-col gap-1 overflow-hidden">
           <div className="flex items-center justify-between">
-            <span className="body-small text-muted" style={{ fontSize: '10px', fontWeight: 600 }}>RESPONSE</span>
+            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>RESPONSE</span>
             <div className="flex items-center gap-2">
               {responseStatus && (
-                <Badge variant={isError ? 'error' : 'cyan'} size="small">
+                <Badge variant={isError ? 'error' : 'cyan'} style={{ fontSize: '13px', padding: '3px 8px' }}>
                   {responseStatus}
                 </Badge>
               )}
               {responseDuration && (
-                <span className="text-muted" style={{ fontSize: '10px' }}>
+                <span className="text-muted" style={{ fontSize: '13px' }}>
                   {responseDuration}
                 </span>
               )}
               {responseSize && (
-                <span className="text-muted" style={{ fontSize: '10px' }}>
+                <span className="text-muted" style={{ fontSize: '13px' }}>
                   {responseSize}
                 </span>
               )}
               <button
                 onClick={handleCopyResponse}
-                className="glass-btn-ghost"
-                style={{ padding: '2px 4px', borderRadius: '3px' }}
+                className="glass-btn-ghost flex items-center justify-center"
+                style={{ width: '28px', height: '28px', borderRadius: '4px' }}
                 title="Copy response body"
               >
-                {copied ? <Check size={11} color="var(--status-success)" /> : <Copy size={11} color="var(--text-muted)" />}
+                {copied ? <Check size={14} color="var(--status-success)" /> : <Copy size={14} color="var(--text-muted)" />}
               </button>
             </div>
           </div>
@@ -474,7 +475,8 @@ export default function ApiClientPanel() {
               border: '1px solid rgba(56, 189, 248, 0.18)',
               borderRadius: 'var(--radius-sm)',
               fontFamily: 'var(--font-code)',
-              fontSize: '13px',
+              fontSize: '16px',
+              lineHeight: '1.55',
               color: isError ? '#F87171' : '#34D399',
               margin: 0,
               whiteSpace: 'pre-wrap',

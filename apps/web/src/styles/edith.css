@@ -97,19 +97,19 @@
   100% { transform: scale(0.9); opacity: 0.4; }
 }
 
-/* ASTRA / EDITH Studio Ergonomic Sizing & Spacing Tokens */
+/* ASTRA / EDITH Studio Ergonomic Sizing & Spacing Tokens (Large Typography Scaled) */
 :root {
   --astra-canvas-padding: 0px;
   --astra-canvas-gap: 0px;
-  --astra-header-height: 50px;
+  --astra-header-height: 56px;
   --astra-activity-width: 56px;
-  --astra-activity-btn-size: 40px;
-  --astra-sidebar-width: 260px;
-  --astra-assistant-width: 365px;
-  --astra-dock-height: 260px;
-  --astra-btn-height-sm: 28px;
-  --astra-btn-height-md: 34px;
-  --astra-tab-height: 38px;
+  --astra-activity-btn-size: 42px;
+  --astra-sidebar-width: 290px;
+  --astra-assistant-width: 400px;
+  --astra-dock-height: 290px;
+  --astra-btn-height-sm: 32px;
+  --astra-btn-height-md: 38px;
+  --astra-tab-height: 42px;
   --edith-accent-gold: var(--brand-gold);
 }
 
@@ -351,10 +351,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 16px;
+  padding: 0 18px;
   height: 100%;
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 15.5px;
   font-weight: 500;
   color: var(--text-secondary);
   border-right: 1px solid rgba(56, 189, 248, 0.12);
@@ -380,15 +380,18 @@
 .astra-code-line {
   display: flex;
   font-family: var(--font-code);
-  font-size: 13.5px;
-  line-height: 22px;
+  font-size: 17px;
+  line-height: 1.65;
 }
 
 .astra-line-number {
-  width: 48px;
+  width: 56px;
   text-align: right;
-  padding-right: 14px;
-  color: rgba(255, 255, 255, 0.25);
+  padding-right: 16px;
+  font-family: var(--font-code);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.3);
   user-select: none;
   flex-shrink: 0;
 }
@@ -397,6 +400,9 @@
   flex: 1;
   white-space: pre;
   color: #E2E8F0;
+  font-family: var(--font-code);
+  font-size: 17px;
+  line-height: 1.65;
 }
 
 /* Vibrant Cosmic Syntax Token Colors */
@@ -416,26 +422,35 @@
   background: rgba(16, 185, 129, 0.18);
   border-left: 3px solid #10B981;
   color: #6EE7B7;
+  font-family: var(--font-code);
+  font-size: 15.5px;
+  line-height: 1.6;
 }
 
 .diff-line-del {
   background: rgba(239, 68, 68, 0.18);
   border-left: 3px solid #EF4444;
   color: #FCA5A5;
+  font-family: var(--font-code);
+  font-size: 15.5px;
+  line-height: 1.6;
 }
 
 .diff-line-hunk {
   background: rgba(56, 189, 248, 0.12);
   color: #38BDF8;
+  font-family: var(--font-code);
+  font-size: 15px;
   font-style: italic;
+  line-height: 1.6;
 }
 
 /* Terminal output — Opaque Terminal Canvas */
 .astra-terminal-body,
 .edith-terminal-body {
   font-family: var(--font-code);
-  font-size: 13.5px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.55;
   background: #060A14;
   border-radius: var(--radius-md);
   padding: 14px 16px;
@@ -479,4 +494,105 @@
 }
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ==========================================================================
+   EDITH Large Typography Standard (Application-Wide Upgrades)
+   ========================================================================== */
+
+/* 1. General Interface Text inside EDITH Canvas */
+.edith-canvas {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.edith-canvas button,
+.edith-canvas input,
+.edith-canvas select,
+.edith-canvas textarea {
+  font-size: 16px;
+}
+
+/* 2. Sidebar File Tree Rows & Headings */
+.edith-file-row,
+.astra-file-row {
+  font-size: 16px !important;
+  line-height: 36px;
+  min-height: 36px;
+}
+
+.edith-sidebar-title,
+.astra-sidebar-header {
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+/* 3. Toolbar Labels & Buttons */
+.edith-toolbar-btn,
+.astra-header-btn {
+  font-size: 15.5px !important;
+  height: 38px;
+}
+
+.edith-breadcrumb {
+  font-size: 15px !important;
+}
+
+/* 4. Bottom Developer Tool Tabs */
+.edith-dock-tab,
+.astra-dock-tab {
+  font-size: 15px !important;
+  font-weight: 600;
+}
+
+/* 5. Status Bar */
+.edith-status-bar,
+.astra-status-bar {
+  font-size: 13.5px !important;
+  height: 28px;
+}
+
+/* 6. AI Assistant Messages & Headings */
+.edith-assistant-msg,
+.astra-chat-message {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+}
+
+.edith-assistant-heading,
+.astra-section-header {
+  font-size: 18px !important;
+  font-weight: 600;
+}
+
+.edith-assistant-composer textarea {
+  font-size: 16px !important;
+  line-height: 1.5;
+}
+
+/* 7. Code Editor Text & Line Numbers */
+.edith-code-surface,
+.astra-editor-textarea {
+  font-family: var(--font-code) !important;
+  font-size: 17px !important;
+  line-height: 1.65 !important;
+}
+
+.edith-line-gutter {
+  font-size: 14.5px !important;
+  width: 56px !important;
+  line-height: 1.65 !important;
+}
+
+/* 8. Terminal Lines & Input */
+.edith-terminal-line,
+.astra-terminal-line {
+  font-family: var(--font-code) !important;
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+}
+
+.edith-terminal-input {
+  font-family: var(--font-code) !important;
+  font-size: 16px !important;
 }

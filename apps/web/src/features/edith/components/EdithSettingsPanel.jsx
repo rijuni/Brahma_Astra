@@ -79,12 +79,12 @@ export default function EdithSettingsPanel() {
   return (
     <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-2.5 mb-3.5" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-        <div className="flex items-center gap-2.5">
-          <Settings size={17} color="#38BDF8" />
-          <span style={{ fontSize: '14px', fontWeight: 600 }}>EDITH Studio Settings & System Health</span>
+      <div className="flex items-center justify-between pb-3 mb-4" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+        <div className="flex items-center gap-3">
+          <Settings size={20} color="#38BDF8" />
+          <span style={{ fontSize: '18px', fontWeight: 600 }}>EDITH Studio Settings & System Health</span>
         </div>
-        <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>STUDIO ENVIRONMENT</Badge>
+        <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>STUDIO ENVIRONMENT</Badge>
       </div>
 
       <div className="grid grid-cols-2 gap-4 flex-1 overflow-y-auto">
@@ -92,30 +92,31 @@ export default function EdithSettingsPanel() {
         <div className="flex flex-col gap-4">
           {/* Preferences */}
           <div>
-            <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
               EDITOR & THEME PREFERENCES
             </span>
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-3">
               <div className="flex flex-col gap-1.5">
-                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Tab Size</span>
-                <select value={tabSize} onChange={(e) => setTabSize(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
+                <span className="text-muted" style={{ fontSize: '13.5px', fontWeight: 500 }}>Tab Size</span>
+                <select value={tabSize} onChange={(e) => setTabSize(e.target.value)} className="glass-input" style={{ height: '38px', padding: '0 12px', fontSize: '14.5px', borderRadius: '6px' }}>
                   <option value="2" style={{ background: '#0B0F1A' }}>2 spaces</option>
                   <option value="4" style={{ background: '#0B0F1A' }}>4 spaces</option>
                 </select>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Font Size</span>
-                <select value={fontSize} onChange={(e) => setFontSize(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
-                  <option value="12" style={{ background: '#0B0F1A' }}>12 px</option>
-                  <option value="13" style={{ background: '#0B0F1A' }}>13 px</option>
-                  <option value="14" style={{ background: '#0B0F1A' }}>14 px</option>
+                <span className="text-muted" style={{ fontSize: '13.5px', fontWeight: 500 }}>Font Size</span>
+                <select value={fontSize} onChange={(e) => setFontSize(e.target.value)} className="glass-input" style={{ height: '38px', padding: '0 12px', fontSize: '14.5px', borderRadius: '6px' }}>
+                  <option value="15" style={{ background: '#0B0F1A' }}>15 px</option>
+                  <option value="16" style={{ background: '#0B0F1A' }}>16 px</option>
+                  <option value="17" style={{ background: '#0B0F1A' }}>17 px (Default)</option>
+                  <option value="18" style={{ background: '#0B0F1A' }}>18 px</option>
                 </select>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <span className="text-muted" style={{ fontSize: '11px', fontWeight: 500 }}>Theme</span>
-                <select value={theme} onChange={(e) => setTheme(e.target.value)} className="glass-input" style={{ height: '34px', padding: '0 10px', fontSize: '12px', borderRadius: '6px' }}>
+                <span className="text-muted" style={{ fontSize: '13.5px', fontWeight: 500 }}>Theme</span>
+                <select value={theme} onChange={(e) => setTheme(e.target.value)} className="glass-input" style={{ height: '38px', padding: '0 12px', fontSize: '14.5px', borderRadius: '6px' }}>
                   <option value="cosmic-dark" style={{ background: '#0B0F1A' }}>Cosmic Dark (Default)</option>
                   <option value="obsidian" style={{ background: '#0B0F1A' }}>Obsidian Glass</option>
                 </select>
@@ -125,14 +126,14 @@ export default function EdithSettingsPanel() {
 
           {/* Keybindings Cheat Sheet */}
           <div>
-            <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
               KEYBOARD SHORTCUTS
             </span>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               {shortcuts.map((s, idx) => (
-                <div key={idx} className="flex items-center justify-between p-2 px-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)', fontSize: '12px' }}>
-                  <kbd className="code-inline" style={{ fontSize: '11px', color: '#00D2FF', padding: '2px 7px' }}>{s.key}</kbd>
-                  <span className="body-small text-secondary" style={{ fontSize: '11.5px' }}>{s.desc}</span>
+                <div key={idx} className="flex items-center justify-between p-2.5 px-3 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)', fontSize: '14px' }}>
+                  <kbd className="code-inline" style={{ fontSize: '13.5px', color: '#00D2FF', padding: '3px 8px' }}>{s.key}</kbd>
+                  <span className="body-regular text-secondary" style={{ fontSize: '14px' }}>{s.desc}</span>
                 </div>
               ))}
             </div>
@@ -140,25 +141,25 @@ export default function EdithSettingsPanel() {
         </div>
 
         {/* Right: Microservice Live Ping Monitor & Reality Matrix */}
-        <div className="flex flex-col gap-3.5">
+        <div className="flex flex-col gap-4">
           {/* Microservice Health Monitor */}
           <div>
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="body-small text-muted" style={{ fontSize: '11.5px', fontWeight: 600 }}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>
                 INTEGRATION STATUS MATRIX & LIVE PING MONITOR
               </span>
               <button
                 onClick={pingAllServices}
                 disabled={isCheckingServices}
-                className="glass-btn-ghost flex items-center gap-1.5 text-muted hover:text-white"
-                style={{ fontSize: '11.5px', height: '28px', padding: '0 10px', borderRadius: '6px' }}
+                className="glass-btn-ghost flex items-center gap-2 text-muted hover:text-white"
+                style={{ fontSize: '13.5px', height: '34px', padding: '0 12px', borderRadius: '6px' }}
                 title="Ping all background microservices"
               >
-                <RefreshCw size={12} className={isCheckingServices ? 'animate-spin' : ''} /> Ping All
+                <RefreshCw size={14} className={isCheckingServices ? 'animate-spin' : ''} /> Ping All
               </button>
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               {Object.entries(serviceStatus).map(([key, s]) => {
                 const isOnline = s.status === 'online';
                 const isChecking = s.status === 'checking';
@@ -166,28 +167,28 @@ export default function EdithSettingsPanel() {
                 return (
                   <div
                     key={key}
-                    className="flex items-center justify-between p-2 rounded"
+                    className="flex items-center justify-between p-2.5 px-3 rounded"
                     style={{
                       background: 'rgba(7, 10, 24, 0.4)',
                       border: isOnline ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid var(--glass-border)'
                     }}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       <span
                         style={{
-                          width: '7px',
-                          height: '7px',
+                          width: '8px',
+                          height: '8px',
                           borderRadius: '50%',
                           background: isOnline ? 'var(--status-success)' : isChecking ? '#00D2FF' : 'var(--status-error)',
                           boxShadow: isOnline ? '0 0 8px rgba(16, 185, 129, 0.6)' : 'none'
                         }}
                       />
-                      <span style={{ fontSize: '11px', color: 'var(--text-primary)' }}>{s.name}</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{s.name}</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted" style={{ fontSize: '10px' }}>{s.latency}</span>
-                      <Badge variant={isOnline ? 'cyan' : isChecking ? 'cyan' : 'error'} size="small">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-muted" style={{ fontSize: '13px' }}>{s.latency}</span>
+                      <Badge variant={isOnline ? 'cyan' : isChecking ? 'cyan' : 'error'} style={{ fontSize: '12px', padding: '2px 8px' }}>
                         {isOnline ? 'ONLINE' : isChecking ? 'PINGING' : 'OFFLINE'}
                       </Badge>
                     </div>
@@ -198,14 +199,14 @@ export default function EdithSettingsPanel() {
           </div>
 
           {/* Reality Matrix & Security Disclosures */}
-          <div className="p-2.5 rounded bg-white/5 border border-white/5">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Shield size={12} color="#00D2FF" />
-              <span style={{ fontSize: '11px', fontWeight: 600, color: '#00D2FF' }}>
+          <div className="p-3 rounded bg-white/5 border border-white/5">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Shield size={15} color="#00D2FF" />
+              <span style={{ fontSize: '14px', fontWeight: 600, color: '#00D2FF' }}>
                 System Architecture Disclosures
               </span>
             </div>
-            <div className="text-muted flex flex-col gap-1" style={{ fontSize: '10px', lineHeight: '1.4' }}>
+            <div className="text-muted flex flex-col gap-1.5" style={{ fontSize: '13px', lineHeight: '1.5' }}>
               <div>• <strong>Real Live Endpoints:</strong> Application API (:3000), FRIDAY (:8001), EDITH Engine (:8002).</div>
               <div>• <strong>Sandboxed Boundary:</strong> EDITH Runner (:8003) execution mode is strictly "disabled" for host safety.</div>
               <div>• <strong>Local Database:</strong> SQLite dev.db via Prisma client. Zero external cloud dependencies required.</div>

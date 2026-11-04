@@ -162,8 +162,8 @@ export default function EdithShell({
           className="glass-panel flex items-center justify-between"
           style={{
             width: '100%',
-            height: 'var(--astra-header-height, 50px)',
-            padding: '0 18px',
+            height: 'var(--astra-header-height, 56px)',
+            padding: '0 20px',
             borderTop: 'none',
             borderLeft: 'none',
             borderRight: 'none',
@@ -174,19 +174,19 @@ export default function EdithShell({
           {/* Breadcrumb Path */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <EdithArcReactor size={22} showHud={false} animated={false} />
-              <span style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--edith-cyan, #00D2FF)', letterSpacing: '0.12em', fontFamily: "'Michroma', sans-serif" }}>
+              <EdithArcReactor size={26} showHud={false} animated={false} />
+              <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--edith-cyan, #00D2FF)', letterSpacing: '0.12em', fontFamily: "'Michroma', sans-serif" }}>
                 EDITH
               </span>
             </div>
-            <span style={{ color: 'rgba(56, 189, 248, 0.4)', fontSize: '13px' }}>/</span>
-            <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 600 }}>
+            <span style={{ color: 'rgba(56, 189, 248, 0.4)', fontSize: '15px' }}>/</span>
+            <span style={{ fontSize: '15.5px', color: 'var(--text-primary)', fontWeight: 600 }}>
               {activeProject?.name || 'Workspace'}
             </span>
             {activeFile && (
               <>
-                <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>/</span>
-                <span className="code-inline" style={{ fontSize: '12.5px', padding: '3px 8px' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '15px' }}>/</span>
+                <span className="code-inline" style={{ fontSize: '15px', padding: '4px 10px' }}>
                   {activeFile.name}
                 </span>
               </>
@@ -195,25 +195,25 @@ export default function EdithShell({
 
           {/* Service & Sandbox Status Disclosures */}
           <div className="flex items-center gap-3.5">
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
               <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
-              <span className="body-small" style={{ fontSize: '12px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="EDITH Engine :8002">
+              <span style={{ fontSize: '13.5px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="EDITH Engine :8002">
                 EDITH Engine :8002
               </span>
             </div>
 
-            <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '11.5px' }}>Sandboxed Runner :8003</Badge>
+            <Badge variant="cyan" style={{ padding: '5px 12px', fontSize: '13.5px' }}>Sandboxed Runner :8003</Badge>
 
             {/* Panel Visibility Toggles */}
             {onToggleSidebar && (
               <button
                 onClick={onToggleSidebar}
-                className="glass-btn-ghost flex items-center gap-1.5"
+                className="glass-btn-ghost flex items-center gap-2"
                 style={{
-                  height: '32px',
-                  padding: '0 12px',
+                  height: '38px',
+                  padding: '0 14px',
                   borderRadius: 'var(--radius-pill)',
-                  fontSize: '12px',
+                  fontSize: '15px',
                   fontWeight: 500,
                   color: isSidebarOpen ? '#38BDF8' : 'var(--text-muted)',
                   background: isSidebarOpen ? 'rgba(56, 189, 248, 0.14)' : 'transparent',
@@ -221,7 +221,7 @@ export default function EdithShell({
                 }}
                 title={isSidebarOpen ? 'Collapse Explorer (Ctrl+E)' : 'Expand Explorer (Ctrl+E)'}
               >
-                <FolderTree size={14} />
+                <FolderTree size={16} />
                 <span>Explorer</span>
               </button>
             )}
@@ -229,12 +229,12 @@ export default function EdithShell({
             {onToggleAssistant && (
               <button
                 onClick={onToggleAssistant}
-                className="glass-btn-ghost flex items-center gap-1.5"
+                className="glass-btn-ghost flex items-center gap-2"
                 style={{
-                  height: '32px',
-                  padding: '0 12px',
+                  height: '38px',
+                  padding: '0 14px',
                   borderRadius: 'var(--radius-pill)',
-                  fontSize: '12px',
+                  fontSize: '15px',
                   fontWeight: 500,
                   color: isAssistantOpen ? '#7DD3FC' : 'var(--text-muted)',
                   background: isAssistantOpen ? 'rgba(56, 189, 248, 0.14)' : 'transparent',
@@ -242,7 +242,7 @@ export default function EdithShell({
                 }}
                 title={isAssistantOpen ? 'Hide AI Assistant (Ctrl+J)' : 'Show AI Assistant (Ctrl+J)'}
               >
-                <Bot size={14} />
+                <Bot size={16} />
                 <span>AI Assistant</span>
               </button>
             )}
@@ -250,12 +250,12 @@ export default function EdithShell({
             {onToggleZenMode && (
               <button
                 onClick={onToggleZenMode}
-                className="glass-btn-ghost flex items-center gap-1.5"
+                className="glass-btn-ghost flex items-center gap-2"
                 style={{
-                  height: '32px',
-                  padding: '0 12px',
+                  height: '38px',
+                  padding: '0 14px',
                   borderRadius: 'var(--radius-pill)',
-                  fontSize: '12px',
+                  fontSize: '15px',
                   fontWeight: 500,
                   color: isZenMode ? '#00D2FF' : 'var(--text-secondary)',
                   background: isZenMode ? 'rgba(0, 210, 255, 0.14)' : 'transparent',
@@ -263,19 +263,19 @@ export default function EdithShell({
                 }}
                 title={isZenMode ? 'Exit Zen Mode (Ctrl+B)' : 'Zen Editor Mode (Ctrl+B)'}
               >
-                <Maximize2 size={13} />
+                <Maximize2 size={15} />
                 <span>{isZenMode ? 'Exit Zen' : 'Zen'}</span>
               </button>
             )}
 
             <button
               onClick={onBackToFriday}
-              className="glass-btn-ghost flex items-center gap-1.5"
+              className="glass-btn-ghost flex items-center gap-2"
               style={{
-                height: '32px',
-                padding: '0 14px',
+                height: '38px',
+                padding: '0 16px',
                 borderRadius: 'var(--radius-pill)',
-                fontSize: '12px',
+                fontSize: '15px',
                 fontWeight: 500,
                 color: 'var(--brand-gold-light)',
                 border: '1px solid rgba(246, 200, 122, 0.25)',
@@ -283,14 +283,14 @@ export default function EdithShell({
               }}
               title="Return to FRIDAY Dashboard"
             >
-              <ArrowLeft size={13} />
+              <ArrowLeft size={15} />
               <span>FRIDAY Home</span>
             </button>
           </div>
         </header>
 
         {/* Content Region */}
-        <main className="flex-1 flex flex-col" style={{ width: '100%', height: 'calc(100vh - 50px)', minHeight: 0, minWidth: 0, overflow: 'hidden', position: 'relative', margin: 0, padding: 0 }}>
+        <main className="flex-1 flex flex-col" style={{ width: '100%', height: 'calc(100vh - 56px)', minHeight: 0, minWidth: 0, overflow: 'hidden', position: 'relative', margin: 0, padding: 0 }}>
           {children}
         </main>
       </div>

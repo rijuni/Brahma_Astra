@@ -108,10 +108,10 @@ export default function ProjectExplorer({
   return (
     <div className="flex flex-col h-full" style={{ padding: '14px 16px' }}>
       {/* Top Header & New Project CTA */}
-      <div className="flex items-center justify-between" style={{ marginBottom: '12px' }}>
-        <div className="flex items-center gap-2">
-          <FolderKanban size={16} color="#38BDF8" />
-          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.06em' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: '14px' }}>
+        <div className="flex items-center gap-2.5">
+          <FolderKanban size={18} color="#38BDF8" />
+          <span className="body-small text-muted" style={{ fontWeight: 600, fontSize: '15px', letterSpacing: '0.04em' }}>
             WORKSPACES ({projects.length})
           </span>
         </div>
@@ -119,8 +119,8 @@ export default function ProjectExplorer({
           onClick={() => setIsCreateOpen(true)}
           className="glass-btn-ghost flex items-center justify-center transition-all"
           style={{
-            width: '28px',
-            height: '28px',
+            width: '32px',
+            height: '32px',
             borderRadius: '6px',
             padding: 0,
             background: 'rgba(0, 210, 255, 0.12)',
@@ -128,16 +128,16 @@ export default function ProjectExplorer({
           }}
           title="New Project"
         >
-          <Plus size={15} color="#00D2FF" />
+          <Plus size={17} color="#00D2FF" />
         </button>
       </div>
 
       {/* Project Search Input */}
       <div
-        className="glass-input flex items-center gap-2"
-        style={{ padding: '7px 10px', marginBottom: '12px', borderRadius: 'var(--radius-sm)' }}
+        className="glass-input flex items-center gap-2.5"
+        style={{ padding: '8px 12px', marginBottom: '14px', borderRadius: 'var(--radius-sm)' }}
       >
-        <Search size={14} color="var(--text-muted)" />
+        <Search size={16} color="var(--text-muted)" />
         <input
           type="text"
           placeholder="Filter workspaces..."
@@ -148,7 +148,7 @@ export default function ProjectExplorer({
             border: 'none',
             outline: 'none',
             color: 'var(--text-primary)',
-            fontSize: '12px',
+            fontSize: '15px',
             width: '100%'
           }}
         />
@@ -156,30 +156,30 @@ export default function ProjectExplorer({
           <button
             onClick={() => setSearchTerm('')}
             className="glass-btn-ghost"
-            style={{ padding: '2px', borderRadius: '50%' }}
+            style={{ padding: '3px', borderRadius: '50%' }}
             title="Clear search"
           >
-            <X size={12} color="var(--text-muted)" />
+            <X size={14} color="var(--text-muted)" />
           </button>
         )}
       </div>
 
       {/* Project List Rail */}
-      <div className="flex flex-col gap-2 flex-1 overflow-y-auto" style={{ paddingRight: '2px' }}>
+      <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto" style={{ paddingRight: '2px' }}>
         {filtered.length === 0 ? (
           <div
-            className="flex flex-col items-center justify-center text-center p-4"
+            className="flex flex-col items-center justify-center text-center p-5"
             style={{
               background: 'rgba(255, 255, 255, 0.02)',
               borderRadius: 'var(--radius-md)',
               border: '1px dashed var(--glass-border)'
             }}
           >
-            <FolderKanban size={24} color="var(--text-muted)" style={{ marginBottom: '8px', opacity: 0.5 }} />
-            <p className="body-small text-muted" style={{ fontSize: '11px', marginBottom: '8px' }}>
+            <FolderKanban size={28} color="var(--text-muted)" style={{ marginBottom: '10px', opacity: 0.5 }} />
+            <p className="body-regular text-muted" style={{ fontSize: '14px', marginBottom: '10px' }}>
               No workspaces matching "{searchTerm}"
             </p>
-            <Button variant="ghost" size="small" onClick={() => setSearchTerm('')}>
+            <Button variant="ghost" size="small" onClick={() => setSearchTerm('')} style={{ fontSize: '14px' }}>
               Clear Filter
             </Button>
           </div>
@@ -194,7 +194,7 @@ export default function ProjectExplorer({
                 onClick={() => onSelectProject(proj.id)}
                 className="glass-card flex flex-col cursor-pointer transition-all relative"
                 style={{
-                  padding: '12px 14px',
+                  padding: '14px 16px',
                   borderRadius: 'var(--radius-md)',
                   background: isActive ? 'rgba(0, 210, 255, 0.12)' : 'rgba(255, 255, 255, 0.03)',
                   borderColor: isActive ? 'rgba(0, 210, 255, 0.4)' : 'rgba(56, 189, 248, 0.15)',
@@ -202,12 +202,12 @@ export default function ProjectExplorer({
                 }}
               >
                 {/* Header row: Icon, Name, Active Badge & Menu */}
-                <div className="flex items-center justify-between" style={{ marginBottom: '6px' }}>
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FolderKanban size={16} color={isActive ? '#00D2FF' : '#38BDF8'} />
+                <div className="flex items-center justify-between" style={{ marginBottom: '8px' }}>
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <FolderKanban size={18} color={isActive ? '#00D2FF' : '#38BDF8'} />
                     <span
                       style={{
-                        fontSize: '13px',
+                        fontSize: '16px',
                         fontWeight: 600,
                         color: 'var(--text-primary)',
                         whiteSpace: 'nowrap',
@@ -218,18 +218,18 @@ export default function ProjectExplorer({
                       {proj.name}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    {isActive && <Badge variant="cyan" size="small">Active</Badge>}
+                  <div className="flex items-center gap-2">
+                    {isActive && <Badge variant="cyan" style={{ fontSize: '13px', padding: '3px 8px' }}>Active</Badge>}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setMenuOpenId(isMenuOpen ? null : proj.id);
                       }}
                       className="glass-btn-ghost flex items-center justify-center"
-                      style={{ width: '24px', height: '24px', borderRadius: '4px', padding: 0 }}
+                      style={{ width: '28px', height: '28px', borderRadius: '4px', padding: 0 }}
                       title="Project options"
                     >
-                      <MoreVertical size={13} color="var(--text-muted)" />
+                      <MoreVertical size={16} color="var(--text-muted)" />
                     </button>
                   </div>
                 </div>
@@ -241,49 +241,49 @@ export default function ProjectExplorer({
                     style={{
                       position: 'absolute',
                       right: '8px',
-                      top: '32px',
+                      top: '36px',
                       zIndex: 30,
                       background: 'rgba(15, 23, 42, 0.95)',
                       border: '1px solid var(--glass-border)',
                       borderRadius: 'var(--radius-sm)',
                       boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
-                      padding: '4px',
-                      minWidth: '130px'
+                      padding: '6px',
+                      minWidth: '150px'
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
                       onClick={(e) => handleDuplicate(proj.id, e)}
-                      className="flex items-center gap-2 p-1.5 text-left body-small hover:bg-white/10 rounded"
-                      style={{ fontSize: '11px', color: 'var(--text-primary)' }}
+                      className="flex items-center gap-2.5 p-2 text-left body-small hover:bg-white/10 rounded"
+                      style={{ fontSize: '14px', color: 'var(--text-primary)' }}
                     >
-                      <Copy size={12} color="var(--brand-cyan)" /> Duplicate
+                      <Copy size={15} color="var(--brand-cyan)" /> Duplicate
                     </button>
                     <button
                       onClick={(e) => handleExportJson(proj, e)}
-                      className="flex items-center gap-2 p-1.5 text-left body-small hover:bg-white/10 rounded"
-                      style={{ fontSize: '11px', color: 'var(--text-primary)' }}
+                      className="flex items-center gap-2.5 p-2 text-left body-small hover:bg-white/10 rounded"
+                      style={{ fontSize: '14px', color: 'var(--text-primary)' }}
                     >
-                      <Download size={12} color="#00D2FF" /> Export JSON
+                      <Download size={15} color="#00D2FF" /> Export JSON
                     </button>
                     {projects.length > 1 && (
                       <button
                         onClick={(e) => handleDeletePrompt(proj, e)}
-                        className="flex items-center gap-2 p-1.5 text-left body-small hover:bg-red-500/20 rounded"
-                        style={{ fontSize: '11px', color: 'var(--status-error)' }}
+                        className="flex items-center gap-2.5 p-2 text-left body-small hover:bg-red-500/20 rounded"
+                        style={{ fontSize: '14px', color: 'var(--status-error)' }}
                       >
-                        <Trash2 size={12} color="var(--status-error)" /> Delete
+                        <Trash2 size={15} color="var(--status-error)" /> Delete
                       </button>
                     )}
                   </div>
                 )}
 
                 <p
-                  className="body-small text-muted"
+                  className="body-regular text-muted"
                   style={{
-                    fontSize: '11px',
-                    marginBottom: '6px',
-                    lineHeight: '1.3',
+                    fontSize: '14px',
+                    marginBottom: '8px',
+                    lineHeight: '1.45',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
@@ -294,20 +294,20 @@ export default function ProjectExplorer({
                 </p>
 
                 {/* Project Stats & Tech Stack Pills */}
-                <div className="flex items-center justify-between" style={{ marginTop: '2px' }}>
-                  <div className="flex items-center gap-2" style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                <div className="flex items-center justify-between" style={{ marginTop: '4px' }}>
+                  <div className="flex items-center gap-2.5" style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
                     <span>{proj.files ? proj.files.length : (proj.stats?.files || 0)} files</span>
                     <span>•</span>
                     <span>{proj.stats?.commits || 1} commits</span>
                   </div>
 
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1.5">
                     {(proj.techStack || []).slice(0, 2).map((tech) => (
                       <span
                         key={tech}
                         style={{
-                          fontSize: '9px',
-                          padding: '1px 5px',
+                          fontSize: '12px',
+                          padding: '2px 8px',
                           borderRadius: '3px',
                           background: 'rgba(255, 255, 255, 0.05)',
                           color: 'var(--text-secondary)'
@@ -373,24 +373,24 @@ export default function ProjectExplorer({
           />
 
           <div>
-            <label className="body-small text-muted" style={{ display: 'block', marginBottom: '6px', fontWeight: 500 }}>
+            <label className="body-small text-muted" style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '15px' }}>
               Primary Template & Tech Stack
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2.5">
               {TEMPLATE_OPTIONS.map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setSelectedTemplate(t.id)}
-                  className="flex items-center gap-2 p-2 rounded text-left transition-all"
+                  className="flex items-center gap-2.5 p-2.5 rounded text-left transition-all"
                   style={{
                     background: selectedTemplate === t.id ? 'rgba(0, 210, 255, 0.15)' : 'rgba(255, 255, 255, 0.03)',
                     border: selectedTemplate === t.id ? '1px solid #00D2FF' : '1px solid var(--glass-border)',
                     color: selectedTemplate === t.id ? '#FFFFFF' : 'var(--text-muted)'
                   }}
                 >
-                  <FileCode size={13} color={selectedTemplate === t.id ? '#00D2FF' : 'var(--text-muted)'} />
-                  <span style={{ fontSize: '11px', fontWeight: selectedTemplate === t.id ? 600 : 400 }}>
+                  <FileCode size={16} color={selectedTemplate === t.id ? '#00D2FF' : 'var(--text-muted)'} />
+                  <span style={{ fontSize: '14px', fontWeight: selectedTemplate === t.id ? 600 : 400 }}>
                     {t.label}
                   </span>
                 </button>
@@ -398,11 +398,11 @@ export default function ProjectExplorer({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2" style={{ marginTop: '8px' }}>
-            <Button variant="ghost" type="button" onClick={() => setIsCreateOpen(false)}>
+          <div className="flex justify-end gap-2.5" style={{ marginTop: '10px' }}>
+            <Button variant="ghost" type="button" onClick={() => setIsCreateOpen(false)} style={{ height: '38px', fontSize: '15px' }}>
               Cancel
             </Button>
-            <Button variant="cyan" type="submit">
+            <Button variant="cyan" type="submit" style={{ height: '38px', fontSize: '15px', fontWeight: 600 }}>
               Create Workspace
             </Button>
           </div>

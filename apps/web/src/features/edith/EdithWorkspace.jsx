@@ -72,18 +72,18 @@ export default function EdithWorkspace({ onBackToFriday }) {
   const [isZenMode, setIsZenMode] = useState(false);
   const { addToast } = useToast();
 
-  // Resizable panel dimensions
+  // Resizable panel dimensions (Calibrated for Large Typography)
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem('edith_sidebar_width');
-    return saved ? parseInt(saved, 10) : 260;
+    return saved ? parseInt(saved, 10) : 290;
   });
   const [assistantWidth, setAssistantWidth] = useState(() => {
     const saved = localStorage.getItem('edith_assistant_width');
-    return saved ? parseInt(saved, 10) : 365;
+    return saved ? parseInt(saved, 10) : 400;
   });
   const [dockHeight, setDockHeight] = useState(() => {
     const saved = localStorage.getItem('edith_dock_height');
-    return saved ? parseInt(saved, 10) : 260;
+    return saved ? parseInt(saved, 10) : 290;
   });
 
   // Resizing handlers
@@ -96,7 +96,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
 
     const onMouseMove = (moveEvent) => {
       const delta = moveEvent.clientX - startX;
-      const newWidth = Math.min(Math.max(startWidth + delta, 220), 400);
+      const newWidth = Math.min(Math.max(startWidth + delta, 220), 450);
       setSidebarWidth(newWidth);
     };
 
@@ -634,16 +634,16 @@ export default function EdithWorkspace({ onBackToFriday }) {
             <div
               className="flex items-center"
               style={{
-                height: '38px',
+                height: '42px',
                 borderBottom: '1px solid var(--glass-border)',
                 background: 'rgba(11, 15, 26, 0.7)'
               }}
             >
               <button
                 onClick={() => setActiveNav('workspace')}
-                className="glass-btn-ghost flex-1 py-1.5 body-small flex items-center justify-center gap-1.5"
+                className="glass-btn-ghost flex-1 py-2 flex items-center justify-center gap-2"
                 style={{
-                  fontSize: '12px',
+                  fontSize: '15.5px',
                   fontWeight: 600,
                   color: activeNav === 'workspace' ? '#00D2FF' : 'var(--text-muted)',
                   borderBottom: activeNav === 'workspace' ? '2px solid #00D2FF' : 'none',
@@ -654,9 +654,9 @@ export default function EdithWorkspace({ onBackToFriday }) {
               </button>
               <button
                 onClick={() => setActiveNav('projects_rail')}
-                className="glass-btn-ghost flex-1 py-1.5 body-small flex items-center justify-center gap-1.5"
+                className="glass-btn-ghost flex-1 py-2 flex items-center justify-center gap-2"
                 style={{
-                  fontSize: '12px',
+                  fontSize: '15.5px',
                   fontWeight: 600,
                   color: activeNav === 'projects_rail' ? '#00D2FF' : 'var(--text-muted)',
                   borderBottom: activeNav === 'projects_rail' ? '2px solid #00D2FF' : 'none',
@@ -667,11 +667,11 @@ export default function EdithWorkspace({ onBackToFriday }) {
               </button>
               <button
                 onClick={() => setIsSidebarOpen(false)}
-                className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white px-2"
+                className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white px-2.5"
                 style={{ height: '100%', borderLeft: '1px solid rgba(255, 255, 255, 0.05)' }}
                 title="Collapse Explorer (Ctrl+E)"
               >
-                <ChevronLeft size={14} />
+                <ChevronLeft size={16} />
               </button>
             </div>
 
@@ -706,7 +706,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
           <div
             className="edith-resizer-h"
             onMouseDown={handleSidebarResizeStart}
-            onDoubleClick={() => setSidebarWidth(260)}
+            onDoubleClick={() => setSidebarWidth(290)}
             title="Drag to resize explorer (Double-click to reset)"
           />
         )}
@@ -743,7 +743,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
             <div
               className="edith-resizer-v"
               onMouseDown={handleDockResizeStart}
-              onDoubleClick={() => setDockHeight(260)}
+              onDoubleClick={() => setDockHeight(290)}
               title="Drag to resize dock (Double-click to reset)"
             />
           )}
@@ -768,18 +768,18 @@ export default function EdithWorkspace({ onBackToFriday }) {
               transition: 'none'
             }}
           >
-            {/* Unified Single Dock Switcher & Diagnostics Tab Bar */}
+            {/* Unified Single Dock Switcher & Diagnostics Tab Bar (15px Tabs) */}
             <div
-              className="flex items-center justify-between px-2.5 overflow-x-auto"
+              className="flex items-center justify-between px-3 overflow-x-auto"
               style={{
-                height: '38px',
+                height: '42px',
                 background: 'rgba(7, 10, 24, 0.75)',
                 borderBottom: dockState === 'minimized' ? 'none' : '1px solid var(--glass-border)',
                 flexShrink: 0
               }}
             >
               {/* Left: Unified Diagnostic & Tool Tabs */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 {[
                   { id: 'terminal', subId: 'terminal', label: 'Terminal', icon: Terminal },
                   { id: 'terminal', subId: 'problems', label: 'Problems (3)', icon: AlertTriangle },
@@ -797,26 +797,26 @@ export default function EdithWorkspace({ onBackToFriday }) {
                         setTerminalSubTab(item.subId);
                         if (dockState === 'minimized') setDockState('standard');
                       }}
-                      className="glass-btn-ghost flex items-center gap-1.5"
+                      className="glass-btn-ghost flex items-center gap-2"
                       style={{
-                        padding: '4px 10px',
-                        fontSize: '11.5px',
+                        padding: '6px 14px',
+                        fontSize: '15px',
                         fontWeight: isActive ? 600 : 500,
-                        borderRadius: '5px',
+                        borderRadius: '6px',
                         color: isActive ? '#FFFFFF' : 'var(--text-muted)',
                         background: isActive ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%)' : 'transparent',
                         border: isActive ? '1px solid rgba(56, 189, 248, 0.55)' : '1px solid transparent',
                         boxShadow: isActive ? '0 0 10px rgba(56, 189, 248, 0.25)' : 'none'
                       }}
                     >
-                      <Icon size={12} color={isActive ? '#00D2FF' : 'currentColor'} />
+                      <Icon size={15} color={isActive ? '#00D2FF' : 'currentColor'} />
                       <span>{item.label}</span>
                     </button>
                   );
                 })}
 
                 {/* Subtle Group Divider */}
-                <div style={{ width: '1px', height: '16px', background: 'rgba(255, 255, 255, 0.1)', margin: '0 4px' }} />
+                <div style={{ width: '1px', height: '20px', background: 'rgba(255, 255, 255, 0.12)', margin: '0 6px' }} />
 
                 {[
                   { id: 'testing', label: 'Testing', icon: CheckCircle2 },
@@ -836,19 +836,19 @@ export default function EdithWorkspace({ onBackToFriday }) {
                         setDockPanel(item.id);
                         if (dockState === 'minimized') setDockState('standard');
                       }}
-                      className="glass-btn-ghost flex items-center gap-1.5"
+                      className="glass-btn-ghost flex items-center gap-2"
                       style={{
-                        padding: '4px 10px',
-                        fontSize: '11.5px',
+                        padding: '6px 14px',
+                        fontSize: '15px',
                         fontWeight: isActive ? 600 : 500,
-                        borderRadius: '5px',
+                        borderRadius: '6px',
                         color: isActive ? '#FFFFFF' : 'var(--text-muted)',
                         background: isActive ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%)' : 'transparent',
                         border: isActive ? '1px solid rgba(56, 189, 248, 0.55)' : '1px solid transparent',
                         boxShadow: isActive ? '0 0 10px rgba(56, 189, 248, 0.25)' : 'none'
                       }}
                     >
-                      <Icon size={12} color={isActive ? '#00D2FF' : 'currentColor'} />
+                      <Icon size={15} color={isActive ? '#00D2FF' : 'currentColor'} />
                       <span>{item.label}</span>
                     </button>
                   );
@@ -856,8 +856,8 @@ export default function EdithWorkspace({ onBackToFriday }) {
               </div>
 
               {/* Right: Security Badge & Window Expand/Minimize Controls */}
-              <div className="flex items-center gap-2">
-                <Badge variant="cyan" style={{ padding: '3px 8px', fontSize: '10.5px' }}>
+              <div className="flex items-center gap-2.5">
+                <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '12px' }}>
                   Execution: Disabled (Safe Boundary)
                 </Badge>
 
@@ -865,20 +865,20 @@ export default function EdithWorkspace({ onBackToFriday }) {
                 <button
                   onClick={() => setDockState((prev) => (prev === 'minimized' ? 'standard' : 'minimized'))}
                   className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
-                  style={{ width: '24px', height: '24px', borderRadius: '4px' }}
+                  style={{ width: '28px', height: '28px', borderRadius: '5px' }}
                   title={dockState === 'minimized' ? 'Expand Dock (Ctrl+`)' : 'Minimize Dock (Ctrl+`)'}
                 >
-                  {dockState === 'minimized' ? <ChevronUp size={13} /> : <Minus size={13} />}
+                  {dockState === 'minimized' ? <ChevronUp size={15} /> : <Minus size={15} />}
                 </button>
 
                 {/* Maximize / Restore Toggle */}
                 <button
                   onClick={() => setDockState((prev) => (prev === 'maximized' ? 'standard' : 'maximized'))}
                   className="glass-btn-ghost flex items-center justify-center text-muted hover:text-white"
-                  style={{ width: '24px', height: '24px', borderRadius: '4px' }}
+                  style={{ width: '28px', height: '28px', borderRadius: '5px' }}
                   title={dockState === 'maximized' ? 'Restore Dock Height' : 'Maximize Dock'}
                 >
-                  {dockState === 'maximized' ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                  {dockState === 'maximized' ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
                 </button>
               </div>
             </div>
@@ -897,7 +897,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
           <div
             className="edith-resizer-h"
             onMouseDown={handleAssistantResizeStart}
-            onDoubleClick={() => setAssistantWidth(365)}
+            onDoubleClick={() => setAssistantWidth(400)}
             title="Drag to resize assistant (Double-click to reset)"
           />
         )}
