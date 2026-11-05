@@ -89,7 +89,8 @@ export default function CodeEditor({
   onFileChange,
   onSaveFile,
   onRunFile,
-  dirtyFilePaths = new Set()
+  dirtyFilePaths = new Set(),
+  isSaving = false
 }) {
   const [copied, setCopied] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(false);
@@ -642,6 +643,19 @@ export default function CodeEditor({
         </div>
 
         <div className="flex items-center gap-5">
+          {isSaving ? (
+            <span className="flex items-center gap-1.5" style={{ color: '#38BDF8', fontWeight: 500 }}>
+              <Save size={13} className="animate-pulse" /> Saving to disk...
+            </span>
+          ) : dirtyFilePaths.has(activeFile?.path) ? (
+            <span className="flex items-center gap-1.5" style={{ color: '#F59E0B', fontWeight: 500 }}>
+              ● Unsaved changes (Ctrl+S)
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5" style={{ color: '#10B981', fontWeight: 500 }}>
+              <Check size={13} /> Saved
+            </span>
+          )}
           <button
             onClick={() => setIsLangSwitcherOpen(true)}
             className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer"

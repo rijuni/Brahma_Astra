@@ -10,6 +10,19 @@
   padding: 0;
 }
 
+button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  text-align: inherit;
+  outline: none;
+}
+
 html, body {
   height: 100%;
   width: 100%;

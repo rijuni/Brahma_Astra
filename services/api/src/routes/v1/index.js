@@ -4,6 +4,7 @@ const projectRoutes = require('./project.routes');
 const conversationRoutes = require('./conversation.routes');
 const aiRoutes = require('./ai.routes');
 const edithRoutes = require('./edith.routes');
+const fileRoutes = require('./file.routes');
 const auditRoutes = require('./audit.routes');
 
 const router = express.Router();
@@ -14,6 +15,7 @@ router.use('/conversations', conversationRoutes);
 router.use('/ai', aiRoutes);
 router.use('/edith', edithRoutes);
 router.use('/astra', edithRoutes); // Backwards-compatible alias
+router.use('/files', fileRoutes);
 router.use('/audit', auditRoutes);
 
 module.exports = router;

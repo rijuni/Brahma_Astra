@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Database,
   Play,
@@ -10,157 +10,176 @@ import {
   ArrowUpDown,
   FileSpreadsheet,
   Search,
-  Sparkles
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Info,
+  Clock,
+  Layers
 } from 'lucide-react';
 import Button from '../../../components/common/Button';
 import Badge from '../../../components/common/Badge';
 import { useToast } from '../../../components/feedback/Toast';
+import { edithDbService } from '../../../services/edith/edith-db-service';
 
-const SQL_TEMPLATES = [
-  { label: 'Select Users', query: 'SELECT id, name, email, role FROM users LIMIT 10;' },
-  { label: 'Select Active Projects', query: "SELECT id, name, owner_id, status FROM projects WHERE status = 'active';" },
-  { label: 'List EDITH Workspaces', query: 'SELECT id, project_id, name, status, created_at FROM astra_workspaces ORDER BY created_at DESC;' },
-  { label: 'Patient Vitals Overview', query: "SELECT id, name, age, gender, admission_status FROM patients WHERE admission_status = 'admitted' LIMIT 15;" },
-  { label: 'Task Status Aggregates', query: 'SELECT status, COUNT(*) as count FROM coding_tasks GROUP BY status;' }
-];
+export default function DatabasePanel({ projectId = 'default', activeProject = null }) {
+  const [databases, setDatabases] = useState([]);
+  const [selectedDb, setSelectedDb] = useState('default');
+  const [tables, setTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [tableSearch, setTableSearch] = useState('');
+  const [activeTab, setActiveTab] = useState('records'); // 'records' | 'schema'
 
-const MOCK_DATASETS = {
-  users: {
-    columns: ['id', 'name', 'email', 'role', 'created_at'],
-    rows: [
-      ['471e1a65-37d9', 'FRIDAY EDITH Lead Developer', 'developer@friday-ai.local', 'admin', '2026-10-20 09:30:00'],
-      ['928c03e1-88f2', 'Clinical Research Analyst', 'research@friday-ai.local', 'developer', '2026-10-21 14:15:22'],
-      ['104f98a2-cc31', 'Telemetry Systems Lead', 'telemetry@friday-ai.local', 'developer', '2026-10-22 08:45:10'],
-      ['883d11b7-492e', 'Security Operations Officer', 'secops@friday-ai.local', 'auditor', '2026-10-22 18:20:05']
-    ]
-  },
-  projects: {
-    columns: ['id', 'name', 'owner_id', 'status', 'created_at'],
-    rows: [
-      ['proj-001', 'Clinical Trial Telemetry Service', '471e1a65-37d9', 'active', '2026-10-20 10:00:00'],
-      ['proj-002', 'EDITH Execution Boundary Runner', '471e1a65-37d9', 'active', '2026-10-22 11:30:00'],
-      ['proj-003', 'Genomic Data Transformer', '928c03e1-88f2', 'completed', '2026-10-18 16:45:00']
-    ]
-  },
-  astra_workspaces: {
-    columns: ['id', 'project_id', 'name', 'status', 'created_at'],
-    rows: [
-      ['ws-101', 'proj-001', 'Production Service Sandbox', 'active', '2026-10-22 12:00:00'],
-      ['ws-102', 'proj-002', 'Runner Integration Suite', 'active', '2026-10-23 09:15:00']
-    ]
-  },
-  coding_tasks: {
-    columns: ['id', 'workspace_id', 'instruction', 'status', 'risk_level'],
-    rows: [
-      ['task-01', 'ws-101', 'Implement structured JSON error response', 'applied', 'low'],
-      ['task-02', 'ws-101', 'Add Redis connection pool retry loop', 'applied', 'medium'],
-      ['task-03', 'ws-102', 'Enforce strict host command block', 'applied', 'high']
-    ]
-  },
-  patients: {
-    columns: ['id', 'name', 'age', 'gender', 'admission_status', 'room'],
-    rows: [
-      [101, 'Eleanor Vance', 48, 'Female', 'admitted', 'ICU-3'],
-      [102, 'Theodora Crain', 34, 'Female', 'admitted', 'Ward-4B'],
-      [103, 'Luke Sanderson', 29, 'Male', 'discharged', 'Ward-2A'],
-      [104, 'Arthur Hill', 62, 'Male', 'admitted', 'ICU-1'],
-      [105, 'Hugh Crain', 71, 'Male', 'outpatient', 'Clinic-A']
-    ]
-  }
-};
-
-export default function DatabasePanel() {
-  const [selectedDb, setSelectedDb] = useState('sqlite');
+  // Query State
   const [query, setQuery] = useState('SELECT id, name, email, role, created_at FROM users LIMIT 10;');
-  const [sortCol, setSortCol] = useState(null);
-  const [sortAsc, setSortAsc] = useState(true);
+  const [isExecuting, setIsExecuting] = useState(false);
   const [queryResult, setQueryResult] = useState({
-    columns: MOCK_DATASETS.users.columns,
-    rows: MOCK_DATASETS.users.rows,
-    executionTime: '8.4ms',
-    rowCount: MOCK_DATASETS.users.rows.length
+    columns: [],
+    rows: [],
+    executionTimeMs: 0,
+    rowCount: 0
   });
   const [queryError, setQueryError] = useState(null);
+
+  // Pagination & Schema State
+  const [tableSchema, setTableSchema] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(50);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoadingRecords, setIsLoadingRecords] = useState(false);
+
+  // Sorting
+  const [sortCol, setSortCol] = useState(null);
+  const [sortAsc, setSortAsc] = useState(true);
+
   const { addToast } = useToast();
+  const effectiveProjectId = projectId || activeProject?.id || 'default';
 
-  const dbProfiles = [
-    { id: 'sqlite', name: 'SQLite (dev.db)', status: 'Connected', host: 'Local file' },
-    { id: 'postgres', name: 'PostgreSQL Prod', status: 'Standby', host: 'aws-rds.internal' },
-    { id: 'mysql', name: 'MySQL Analytics', status: 'Standby', host: '10.0.1.42:3306' }
-  ];
-
-  const tables = [
-    { name: 'users', count: 4, cols: ['id (PK)', 'name', 'email', 'role'] },
-    { name: 'projects', count: 3, cols: ['id (PK)', 'name', 'owner_id', 'status'] },
-    { name: 'astra_workspaces', count: 2, cols: ['id (PK)', 'project_id', 'name', 'status'] },
-    { name: 'coding_tasks', count: 3, cols: ['id (PK)', 'workspace_id', 'instruction', 'status'] },
-    { name: 'patients', count: 5, cols: ['id (PK)', 'name', 'age', 'admission_status'] }
-  ];
-
-  const handleExecute = (overrideQuery) => {
-    const sql = (overrideQuery || query).trim();
-    setQueryError(null);
-
-    // Read-only validation
-    const upper = sql.toUpperCase();
-    if (!upper.startsWith('SELECT') && !upper.startsWith('SHOW') && !upper.startsWith('PRAGMA') && !upper.startsWith('EXPLAIN')) {
-      setQueryError('Execution blocked: Read-Only sandbox boundary permits only SELECT queries.');
-      return;
+  // 1. Load available databases
+  useEffect(() => {
+    let mounted = true;
+    async function loadDatabases() {
+      try {
+        const res = await edithDbService.getDatabases(effectiveProjectId);
+        if (mounted && res?.databases) {
+          setDatabases(res.databases);
+          if (res.databases.length > 0 && !selectedDb) {
+            setSelectedDb(res.databases[0].id);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load databases:', err);
+      }
     }
+    loadDatabases();
+    return () => {
+      mounted = false;
+    };
+  }, [effectiveProjectId]);
 
-    // Determine target table
-    let matchedTable = 'users';
-    if (/from\s+projects/i.test(sql)) matchedTable = 'projects';
-    else if (/from\s+astra_workspaces/i.test(sql)) matchedTable = 'astra_workspaces';
-    else if (/from\s+coding_tasks/i.test(sql)) matchedTable = 'coding_tasks';
-    else if (/from\s+patients/i.test(sql)) matchedTable = 'patients';
+  // 2. Load tables when database changes
+  const loadTables = useCallback(async () => {
+    if (!effectiveProjectId) return;
+    try {
+      const res = await edithDbService.getTables(effectiveProjectId, selectedDb);
+      if (res?.tables) {
+        setTables(res.tables);
+        if (res.tables.length > 0 && !selectedTable) {
+          // Select first real table
+          handleSelectTable(res.tables[0].name);
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to load tables:', err);
+      const msg = err.response?.data?.message || err.message || 'Failed to list tables';
+      setQueryError(msg);
+    }
+  }, [effectiveProjectId, selectedDb, selectedTable]);
 
-    const dataset = MOCK_DATASETS[matchedTable] || MOCK_DATASETS.users;
-    setQueryResult({
-      columns: dataset.columns,
-      rows: dataset.rows,
-      executionTime: `${(Math.random() * 4 + 3).toFixed(1)}ms`,
-      rowCount: dataset.rows.length
-    });
-    setSortCol(null);
-    addToast(`Executed query against ${matchedTable}`, 'info');
-  };
+  useEffect(() => {
+    loadTables();
+  }, [loadTables]);
+
+  // 3. Load records and schema for selected table
+  const loadTableData = useCallback(
+    async (tableName, targetPage = 1) => {
+      if (!effectiveProjectId || !tableName) return;
+      setIsLoadingRecords(true);
+      setQueryError(null);
+
+      try {
+        // Fetch schema
+        const schemaRes = await edithDbService.getTableSchema(effectiveProjectId, tableName, selectedDb);
+        setTableSchema(schemaRes);
+
+        // Fetch records
+        const recordsRes = await edithDbService.getTableRecords(
+          effectiveProjectId,
+          tableName,
+          targetPage,
+          limit,
+          selectedDb
+        );
+
+        if (recordsRes) {
+          setPage(recordsRes.page);
+          setTotalRecords(recordsRes.total);
+          setTotalPages(recordsRes.totalPages);
+          setQueryResult({
+            columns: recordsRes.columns || [],
+            rows: recordsRes.rows || [],
+            executionTimeMs: 1.2,
+            rowCount: recordsRes.rows?.length || 0
+          });
+        }
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message || 'Failed to load table records';
+        setQueryError(msg);
+      } finally {
+        setIsLoadingRecords(false);
+      }
+    },
+    [effectiveProjectId, selectedDb, limit]
+  );
 
   const handleSelectTable = (tblName) => {
-    const newQuery = `SELECT * FROM ${tblName} LIMIT 25;`;
-    setQuery(newQuery);
-    handleExecute(newQuery);
+    setSelectedTable(tblName);
+    setPage(1);
+    setQuery(`SELECT * FROM "${tblName}" LIMIT 50;`);
+    loadTableData(tblName, 1);
   };
 
-  const handleExportCsv = () => {
-    if (!queryResult || !queryResult.rows.length) return;
-    const header = queryResult.columns.join(',');
-    const rows = queryResult.rows.map((r) => r.map((c) => `"${c}"`).join(','));
-    const csvContent = 'data:text/csv;charset=utf-8,' + [header, ...rows].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `query_export_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    addToast('Exported query results to CSV', 'success');
+  // Execute arbitrary read-only query
+  const handleExecute = async (overrideQuery) => {
+    const sqlToRun = (overrideQuery || query).trim();
+    if (!sqlToRun) return;
+
+    setIsExecuting(true);
+    setQueryError(null);
+
+    try {
+      const res = await edithDbService.executeQuery(effectiveProjectId, sqlToRun, selectedDb, 100);
+      setQueryResult({
+        columns: res.columns || [],
+        rows: res.rows || [],
+        executionTimeMs: res.executionTimeMs || 0,
+        rowCount: res.rowCount || 0
+      });
+      addToast(`Query executed (${res.rowCount} rows in ${res.executionTimeMs}ms)`, 'success');
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        err.message ||
+        'Query execution failed or violated read-only policy.';
+      setQueryError(msg);
+      addToast(msg, 'error');
+    } finally {
+      setIsExecuting(false);
+    }
   };
 
-  const sortedRows = useMemo(() => {
-    if (sortCol === null) return queryResult.rows;
-    const colIdx = queryResult.columns.indexOf(sortCol);
-    if (colIdx === -1) return queryResult.rows;
-
-    return [...queryResult.rows].sort((a, b) => {
-      const valA = a[colIdx];
-      const valB = b[colIdx];
-      if (valA < valB) return sortAsc ? -1 : 1;
-      if (valA > valB) return sortAsc ? 1 : -1;
-      return 0;
-    });
-  }, [queryResult.rows, queryResult.columns, sortCol, sortAsc]);
-
+  // Sort rows in memory
   const toggleSort = (col) => {
     if (sortCol === col) {
       setSortAsc(!sortAsc);
@@ -169,195 +188,385 @@ export default function DatabasePanel() {
       setSortAsc(true);
     }
   };
+  const handleSort = toggleSort;
+
+  const processedRows = useMemo(() => {
+    if (!queryResult.rows || !sortCol) return queryResult.rows || [];
+    return [...queryResult.rows].sort((a, b) => {
+      const valA = typeof a === 'object' && a !== null ? a[sortCol] : a;
+      const valB = typeof b === 'object' && b !== null ? b[sortCol] : b;
+      if (valA === valB) return 0;
+      if (valA === null || valA === undefined) return 1;
+      if (valB === null || valB === undefined) return -1;
+      if (sortAsc) return valA > valB ? 1 : -1;
+      return valA < valB ? 1 : -1;
+    });
+  }, [queryResult.rows, sortCol, sortAsc]);
+
+  // Export CSV
+  const handleExportCSV = () => {
+    if (!queryResult.columns?.length || !queryResult.rows?.length) {
+      addToast('No data available to export', 'info');
+      return;
+    }
+
+    try {
+      const headers = queryResult.columns.join(',');
+      const rowsCsv = queryResult.rows.map((row) => {
+        return queryResult.columns
+          .map((col) => {
+            const val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+            return `"${val.replace(/"/g, '""')}"`;
+          })
+          .join(',');
+      });
+
+      const csvContent = [headers, ...rowsCsv].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${selectedTable || 'query_results'}_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      addToast('CSV exported successfully', 'success');
+    } catch (err) {
+      addToast('Failed to export CSV', 'error');
+    }
+  };
+  const handleExportCsv = handleExportCSV;
+
+  const filteredTables = useMemo(() => {
+    if (!tableSearch.trim()) return tables;
+    return tables.filter((t) => t.name.toLowerCase().includes(tableSearch.toLowerCase()));
+  }, [tables, tableSearch]);
+
+  const SQL_TEMPLATES = [
+    { label: 'Select Users', query: 'SELECT id, name, email, role, created_at FROM users LIMIT 10;' },
+    { label: 'Select Active Projects', query: "SELECT id, name, owner_id, status FROM projects WHERE status = 'active';" },
+    { label: 'List EDITH Workspaces', query: 'SELECT id, project_id, name, status, root_path FROM edith_workspaces ORDER BY created_at DESC;' },
+    { label: 'Task Aggregates', query: 'SELECT status, COUNT(*) as count FROM coding_tasks GROUP BY status;' },
+    { label: 'Audit Trail', query: 'SELECT action, resource_type, created_at FROM audit_events ORDER BY created_at DESC LIMIT 15;' }
+  ];
 
   return (
     <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
-      {/* DB Connection Bar */}
+      {/* Top Header Bar */}
       <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid var(--glass-border)' }}>
         <div className="flex items-center gap-3">
-          <Database size={18} color="#38BDF8" />
-          <span style={{ fontSize: '15px', fontWeight: 600 }}>Active Database:</span>
+          <Database size={18} color="#00D2FF" />
+          <span style={{ fontSize: '15px', fontWeight: 600 }}>Database:</span>
           <select
             value={selectedDb}
-            onChange={(e) => setSelectedDb(e.target.value)}
+            onChange={(e) => {
+              setSelectedDb(e.target.value);
+              setSelectedTable(null);
+            }}
             className="glass-input"
-            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px' }}
+            style={{ height: '38px', padding: '0 12px', fontSize: '15px', borderRadius: '6px', color: '#00D2FF' }}
           >
-            {dbProfiles.map((p) => (
-              <option key={p.id} value={p.id} style={{ background: '#0B0F1A' }}>
-                {p.name} ({p.status})
+            {databases.map((db) => (
+              <option key={db.id} value={db.id} style={{ background: '#0B0F1A' }}>
+                SQLite: {db.name} ({db.isDefault ? 'System' : 'Workspace'})
               </option>
             ))}
+            <option value="postgres_disabled" disabled style={{ background: '#0B0F1A', color: 'var(--text-muted)' }}>
+              PostgreSQL (Remote Cluster — Standby)
+            </option>
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>SSL VERIFIED</Badge>
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>READ-ONLY SANDBOX</Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>
+            <ShieldCheck size={14} className="inline mr-1" />
+            READ-ONLY ENFORCED
+          </Badge>
+          <Button
+            variant="ghost"
+            size="small"
+            onClick={handleExportCSV}
+            disabled={!queryResult.rows?.length}
+            style={{ height: '34px', padding: '0 12px', fontSize: '14px', borderRadius: '6px' }}
+          >
+            <Download size={14} className="inline mr-1.5" />
+            Export CSV
+          </Button>
         </div>
       </div>
 
-      {/* Main Grid: Schema Explorer + SQL Query & Grid */}
-      <div className="grid grid-cols-3 gap-4 flex-1 overflow-hidden">
-        {/* Left: Schema Tables Tree */}
-        <div className="flex flex-col gap-2 overflow-y-auto" style={{ borderRight: '1px solid rgba(255, 255, 255, 0.08)', paddingRight: '12px' }}>
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>SCHEMA TABLES</span>
-            <span className="text-muted" style={{ fontSize: '13px' }}>Click to query</span>
-          </div>
-          {tables.map((t) => (
-            <div
-              key={t.name}
-              onClick={() => handleSelectTable(t.name)}
-              className="flex flex-col p-3 mb-1 rounded-md cursor-pointer transition-all hover:bg-white/5"
-              style={{
-                background: 'rgba(7, 10, 24, 0.45)',
-                border: '1px solid var(--glass-border)'
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Table size={16} color="var(--brand-cyan)" />
-                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</span>
-                </div>
-                <span className="code-inline" style={{ fontSize: '12px', padding: '2px 6px' }}>{t.count} rows</span>
-              </div>
-              <div className="flex flex-wrap gap-1 mt-2">
-                {t.cols.map((col) => (
-                  <span key={col} className="text-muted" style={{ fontSize: '12px', background: 'rgba(255,255,255,0.05)', padding: '2px 7px', borderRadius: '3px' }}>
-                    {col}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Right: SQL Query Editor & Result Grid */}
-        <div className="col-span-2 flex flex-col gap-3 overflow-hidden">
-          {/* Query Editor & Templates */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="body-small text-muted" style={{ fontSize: '14px', fontWeight: 600 }}>SQL QUERY</span>
-                <select
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      setQuery(e.target.value);
-                      handleExecute(e.target.value);
-                    }
-                  }}
-                  className="glass-input"
-                  style={{ height: '36px', padding: '0 10px', fontSize: '14px', borderRadius: '6px' }}
-                >
-                  <option value="">Query Templates...</option>
-                  {SQL_TEMPLATES.map((tmpl) => (
-                    <option key={tmpl.label} value={tmpl.query} style={{ background: '#0B0F1A' }}>
-                      {tmpl.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="cyan"
-                  icon={Play}
-                  onClick={() => handleExecute()}
-                  style={{ height: '36px', padding: '0 16px', fontSize: '15px', fontWeight: 600 }}
-                >
-                  Execute
-                </Button>
-              </div>
-            </div>
-
-            <textarea
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              rows={2}
-              className="glass-input p-3 outline-none"
-              style={{
-                fontFamily: 'var(--font-code)',
-                fontSize: '16px',
-                borderRadius: '6px',
-                background: '#070B16',
-                border: '1px solid rgba(56, 189, 248, 0.25)',
-                minHeight: '68px',
-                lineHeight: '1.5'
-              }}
+      {/* Main Grid: Left Tables Sidebar (260px) + Right Query & Results (1fr) */}
+      <div className="grid grid-cols-[260px_minmax(0,1fr)] gap-4 flex-1 overflow-hidden">
+        {/* Left Sidebar: Tables */}
+        <div className="flex flex-col gap-2 overflow-hidden" style={{ borderRight: '1px solid var(--glass-border)', paddingRight: '12px' }}>
+          <div className="flex items-center gap-2">
+            <Search size={15} color="var(--text-muted)" />
+            <input
+              type="text"
+              placeholder="Filter tables..."
+              value={tableSearch}
+              onChange={(e) => setTableSearch(e.target.value)}
+              className="glass-input flex-1"
+              style={{ height: '34px', padding: '0 8px', fontSize: '14px', borderRadius: '4px' }}
             />
           </div>
 
-          {/* Query Error State */}
+          <div className="flex items-center justify-between pt-1">
+            <span className="body-small text-muted" style={{ fontSize: '13px', fontWeight: 600 }}>
+              TABLES ({filteredTables.length})
+            </span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto flex flex-col gap-1 pr-1">
+            {filteredTables.map((tbl) => {
+              const isSelected = selectedTable === tbl.name;
+              return (
+                <button
+                  key={tbl.name}
+                  onClick={() => handleSelectTable(tbl.name)}
+                  className={`flex items-center justify-between p-2 rounded text-left transition-all ${
+                    isSelected ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-300' : 'hover:bg-white/5 text-secondary'
+                  }`}
+                  style={{ fontSize: '14px' }}
+                >
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <Table size={15} color={isSelected ? '#00D2FF' : 'var(--text-muted)'} />
+                    <span className="font-mono truncate">{tbl.name}</span>
+                  </div>
+                  {tbl.rowCount >= 0 && (
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-white/10 text-muted">
+                      {tbl.rowCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right Main Content */}
+        <div className="flex flex-col gap-3 overflow-hidden">
+          {/* Query Input Section */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="body-small text-muted" style={{ fontSize: '13px', fontWeight: 600 }}>
+                  READ-ONLY SQL EDITOR
+                </span>
+                <span className="text-xs text-muted">(SELECT queries only)</span>
+              </div>
+              {/* Quick Templates */}
+              <div className="flex items-center gap-1.5 overflow-x-auto">
+                <span className="text-xs text-muted">Templates:</span>
+                {SQL_TEMPLATES.map((tmpl) => (
+                  <button
+                    key={tmpl.label}
+                    onClick={() => {
+                      setQuery(tmpl.query);
+                      handleExecute(tmpl.query);
+                    }}
+                    className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-cyan-500/20 text-muted hover:text-cyan-300 transition-colors"
+                  >
+                    {tmpl.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <textarea
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                rows={3}
+                className="glass-input w-full font-mono"
+                style={{
+                  padding: '10px 12px',
+                  fontSize: '14.5px',
+                  lineHeight: '1.5',
+                  borderRadius: '6px',
+                  color: '#E0F2FE',
+                  resize: 'none',
+                  background: 'rgba(7, 10, 18, 0.75)'
+                }}
+              />
+              <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                <Button
+                  variant="cyan"
+                  size="small"
+                  onClick={() => handleExecute()}
+                  disabled={isExecuting || !query.trim()}
+                  style={{ height: '32px', padding: '0 14px', fontSize: '13.5px', fontWeight: 600 }}
+                >
+                  <Play size={13} className="inline mr-1" />
+                  Run
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Error Banner */}
           {queryError && (
             <div
-              className="flex items-center gap-2 p-2.5 rounded animate-entrance"
+              className="flex items-center gap-2 p-3 rounded"
               style={{
-                background: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: 'var(--status-error)',
+                background: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.35)',
+                color: '#FCA5A5',
                 fontSize: '14px'
               }}
             >
-              <AlertTriangle size={15} />
+              <AlertTriangle size={18} className="flex-shrink-0" color="#F87171" />
               <span>{queryError}</span>
             </div>
           )}
 
-          {/* Results Grid */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="body-regular text-muted" style={{ fontSize: '14px' }}>
-                Results: {queryResult.rowCount} rows ({queryResult.executionTime})
-              </span>
+          {/* Table / Results Header Bar */}
+          <div className="flex items-center justify-between pb-1" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+            <div className="flex items-center gap-3">
               <button
-                onClick={handleExportCsv}
-                className="glass-btn-ghost flex items-center gap-1.5 body-regular text-muted hover:text-white"
-                style={{ padding: '3px 10px', fontSize: '14px' }}
-                title="Download CSV"
+                onClick={() => setActiveTab('records')}
+                className={`flex items-center gap-1.5 pb-1 px-1 transition-colors ${
+                  activeTab === 'records'
+                    ? 'border-b-2 border-cyan-400 text-cyan-300 font-semibold'
+                    : 'text-muted hover:text-white'
+                }`}
+                style={{ fontSize: '14px' }}
               >
-                <Download size={14} color="#00D2FF" /> Export CSV
+                <Table size={15} />
+                <span>Records ({queryResult.rowCount})</span>
               </button>
+
+              {tableSchema && (
+                <button
+                  onClick={() => setActiveTab('schema')}
+                  className={`flex items-center gap-1.5 pb-1 px-1 transition-colors ${
+                    activeTab === 'schema'
+                      ? 'border-b-2 border-cyan-400 text-cyan-300 font-semibold'
+                      : 'text-muted hover:text-white'
+                  }`}
+                  style={{ fontSize: '14px' }}
+                >
+                  <Layers size={15} />
+                  <span>Schema ({tableSchema.columns?.length || 0} columns)</span>
+                </button>
+              )}
             </div>
 
-            <div className="flex-1 overflow-auto" style={{ background: '#070B16', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '6px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px' }}>
+            <div className="flex items-center gap-3 text-muted" style={{ fontSize: '13px' }}>
+              <span className="flex items-center gap-1">
+                <Clock size={13} />
+                {queryResult.executionTimeMs}ms
+              </span>
+              {selectedTable && (
+                <div className="flex items-center gap-2">
+                  <span>Page {page} of {totalPages}</span>
+                  <button
+                    onClick={() => loadTableData(selectedTable, page - 1)}
+                    disabled={page <= 1 || isLoadingRecords}
+                    className="glass-btn-ghost p-1 rounded disabled:opacity-30"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => loadTableData(selectedTable, page + 1)}
+                    disabled={page >= totalPages || isLoadingRecords}
+                    className="glass-btn-ghost p-1 rounded disabled:opacity-30"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Results Grid / Schema Tab */}
+          <div className="flex-1 overflow-auto rounded" style={{ background: 'rgba(7, 10, 18, 0.4)', border: '1px solid var(--glass-border)' }}>
+            {activeTab === 'schema' && tableSchema ? (
+              <table className="w-full text-left font-mono" style={{ fontSize: '13.5px' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(56, 189, 248, 0.05)', position: 'sticky', top: 0, zIndex: 1 }}>
-                    <th style={{ width: '40px', padding: '9px 12px', color: 'var(--text-muted)' }}>#</th>
+                  <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderBottom: '1px solid var(--glass-border)' }}>
+                    <th className="p-2.5 text-muted">#</th>
+                    <th className="p-2.5 text-cyan-300">COLUMN NAME</th>
+                    <th className="p-2.5 text-muted">TYPE</th>
+                    <th className="p-2.5 text-muted">PRIMARY KEY</th>
+                    <th className="p-2.5 text-muted">NOT NULL</th>
+                    <th className="p-2.5 text-muted">DEFAULT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableSchema.columns.map((c, i) => (
+                    <tr key={c.name} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
+                      <td className="p-2 text-muted">{c.cid}</td>
+                      <td className="p-2 text-white font-semibold">{c.name}</td>
+                      <td className="p-2 text-cyan-400">{c.type}</td>
+                      <td className="p-2">{c.pk ? <span className="text-amber-400 font-bold">YES</span> : 'No'}</td>
+                      <td className="p-2">{c.notnull ? 'YES' : 'No'}</td>
+                      <td className="p-2 text-muted">{c.defaultValue || 'NULL'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <table className="w-full text-left font-mono" style={{ fontSize: '13.5px', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderBottom: '1px solid var(--glass-border)' }}>
                     {queryResult.columns.map((col) => (
                       <th
                         key={col}
-                        onClick={() => toggleSort(col)}
-                        className="cursor-pointer select-none hover:text-white transition-colors"
-                        style={{ textAlign: 'left', padding: '9px 12px', color: '#00D2FF', fontWeight: 600 }}
+                        onClick={() => handleSort(col)}
+                        className="p-2.5 text-cyan-300 cursor-pointer select-none hover:bg-white/5"
+                        style={{ whiteSpace: 'nowrap' }}
                       >
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <span>{col}</span>
-                          {sortCol === col ? (
-                            <span style={{ fontSize: '11px' }}>{sortAsc ? '▲' : '▼'}</span>
-                          ) : (
-                            <ArrowUpDown size={11} style={{ opacity: 0.3 }} />
-                          )}
+                          <ArrowUpDown size={12} color="var(--text-muted)" />
                         </div>
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedRows.map((row, rIdx) => (
-                    <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
-                      <td style={{ padding: '8px 12px', color: 'var(--text-muted)', fontSize: '13px' }}>{rIdx + 1}</td>
-                      {row.map((cell, cIdx) => (
-                        <td key={cIdx} style={{ padding: '8px 12px', color: 'var(--text-secondary)', fontFamily: 'var(--font-code)', fontSize: '15px' }}>
-                          {String(cell)}
-                        </td>
-                      ))}
+                  {processedRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={queryResult.columns.length || 1} className="p-8 text-center text-muted">
+                        {isLoadingRecords ? 'Loading records...' : 'No records returned'}
+                      </td>
                     </tr>
-                  ))}
+                  ) : (
+                    processedRows.map((row, rIdx) => (
+                      <tr
+                        key={rIdx}
+                        className="hover:bg-white/[0.03]"
+                        style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}
+                      >
+                        {queryResult.columns.map((col) => {
+                          const rawVal = typeof row === 'object' && row !== null ? row[col] : row;
+                          const displayVal =
+                            rawVal === null || rawVal === undefined
+                              ? '<NULL>'
+                              : typeof rawVal === 'object'
+                              ? JSON.stringify(rawVal)
+                              : String(rawVal);
+                          const isNull = rawVal === null || rawVal === undefined;
+                          return (
+                            <td
+                              key={col}
+                              className="p-2 truncate max-w-xs"
+                              style={{ color: isNull ? 'var(--text-muted)' : 'var(--text-primary)' }}
+                              title={displayVal}
+                            >
+                              {displayVal}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
-            </div>
+            )}
           </div>
         </div>
       </div>

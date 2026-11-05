@@ -50,6 +50,10 @@ class ApiClient {
       ...options.headers
     };
 
+    if (options.body && typeof FormData !== 'undefined' && options.body instanceof FormData) {
+      delete headers['Content-Type'];
+    }
+
     const token = this.getToken();
     if (token && !headers['Authorization']) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -115,6 +119,22 @@ class ApiClient {
       ...options,
       method: 'PATCH',
       body: body ? JSON.stringify(body) : undefined
+    });
+  }
+
+  put(endpoint, body, options) {
+    return this.request(endpoint, {
+      ...options,
+      method: 'PUT',
+      body: body ? JSON.stringify(body) : undefined
+    });
+  }
+
+  upload(endpoint, formData, options) {
+    return this.request(endpoint, {
+      ...options,
+      method: 'POST',
+      body: formData
     });
   }
 

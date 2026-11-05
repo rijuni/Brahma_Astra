@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Terminal,
   AlertTriangle,
@@ -37,8 +37,11 @@ import ProjectSummaryPanel from './components/ProjectSummaryPanel';
 import TaskHistoryPanel from './components/TaskHistoryPanel';
 import EdithSettingsPanel from './components/EdithSettingsPanel';
 import Badge from '../../components/common/Badge';
+import Modal from '../../components/common/Modal';
+import Button from '../../components/common/Button';
 import { EDITH_SAMPLE_PROJECTS } from '../../config/edith-sample-projects';
 import { edithService } from '../../services/edith/edith-service';
+import { edithFsService } from '../../services/edith/edith-fs-service';
 import { useToast } from '../../components/feedback/Toast';
 
 export default function EdithWorkspace({ onBackToFriday }) {
@@ -50,6 +53,8 @@ export default function EdithWorkspace({ onBackToFriday }) {
   const [openFiles, setOpenFiles] = useState(activeProject.files.slice(0, 3));
   const [activeFilePath, setActiveFilePath] = useState(activeProject.files[0]?.path || '');
   const [dirtyFilePaths, setDirtyFilePaths] = useState(new Set());
+  const [isSaving, setIsSaving] = useState(false);
+  const [unsavedConfirmFile, setUnsavedConfirmFile] = useState(null);
 
   // Active navigation view on activity bar
   const [activeNav, setActiveNav] = useState('workspace');
@@ -186,60 +191,197 @@ export default function EdithWorkspace({ onBackToFriday }) {
 
   const activeFile = openFiles.find((f) => f.path === activeFilePath) || openFiles[0];
 
+  // Helper to flatten hierarchical tree into file list
+  const flattenTreeNodes = (node, result = []) => {
+    if (!node) return result;
+    if (node.type === 'file') {
+      result.push({
+        path: node.path,
+        name: node.name,
+        size: node.size,
+        extension: node.extension,
+        updatedAt: node.updatedAt
+      });
+    } else if (Array.isArray(node.children)) {
+      for (const child of node.children) {
+        flattenTreeNodes(child, result);
+      }
+    }
+    return result;
+  };
+
+  // Load live filesystem tree for active workspace
+  const reloadWorkspaceTree = async (projId) => {
+    if (!projId) return;
+    try {
+      const tree = await edithFsService.getFileTree(projId);
+      if (tree) {
+        const flat = flattenTreeNodes(tree);
+        if (flat.length > 0) {
+          setProjects((prev) =>
+            prev.map((p) => (p.id === projId || p.projectId === projId ? { ...p, files: flat } : p))
+          );
+          return flat;
+        }
+      }
+    } catch (err) {
+      console.warn('Real filesystem tree lookup fallback:', err);
+    }
+    return null;
+  };
+
+  // Initialize workspaces on mount
+  useEffect(() => {
+    let mounted = true;
+    async function initWorkspaceRoots() {
+      try {
+        const list = await edithFsService.getProjects();
+        if (mounted && Array.isArray(list) && list.length > 0) {
+          const remoteProjects = list.map((ws) => ({
+            id: ws.projectId || ws.id,
+            workspaceId: ws.id,
+            name: ws.projectName || ws.name,
+            rootPath: ws.rootPath,
+            description: `Host Root: ${ws.rootPath}`,
+            files: []
+          }));
+          setProjects(remoteProjects);
+          setActiveProjectId(remoteProjects[0].id);
+          const flat = await reloadWorkspaceTree(remoteProjects[0].id);
+          if (flat && flat.length > 0 && mounted) {
+            const preferred =
+              flat.find((f) => /^(readme\.md|package\.json|src\/app|main\.)/i.test(f.name || f.path)) ||
+              flat.find((f) => /\.(jsx?|tsx?|py|json|md|html|css)$/i.test(f.name || f.path)) ||
+              flat[0];
+            handleOpenFile(preferred);
+          }
+        } else {
+          // Auto-register default workspace root for Friday-Edith
+          try {
+            const reg = await edithFsService.registerProject({
+              name: 'Friday-Edith Workspace',
+              rootPath: 'M:\\Friday-Edith'
+            });
+            if (mounted && reg) {
+              const defaultProj = {
+                id: reg.projectId || reg.id,
+                workspaceId: reg.id,
+                name: reg.projectName || reg.name,
+                rootPath: reg.rootPath,
+                description: `Host Root: ${reg.rootPath}`,
+                files: []
+              };
+              setProjects([defaultProj]);
+              setActiveProjectId(defaultProj.id);
+              const flat = await reloadWorkspaceTree(defaultProj.id);
+              if (flat && flat.length > 0 && mounted) {
+                const preferred =
+                  flat.find((f) => /^(readme\.md|package\.json|src\/app|main\.)/i.test(f.name || f.path)) ||
+                  flat.find((f) => /\.(jsx?|tsx?|py|json|md|html|css)$/i.test(f.name || f.path)) ||
+                  flat[0];
+                handleOpenFile(preferred);
+              }
+            }
+          } catch (autoErr) {
+            console.warn('Auto-registering default root failed, using sample projects:', autoErr);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not query real workspace projects:', err);
+      }
+    }
+
+    initWorkspaceRoots();
+    return () => { mounted = false; };
+  }, []);
+
   // Project selection handler
-  const handleSelectProject = (projectId) => {
+  const handleSelectProject = async (projectId) => {
     setActiveProjectId(projectId);
+    const flat = await reloadWorkspaceTree(projectId);
     const target = projects.find((p) => p.id === projectId);
-    if (target && target.files.length > 0) {
-      setOpenFiles(target.files.slice(0, 3));
-      setActiveFilePath(target.files[0].path);
+    const availableFiles = (flat && flat.length > 0) ? flat : (target?.files || []);
+    if (availableFiles.length > 0) {
+      handleOpenFile(availableFiles[0]);
       setDirtyFilePaths(new Set());
     }
   };
 
   // Create new project
-  const handleCreateProject = (newProj) => {
-    const created = {
-      id: `p-${Date.now()}`,
-      name: newProj.name,
-      description: newProj.description,
-      path: `/projects/${newProj.name.toLowerCase().replace(/\\s+/g, '-')}`,
-      techStack: ['Python', 'FastAPI', 'React'],
-      status: 'active',
-      stats: { files: 1, commits: 1, lastUpdated: 'Just now' },
-      files: [
-        {
-          path: 'app.py',
-          name: 'app.py',
-          language: 'python',
-          content: `# ${newProj.name}\\nprint("Initialized EDITH project")\\n`
-        }
-      ]
-    };
-    setProjects((prev) => [created, ...prev]);
-    handleSelectProject(created.id);
+  const handleCreateProject = async (newProj) => {
+    try {
+      const reg = await edithFsService.registerProject({
+        name: newProj.name,
+        rootPath: newProj.rootPath || 'M:\\Friday-Edith'
+      });
+      const created = {
+        id: reg.projectId || reg.id,
+        name: reg.name,
+        rootPath: reg.rootPath,
+        description: `Host Root: ${reg.rootPath}`,
+        files: []
+      };
+      setProjects((prev) => [created, ...prev]);
+      handleSelectProject(created.id);
+      addToast(`Registered workspace "${created.name}"`, 'success');
+    } catch (err) {
+      addToast(`Failed to register workspace: ${err.message}`, 'error');
+    }
   };
 
-  // Open / select a file tab
-  const handleOpenFile = (file) => {
+  // Open / select a file tab with live disk read
+  const handleOpenFile = async (file) => {
     const exists = openFiles.find((f) => f.path === file.path);
     if (!exists) {
-      setOpenFiles((prev) => [...prev, file]);
+      let fileWithContent = { ...file };
+      if (fileWithContent.content === undefined) {
+        try {
+          const res = await edithFsService.readFile(activeProjectId, file.path);
+          fileWithContent.content = res.content;
+        } catch (err) {
+          console.warn('Could not read real file from disk:', err);
+          fileWithContent.content = file.content || `// File: ${file.name}\n`;
+        }
+      }
+      setOpenFiles((prev) => [...prev, fileWithContent]);
     }
     setActiveFilePath(file.path);
   };
 
-  // Close tab
-  const handleCloseTab = (filePath) => {
+  // Force close a tab without prompt
+  const forceCloseTab = (filePath) => {
     const remaining = openFiles.filter((f) => f.path !== filePath);
     setOpenFiles(remaining);
+    setDirtyFilePaths((prev) => {
+      const next = new Set(prev);
+      next.delete(filePath);
+      return next;
+    });
     if (activeFilePath === filePath && remaining.length > 0) {
       setActiveFilePath(remaining[remaining.length - 1].path);
     }
   };
 
+  // Close tab with dirty check
+  const handleCloseTab = (filePath) => {
+    if (dirtyFilePaths.has(filePath)) {
+      const target = openFiles.find((f) => f.path === filePath) || {
+        path: filePath,
+        name: filePath.split('/').pop() || filePath
+      };
+      setUnsavedConfirmFile(target);
+      return;
+    }
+    forceCloseTab(filePath);
+  };
+
   // Close all tabs
   const handleCloseAllTabs = () => {
+    const dirty = openFiles.filter((f) => dirtyFilePaths.has(f.path));
+    if (dirty.length > 0) {
+      setUnsavedConfirmFile(dirty[0]);
+      return;
+    }
     setOpenFiles([]);
     setActiveFilePath('');
   };
@@ -259,13 +401,25 @@ export default function EdithWorkspace({ onBackToFriday }) {
     setDirtyFilePaths((prev) => new Set(prev).add(filePath));
   };
 
-  // Save active file
-  const handleSaveFile = (filePath) => {
-    setDirtyFilePaths((prev) => {
-      const next = new Set(prev);
-      next.delete(filePath);
-      return next;
-    });
+  // Save active file persistently to host disk
+  const handleSaveFile = async (filePath) => {
+    const target = openFiles.find((f) => f.path === filePath);
+    if (!target) return;
+
+    setIsSaving(true);
+    try {
+      await edithFsService.writeFile(activeProjectId, filePath, target.content || '');
+      setDirtyFilePaths((prev) => {
+        const next = new Set(prev);
+        next.delete(filePath);
+        return next;
+      });
+      addToast(`Saved "${target.name || filePath}" to disk`, 'success');
+    } catch (err) {
+      addToast(`Save failed: ${err.message}`, 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Run active file in sandboxed terminal
@@ -274,21 +428,19 @@ export default function EdithWorkspace({ onBackToFriday }) {
     addToast(`Dispatching "${file.name}" to EDITH execution boundary...`, 'info');
   };
 
-  // Add new file to active project
-  const handleAddFile = (fileName) => {
-    const cleanName = fileName.replace(/^\/+/, '');
-    const newFile = {
-      path: cleanName,
-      name: cleanName.split('/').pop() || cleanName,
-      language: cleanName.split('.').pop() || 'plaintext',
-      content: `// New file: ${cleanName}\n`
-    };
-    setProjects((prev) =>
-      prev.map((p) =>
-        p.id === activeProjectId ? { ...p, files: [newFile, ...p.files] } : p
-      )
-    );
-    handleOpenFile(newFile);
+  // Add new file or folder to active project
+  const handleAddFile = async (itemName, type = 'file') => {
+    const cleanName = itemName.replace(/^\/+/, '');
+    try {
+      await edithFsService.createItem(activeProjectId, cleanName, type);
+      addToast(`Created ${type} "${cleanName}"`, 'success');
+      await reloadWorkspaceTree(activeProjectId);
+      if (type !== 'directory') {
+        handleOpenFile({ path: cleanName, name: cleanName.split('/').pop() || cleanName });
+      }
+    } catch (err) {
+      addToast(`Create failed: ${err.message}`, 'error');
+    }
   };
 
   // Delete project
@@ -314,8 +466,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       ...orig,
       id: `p-${Date.now()}`,
       name: `${orig.name} (Copy)`,
-      path: `${orig.path}-copy`,
-      stats: { ...orig.stats, lastUpdated: 'Just now' },
+      path: `${orig.path || ''}-copy`,
       files: (orig.files || []).map((f) => ({ ...f }))
     };
     setProjects((prev) => [duplicated, ...prev]);
@@ -324,47 +475,38 @@ export default function EdithWorkspace({ onBackToFriday }) {
   };
 
   // Delete file from active project
-  const handleDeleteFile = (filePath) => {
-    setProjects((prev) =>
-      prev.map((p) =>
-        p.id === activeProjectId
-          ? { ...p, files: p.files.filter((f) => f.path !== filePath) }
-          : p
-      )
-    );
-    handleCloseTab(filePath);
-    addToast(`Deleted file "${filePath}"`, 'info');
+  const handleDeleteFile = async (filePath) => {
+    try {
+      await edithFsService.deleteItem(activeProjectId, filePath);
+      forceCloseTab(filePath);
+      addToast(`Deleted "${filePath}"`, 'info');
+      await reloadWorkspaceTree(activeProjectId);
+    } catch (err) {
+      addToast(`Delete failed: ${err.message}`, 'error');
+    }
   };
 
   // Rename file in active project
-  const handleRenameFile = (oldPath, newPath) => {
+  const handleRenameFile = async (oldPath, newPath) => {
     if (!newPath || oldPath === newPath) return;
     const cleanNew = newPath.replace(/^\/+/, '');
-    setProjects((prev) =>
-      prev.map((p) =>
-        p.id === activeProjectId
-          ? {
-            ...p,
-            files: p.files.map((f) =>
-              f.path === oldPath
-                ? { ...f, path: cleanNew, name: cleanNew.split('/').pop() || cleanNew }
-                : f
-            )
-          }
-          : p
-      )
-    );
-    setOpenFiles((prev) =>
-      prev.map((f) =>
-        f.path === oldPath
-          ? { ...f, path: cleanNew, name: cleanNew.split('/').pop() || cleanNew }
-          : f
-      )
-    );
-    if (activeFilePath === oldPath) {
-      setActiveFilePath(cleanNew);
+    try {
+      await edithFsService.renameItem(activeProjectId, oldPath, cleanNew);
+      setOpenFiles((prev) =>
+        prev.map((f) =>
+          f.path === oldPath
+            ? { ...f, path: cleanNew, name: cleanNew.split('/').pop() || cleanNew }
+            : f
+        )
+      );
+      if (activeFilePath === oldPath) {
+        setActiveFilePath(cleanNew);
+      }
+      addToast(`Renamed to "${cleanNew}"`, 'success');
+      await reloadWorkspaceTree(activeProjectId);
+    } catch (err) {
+      addToast(`Rename failed: ${err.message}`, 'error');
     }
-    addToast(`Renamed to "${cleanNew}"`, 'success');
   };
 
   // Submit coding task to EDITH Assistant & backend
@@ -470,9 +612,9 @@ export default function EdithWorkspace({ onBackToFriday }) {
       case 'pipelines':
         return <PipelinesPanel />;
       case 'database':
-        return <DatabasePanel />;
+        return <DatabasePanel projectId={activeProjectId} activeProject={activeProject} />;
       case 'git':
-        return <GitPanel />;
+        return <GitPanel projectId={activeProjectId} activeProject={activeProject} />;
       case 'api_client':
         return <ApiClientPanel />;
       case 'summary':
@@ -500,7 +642,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'database') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><DatabasePanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><DatabasePanel projectId={activeProjectId} activeProject={activeProject} /></div>
       </EdithShell>
     );
   }
@@ -532,7 +674,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
   if (activeNav === 'git') {
     return (
       <EdithShell activeNav={activeNav} onSelectNav={setActiveNav} activeProject={activeProject} activeFile={activeFile} onBackToFriday={onBackToFriday}>
-        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><GitPanel /></div>
+        <div className="flex-1 flex flex-col w-full h-full overflow-hidden p-2"><GitPanel projectId={activeProjectId} activeProject={activeProject} /></div>
       </EdithShell>
     );
   }
@@ -734,6 +876,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
                 onSaveFile={handleSaveFile}
                 onRunFile={handleRunFile}
                 dirtyFilePaths={dirtyFilePaths}
+                isSaving={isSaving}
               />
             )}
           </div>
@@ -929,6 +1072,50 @@ export default function EdithWorkspace({ onBackToFriday }) {
           </div>
         )}
       </div>
+
+      {/* Unsaved Changes Confirmation Modal */}
+      <Modal
+        isOpen={Boolean(unsavedConfirmFile)}
+        onClose={() => setUnsavedConfirmFile(null)}
+        title="Unsaved Changes"
+        maxWidth="440px"
+      >
+        <div className="flex flex-col gap-4">
+          <p className="body-medium" style={{ color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.5 }}>
+            File <strong>"{unsavedConfirmFile?.name || unsavedConfirmFile?.path}"</strong> has unsaved changes. Do you want to save before closing or discard them?
+          </p>
+          <div className="flex justify-end gap-2.5" style={{ marginTop: '8px' }}>
+            <Button variant="ghost" size="small" onClick={() => setUnsavedConfirmFile(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              size="small"
+              onClick={() => {
+                if (unsavedConfirmFile) {
+                  forceCloseTab(unsavedConfirmFile.path);
+                  setUnsavedConfirmFile(null);
+                }
+              }}
+            >
+              Discard Changes
+            </Button>
+            <Button
+              variant="cyan"
+              size="small"
+              onClick={async () => {
+                if (unsavedConfirmFile) {
+                  await handleSaveFile(unsavedConfirmFile.path);
+                  forceCloseTab(unsavedConfirmFile.path);
+                  setUnsavedConfirmFile(null);
+                }
+              }}
+            >
+              Save & Close
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </EdithShell>
   );
 }

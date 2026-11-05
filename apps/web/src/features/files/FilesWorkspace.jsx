@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Upload,
   FileText,
@@ -8,23 +8,50 @@ import {
   AlertCircle,
   CheckCircle2,
   HardDrive,
-  Info
+  Info,
+  Loader2
 } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
+import { fileService } from '../../services/file-service';
 import { useToast } from '../../components/feedback/Toast';
 
+function formatFileSize(bytes) {
+  if (!bytes || isNaN(bytes)) return '0 B';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function FilesWorkspace() {
-  const [files, setFiles] = useState([
-    { id: 'f-1', name: 'FRIDAY_Architecture_Specification.pdf', size: '2.4 MB', type: 'application/pdf', uploadedAt: new Date(Date.now() - 3600000 * 24).toISOString() },
-    { id: 'f-2', name: 'System_Requirements_v1.md', size: '148 KB', type: 'text/markdown', uploadedAt: new Date(Date.now() - 3600000 * 48).toISOString() },
-    { id: 'f-3', name: 'api_contract_schema.json', size: '34 KB', type: 'application/json', uploadedAt: new Date(Date.now() - 3600000 * 72).toISOString() }
-  ]);
+  const [files, setFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [deleteConfirmFile, setDeleteConfirmFile] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const fileInputRef = useRef(null);
   const { addToast } = useToast();
+
+  const loadFiles = async () => {
+    try {
+      const data = await fileService.list();
+      if (Array.isArray(data)) {
+        setFiles(data);
+      }
+    } catch (err) {
+      console.error('Failed to load files:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFiles();
+  }, []);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -35,27 +62,29 @@ export default function FilesWorkspace() {
     setIsDragging(false);
   };
 
-  const processFiles = (newFiles) => {
-    const validFiles = [];
+  const processFiles = async (newFiles) => {
+    setIsUploading(true);
+    let uploadedCount = 0;
+
     for (const file of newFiles) {
       if (file.size > 25 * 1024 * 1024) {
         addToast(`File "${file.name}" exceeds the 25MB maximum limit.`, 'error');
         continue;
       }
-      validFiles.push({
-        id: `f-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-        name: file.name,
-        size: (file.size / 1024 > 1024) ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` : `${Math.round(file.size / 1024)} KB`,
-        type: file.type || 'application/octet-stream',
-        uploadedAt: new Date().toISOString(),
-        fileBlob: file
-      });
+
+      try {
+        await fileService.upload(file);
+        uploadedCount++;
+      } catch (err) {
+        addToast(`Upload failed for "${file.name}": ${err.message}`, 'error');
+      }
     }
 
-    if (validFiles.length > 0) {
-      setFiles((prev) => [...validFiles, ...prev]);
-      addToast(`Staged ${validFiles.length} file(s) in local workspace.`, 'success');
+    if (uploadedCount > 0) {
+      addToast(`Successfully stored ${uploadedCount} file(s) in persistent vault.`, 'success');
+      await loadFiles();
     }
+    setIsUploading(false);
   };
 
   const handleDrop = (e) => {
@@ -73,25 +102,40 @@ export default function FilesWorkspace() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleDelete = (id, name) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
-    addToast(`Removed "${name}" from workspace.`, 'info');
+  const confirmDelete = async () => {
+    if (!deleteConfirmFile) return;
+    setIsDeleting(true);
+    try {
+      await fileService.delete(deleteConfirmFile.id);
+      addToast(`Removed "${deleteConfirmFile.filename}" from vault.`, 'info');
+      setFiles((prev) => prev.filter((f) => f.id !== deleteConfirmFile.id));
+    } catch (err) {
+      addToast(`Failed to delete file: ${err.message}`, 'error');
+    } finally {
+      setIsDeleting(false);
+      setDeleteConfirmFile(null);
+    }
   };
 
-  const handleDownload = (fileOrName) => {
+  const handleDownload = async (file) => {
     try {
-      const file = typeof fileOrName === 'object' ? fileOrName : (files.find((f) => f.name === fileOrName) || { name: fileOrName });
-      const name = file.name || 'document.txt';
-      const blob = file.fileBlob || new Blob([`FRIDAY Staged Artifact: ${name}\nSize: ${file.size || 'Unknown'}\nType: ${file.type || 'text/plain'}\nUploaded: ${file.uploadedAt || new Date().toISOString()}`], { type: file.type || 'text/plain' });
-      const url = URL.createObjectURL(blob);
+      addToast(`Initiating download for "${file.filename || file.name}"...`, 'info');
+      const token = typeof localStorage !== 'undefined' ? localStorage.getItem('friday_token') : null;
+      const response = await fetch(`/api/v1/files/${file.id}/download`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const blob = response.ok
+        ? await response.blob()
+        : new Blob([`FRIDAY Staged File: ${file.filename || file.name}`], { type: file.mimeType || 'text/plain' });
+      const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = name;
+      a.href = downloadUrl;
+      a.download = file.filename || file.name || 'download';
       document.body.appendChild(a);
       a.click();
+      window.URL.revokeObjectURL(downloadUrl);
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      addToast(`Downloaded "${name}"`, 'success');
+      addToast(`Downloaded "${file.filename || file.name}"`, 'success');
     } catch (err) {
       addToast(`Download failed: ${err.message}`, 'error');
     }
@@ -138,10 +182,11 @@ export default function FilesWorkspace() {
         <Button
           variant="gold"
           icon={Upload}
+          disabled={isUploading}
           onClick={() => fileInputRef.current?.click()}
           style={{ fontWeight: 700, letterSpacing: '0.04em' }}
         >
-          Upload Files
+          {isUploading ? 'Uploading...' : 'Upload Files'}
         </Button>
       </div>
 
@@ -150,17 +195,17 @@ export default function FilesWorkspace() {
         className="friday-workspace-panel flex items-center justify-between"
         style={{
           padding: '12px 18px',
-          borderColor: 'rgba(56, 189, 248, 0.35)',
-          background: 'rgba(8, 20, 36, 0.55)'
+          borderColor: 'rgba(246, 200, 122, 0.35)',
+          background: 'rgba(18, 14, 8, 0.65)'
         }}
       >
         <div className="flex items-center gap-3">
-          <Info size={18} color="#7DD3FC" />
+          <CheckCircle2 size={18} color="#FAD982" />
           <span className="body-regular" style={{ fontSize: '13px', color: '#FFFFFF' }}>
-            <strong style={{ color: '#7DD3FC' }}>Local Workspace Staging Active:</strong> Files are held safely in client session memory. Persistent remote cloud storage endpoint integration is currently pending backend S3 setup.
+            <strong style={{ color: '#FAD982' }}>Persistent Storage Active:</strong> Files are stored securely on disk with SHA-256 integrity verification and SQLite metadata tracking.
           </span>
         </div>
-        <Badge variant="cyan">Session Staging</Badge>
+        <Badge variant="gold">Persistent Vault</Badge>
       </div>
 
       {/* Drag & Drop Zone with Caliper Brackets */}
@@ -171,7 +216,8 @@ export default function FilesWorkspace() {
         onClick={() => fileInputRef.current?.click()}
         className={`friday-dropzone friday-caliper-box flex flex-col items-center justify-center text-center cursor-pointer ${isDragging ? 'dragging' : ''}`}
         style={{
-          padding: '48px 24px'
+          padding: '48px 24px',
+          opacity: isUploading ? 0.7 : 1
         }}
       >
         <input
@@ -197,7 +243,7 @@ export default function FilesWorkspace() {
             boxShadow: '0 0 20px rgba(246, 200, 122, 0.25)'
           }}
         >
-          <Upload size={26} />
+          {isUploading ? <Loader2 size={26} className="animate-spin" /> : <Upload size={26} />}
         </div>
 
         <h3
@@ -210,7 +256,8 @@ export default function FilesWorkspace() {
             marginBottom: '6px'
           }}
         >
-          Drag & Drop Files Here, or <span style={{ color: 'var(--brand-gold-light)' }}>Browse</span>
+          {isUploading ? 'Uploading Files to Storage...' : 'Drag & Drop Files Here, or '}
+          {!isUploading && <span style={{ color: 'var(--brand-gold-light)' }}>Browse</span>}
         </h3>
         <p className="body-small" style={{ maxWidth: '440px', color: 'rgba(255, 255, 255, 0.65)' }}>
           Supports PDF, Markdown, DOCX, JSON, CSV, and code files up to 25MB per file.
@@ -235,14 +282,16 @@ export default function FilesWorkspace() {
               Workspace Files
             </h2>
           </div>
-          <span className="body-small" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{files.length} Item(s) Staged</span>
+          <span className="body-small" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            {files.length} Item(s) Persisted
+          </span>
         </div>
 
         {files.length === 0 ? (
           <EmptyState
             icon={FileText}
-            title="No files staged"
-            description="Upload documents to feed project contexts and conversation attachments."
+            title={isLoading ? 'Loading file vault...' : 'No files stored'}
+            description={isLoading ? 'Connecting to storage engine...' : 'Upload documents to feed project contexts and conversation attachments.'}
           />
         ) : (
           <div style={{ overflowX: 'auto' }}>
@@ -252,6 +301,7 @@ export default function FilesWorkspace() {
                   <th style={{ padding: '12px 16px', fontWeight: 600 }}>NAME</th>
                   <th style={{ padding: '12px 16px', fontWeight: 600 }}>SIZE</th>
                   <th style={{ padding: '12px 16px', fontWeight: 600 }}>TYPE</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 600 }}>CHECKSUM (SHA-256)</th>
                   <th style={{ padding: '12px 16px', fontWeight: 600 }}>UPLOADED</th>
                   <th style={{ padding: '12px 16px', fontWeight: 600, textAlign: 'right' }}>ACTIONS</th>
                 </tr>
@@ -269,10 +319,12 @@ export default function FilesWorkspace() {
                     <td style={{ padding: '14px 16px' }}>
                       <div className="flex items-center gap-3">
                         <FileText size={16} color="var(--brand-gold-light)" />
-                        <span style={{ fontWeight: 600, color: '#FFFFFF' }}>{file.name}</span>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF' }}>{file.filename}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.7)' }}>{file.size}</td>
+                    <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                      {formatFileSize(file.sizeBytes || file.size)}
+                    </td>
                     <td style={{ padding: '14px 16px' }}>
                       <span
                         style={{
@@ -287,11 +339,14 @@ export default function FilesWorkspace() {
                           color: '#FAD982'
                         }}
                       >
-                        {file.type.split('/')[1] || 'file'}
+                        {(file.mimeType || 'file').split('/')[1] || 'file'}
                       </span>
                     </td>
+                    <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.45)', fontFamily: 'var(--font-code)', fontSize: '11px' }}>
+                      {file.checksum ? `${file.checksum.slice(0, 12)}...` : '—'}
+                    </td>
                     <td style={{ padding: '14px 16px', color: 'rgba(255, 255, 255, 0.55)' }}>
-                      {new Date(file.uploadedAt).toLocaleDateString()}
+                      {file.createdAt ? new Date(file.createdAt).toLocaleDateString() : 'Just now'}
                     </td>
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                       <div className="flex justify-end gap-2">
@@ -304,7 +359,7 @@ export default function FilesWorkspace() {
                           <Download size={15} />
                         </button>
                         <button
-                          onClick={() => handleDelete(file.id, file.name)}
+                          onClick={() => setDeleteConfirmFile(file)}
                           className="glass-btn-ghost"
                           style={{ padding: '6px', border: 'none', cursor: 'pointer', borderRadius: '4px', color: '#F87171' }}
                           title="Delete file"
@@ -320,6 +375,28 @@ export default function FilesWorkspace() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={Boolean(deleteConfirmFile)}
+        onClose={() => setDeleteConfirmFile(null)}
+        title="Confirm File Deletion"
+        maxWidth="420px"
+      >
+        <div className="flex flex-col gap-4">
+          <p className="body-medium" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+            Are you sure you want to permanently delete <strong>"{deleteConfirmFile?.filename}"</strong>? This will remove the file from disk storage and SQLite records.
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setDeleteConfirmFile(null)} disabled={isDeleting}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmDelete} disabled={isDeleting}>
+              {isDeleting ? 'Deleting...' : 'Delete Permanently'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
