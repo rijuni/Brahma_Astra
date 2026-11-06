@@ -3,14 +3,6 @@ import {
   CheckCircle2,
   XCircle,
   Play,
-  RefreshCw,
-  Clock,
-  ShieldCheck,
-  AlertTriangle,
-  FileCode,
-  Check,
-  SlidersHorizontal,
-  X
 } from 'lucide-react';
 import Button from '../../../components/common/Button';
 import Badge from '../../../components/common/Badge';
@@ -18,13 +10,11 @@ import Modal from '../../../components/common/Modal';
 import { useToast } from '../../../components/feedback/Toast';
 
 export default function TestRunnerPanel() {
-  const [isRunning, setIsRunning] = useState(false);
   const [filter, setFilter] = useState('all'); // 'all' | 'passed' | 'failed'
   const [inspectTest, setInspectTest] = useState(null);
-  const [runningTestId, setRunningTestId] = useState(null);
   const { addToast } = useToast();
 
-  const [testResults, setTestResults] = useState([
+  const [testResults] = useState([
     { id: 1, name: 'test_get_patient_by_id', status: 'passed', duration: '0.24s', suite: 'unit' },
     { id: 2, name: 'test_patient_not_found_returns_404', status: 'passed', duration: '0.18s', suite: 'unit' },
     { id: 3, name: 'test_create_patient_validates_payload', status: 'passed', duration: '0.31s', suite: 'integration' },
@@ -51,22 +41,13 @@ export default function TestRunnerPanel() {
   });
 
   const handleRunAll = () => {
-    setIsRunning(true);
-    addToast('Executing full test suite against sandboxed boundary...', 'info');
-    setTimeout(() => {
-      setIsRunning(false);
-      addToast(`Test suite complete: ${passedCount} passed, ${failedCount} failed`, failedCount > 0 ? 'warning' : 'success');
-    }, 1100);
+    addToast('Preview only: no test suite was started.', 'warning');
   };
   const handleRunTests = handleRunAll;
 
-  const handleRunSingle = (tId, e) => {
+  const handleRunSingle = (_tId, e) => {
     e.stopPropagation();
-    setRunningTestId(tId);
-    setTimeout(() => {
-      setRunningTestId(null);
-      addToast('Test execution verified', 'info');
-    }, 500);
+    addToast('Preview only: no test was started.', 'warning');
   };
 
   return (
@@ -130,17 +111,20 @@ export default function TestRunnerPanel() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>SANDBOXED RUNNER</Badge>
+          <Badge variant="gold" style={{ padding: '4px 10px', fontSize: '13px' }}>PREVIEW · SAMPLE RESULTS</Badge>
           <Button
             variant="cyan"
-            icon={isRunning ? RefreshCw : Play}
+            icon={Play}
             onClick={handleRunAll}
-            isLoading={isRunning}
             style={{ height: '36px', padding: '0 16px', fontSize: '15px', fontWeight: 600 }}
           >
-            {isRunning ? 'Running...' : 'Run All'}
+            Preview results
           </Button>
         </div>
+      </div>
+
+      <div role="note" className="edith-preview-note">
+        Sample test data only. No test process has run from this panel.
       </div>
 
       {/* Coverage Metric Bar */}
@@ -167,7 +151,6 @@ export default function TestRunnerPanel() {
       <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
         {filteredTests.map((t) => {
           const isPassed = t.status === 'passed';
-          const isSingleRunning = runningTestId === t.id;
 
           return (
             <div
@@ -197,12 +180,11 @@ export default function TestRunnerPanel() {
                 <span className="text-muted" style={{ fontSize: '13px' }}>{t.duration}</span>
                 <button
                   onClick={(e) => handleRunSingle(t.id, e)}
-                  disabled={isSingleRunning}
                   className="glass-btn-ghost flex items-center justify-center"
                   style={{ width: '28px', height: '28px', borderRadius: '4px', padding: 0 }}
-                  title="Run this test"
+                  title="Preview only; does not run this test"
                 >
-                  <Play size={13} fill="currentColor" color={isSingleRunning ? 'var(--brand-gold)' : 'var(--text-muted)'} />
+                  <Play size={13} fill="currentColor" color="var(--text-muted)" />
                 </button>
               </div>
             </div>

@@ -32,6 +32,9 @@ function validateEnv() {
     if (!process.env.INTERNAL_SERVICE_KEY || process.env.INTERNAL_SERVICE_KEY.length < 32) {
       throw new Error('[FATAL] INTERNAL_SERVICE_KEY must be configured securely in production.');
     }
+    if (!process.env.EDITH_WORKSPACE_BASE_DIR) {
+      throw new Error('[FATAL] EDITH_WORKSPACE_BASE_DIR must point to a dedicated workspace directory in production.');
+    }
     if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('file:')) {
       console.warn('[WARN] Running in production with SQLite DATABASE_URL. PostgreSQL is the production target.');
     }

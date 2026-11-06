@@ -22,16 +22,17 @@ import Badge from '../../../components/common/Badge';
 import { useToast } from '../../../components/feedback/Toast';
 import { edithDbService } from '../../../services/edith/edith-db-service';
 
-export default function DatabasePanel({ projectId = 'default', activeProject = null }) {
+export default function DatabasePanel({ projectId = null, activeProject = null }) {
   const [databases, setDatabases] = useState([]);
-  const [selectedDb, setSelectedDb] = useState('default');
+  const [isLoadingDatabases, setIsLoadingDatabases] = useState(true);
+  const [selectedDb, setSelectedDb] = useState('');
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [tableSearch, setTableSearch] = useState('');
   const [activeTab, setActiveTab] = useState('records'); // 'records' | 'schema'
 
   // Query State
-  const [query, setQuery] = useState('SELECT id, name, email, role, created_at FROM users LIMIT 10;');
+  const [query, setQuery] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
   const [queryResult, setQueryResult] = useState({
     columns: [],
@@ -54,22 +55,34 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
   const [sortAsc, setSortAsc] = useState(true);
 
   const { addToast } = useToast();
-  const effectiveProjectId = projectId || activeProject?.id || 'default';
+  const effectiveProjectId = projectId || activeProject?.id || '';
 
   // 1. Load available databases
   useEffect(() => {
     let mounted = true;
     async function loadDatabases() {
+      if (!effectiveProjectId) {
+        setDatabases([]);
+        setSelectedDb('');
+        setIsLoadingDatabases(false);
+        return;
+      }
+      setIsLoadingDatabases(true);
       try {
         const res = await edithDbService.getDatabases(effectiveProjectId);
         if (mounted && res?.databases) {
           setDatabases(res.databases);
-          if (res.databases.length > 0 && !selectedDb) {
-            setSelectedDb(res.databases[0].id);
-          }
+          const selectionExists = res.databases.some((db) => db.id === selectedDb);
+          if (!selectionExists) setSelectedDb(res.databases[0]?.id || '');
         }
       } catch (err) {
         console.warn('Failed to load databases:', err);
+        if (mounted) {
+          setDatabases([]);
+          setSelectedDb('');
+        }
+      } finally {
+        if (mounted) setIsLoadingDatabases(false);
       }
     }
     loadDatabases();
@@ -78,9 +91,19 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
     };
   }, [effectiveProjectId]);
 
+  useEffect(() => {
+    setTables([]);
+    setSelectedTable(null);
+    setTableSchema(null);
+  }, [effectiveProjectId]);
+
   // 2. Load tables when database changes
   const loadTables = useCallback(async () => {
-    if (!effectiveProjectId) return;
+    if (!effectiveProjectId || !selectedDb) {
+      setTables([]);
+      setSelectedTable(null);
+      return;
+    }
     try {
       const res = await edithDbService.getTables(effectiveProjectId, selectedDb);
       if (res?.tables) {
@@ -129,7 +152,7 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
           setQueryResult({
             columns: recordsRes.columns || [],
             rows: recordsRes.rows || [],
-            executionTimeMs: 1.2,
+            executionTimeMs: recordsRes.executionTimeMs || 0,
             rowCount: recordsRes.rows?.length || 0
           });
         }
@@ -146,7 +169,7 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
   const handleSelectTable = (tblName) => {
     setSelectedTable(tblName);
     setPage(1);
-    setQuery(`SELECT * FROM "${tblName}" LIMIT 50;`);
+    setQuery(`SELECT * FROM "${tblName}" LIMIT 50`);
     loadTableData(tblName, 1);
   };
 
@@ -244,13 +267,26 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
     return tables.filter((t) => t.name.toLowerCase().includes(tableSearch.toLowerCase()));
   }, [tables, tableSearch]);
 
-  const SQL_TEMPLATES = [
-    { label: 'Select Users', query: 'SELECT id, name, email, role, created_at FROM users LIMIT 10;' },
-    { label: 'Select Active Projects', query: "SELECT id, name, owner_id, status FROM projects WHERE status = 'active';" },
-    { label: 'List EDITH Workspaces', query: 'SELECT id, project_id, name, status, root_path FROM edith_workspaces ORDER BY created_at DESC;' },
-    { label: 'Task Aggregates', query: 'SELECT status, COUNT(*) as count FROM coding_tasks GROUP BY status;' },
-    { label: 'Audit Trail', query: 'SELECT action, resource_type, created_at FROM audit_events ORDER BY created_at DESC LIMIT 15;' }
-  ];
+  const SQL_TEMPLATES = selectedTable ? [
+    { label: 'First 10 rows', query: `SELECT * FROM "${selectedTable}" LIMIT 10` },
+    { label: 'Count rows', query: `SELECT COUNT(*) AS total FROM "${selectedTable}"` }
+  ] : [];
+
+  if (isLoadingDatabases || !effectiveProjectId || databases.length === 0) {
+    return (
+      <div className="edith-db-empty-state" role="status">
+        <Database size={24} aria-hidden="true" />
+        <div>
+          <strong>{isLoadingDatabases ? 'Loading databases' : effectiveProjectId ? 'No workspace database found' : 'Select a workspace'}</strong>
+          <p>{isLoadingDatabases
+            ? 'Checking the connected workspace.'
+            : effectiveProjectId
+            ? 'Place a SQLite database inside this workspace to inspect its tables and records.'
+            : 'Choose a connected workspace to see databases stored within it.'}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
@@ -261,6 +297,7 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
           <span style={{ fontSize: '15px', fontWeight: 600 }}>Database:</span>
           <select
             value={selectedDb}
+            disabled={databases.length === 0}
             onChange={(e) => {
               setSelectedDb(e.target.value);
               setSelectedTable(null);
@@ -270,12 +307,9 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
           >
             {databases.map((db) => (
               <option key={db.id} value={db.id} style={{ background: '#0B0F1A' }}>
-                SQLite: {db.name} ({db.isDefault ? 'System' : 'Workspace'})
+                SQLite: {db.name}
               </option>
             ))}
-            <option value="postgres_disabled" disabled style={{ background: '#0B0F1A', color: 'var(--text-muted)' }}>
-              PostgreSQL (Remote Cluster — Standby)
-            </option>
           </select>
         </div>
 
@@ -298,7 +332,7 @@ export default function DatabasePanel({ projectId = 'default', activeProject = n
       </div>
 
       {/* Main Grid: Left Tables Sidebar (260px) + Right Query & Results (1fr) */}
-      <div className="grid grid-cols-[260px_minmax(0,1fr)] gap-4 flex-1 overflow-hidden">
+      <div className="edith-db-main-grid grid grid-cols-[260px_minmax(0,1fr)] gap-4 flex-1 overflow-hidden">
         {/* Left Sidebar: Tables */}
         <div className="flex flex-col gap-2 overflow-hidden" style={{ borderRight: '1px solid var(--glass-border)', paddingRight: '12px' }}>
           <div className="flex items-center gap-2">

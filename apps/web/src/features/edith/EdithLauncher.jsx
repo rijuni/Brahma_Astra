@@ -294,7 +294,7 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
                 color: 'rgba(255, 255, 255, 0.72)'
               }}
             >
-              Dedicated autonomous AI software development workspace inside FRIDAY. Multi-language AST code synthesis, diff review, and sandboxed runner execution.
+              AI-assisted workspace for project files, code review, and development tools. Arbitrary code execution is disabled by default in the native Windows configuration.
             </p>
           </div>
 
@@ -361,7 +361,7 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
             >
               <Play size={18} color="#22C55E" style={{ marginBottom: '4px' }} />
               <span style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF' }}>Deploy</span>
-              <span className="body-small" style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.55)' }}>Safe Sandbox Boundary</span>
+              <span className="body-small" style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.55)' }}>Runner disabled by default</span>
             </div>
           </div>
 
@@ -387,7 +387,7 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
             <div className="flex items-center gap-2">
               <ShieldCheck size={14} color="#22C55E" />
               <span className="body-small" style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                Host Security Boundary Active • Sandboxed Execution Isolated
+                Safe execution policy active • Code execution disabled by default
               </span>
             </div>
           </div>

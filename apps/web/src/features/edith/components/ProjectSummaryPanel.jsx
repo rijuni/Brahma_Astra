@@ -17,7 +17,10 @@ import Button from '../../../components/common/Button';
 export default function ProjectSummaryPanel({ project, onNavigateTab }) {
   if (!project) return null;
 
-  const totalLines = (project.files || []).reduce((acc, f) => acc + (f.content ? f.content.split('\n').length : 20), 0);
+  const filesWithContent = (project.files || []).filter((file) => typeof file.content === 'string');
+  const totalLines = filesWithContent.length
+    ? filesWithContent.reduce((sum, file) => sum + file.content.split('\n').length, 0)
+    : null;
 
   return (
     <div className="glass-card flex flex-col h-full overflow-hidden p-4" style={{ borderRadius: 'var(--radius-lg)' }}>
@@ -28,7 +31,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
           <span style={{ fontSize: '18px', fontWeight: 600 }}>{project.name}</span>
           <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>{project.status || 'active'}</Badge>
         </div>
-        <span className="code-inline" style={{ fontSize: '13.5px', padding: '3px 10px' }}>{project.path}</span>
+              {project.path && <span className="code-inline" style={{ fontSize: '13.5px', padding: '3px 10px' }}>{project.path}</span>}
       </div>
 
       <p className="body-regular text-secondary mb-4" style={{ fontSize: '15px', lineHeight: '1.55' }}>
@@ -42,7 +45,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             <FileText size={15} /> Files
           </div>
           <span style={{ fontSize: '20px', fontWeight: 600, color: 'var(--brand-cyan)', marginTop: '4px' }}>
-            {project.files ? project.files.length : (project.stats?.files || 48)}
+            {project.files?.length ?? project.stats?.files ?? '—'}
           </span>
         </div>
 
@@ -51,7 +54,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             <Code2 size={15} /> Lines of Code
           </div>
           <span style={{ fontSize: '20px', fontWeight: 600, color: '#00D2FF', marginTop: '4px' }}>
-            ~{totalLines.toLocaleString()}
+            {totalLines === null ? '—' : `~${totalLines.toLocaleString()}`}
           </span>
         </div>
 
@@ -60,7 +63,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             <GitCommit size={15} /> Commits
           </div>
           <span style={{ fontSize: '20px', fontWeight: 600, color: '#38BDF8', marginTop: '4px' }}>
-            {project.stats?.commits || 128}
+            {project.stats?.commits ?? '—'}
           </span>
         </div>
 
@@ -69,7 +72,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             <Clock size={15} /> Updated
           </div>
           <span style={{ fontSize: '15px', fontWeight: 500, color: '#34D399', marginTop: '4px' }}>
-            {project.stats?.lastUpdated || 'Just now'}
+            {project.stats?.lastUpdated || '—'}
           </span>
         </div>
       </div>
@@ -95,7 +98,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
             </span>
           </div>
           <p className="body-regular text-muted" style={{ fontSize: '13px', lineHeight: '1.5', margin: 0 }}>
-            Running in isolated browser context. Backend Node API (:3000) and EDITH Engine (:8002) communicate via strictly scoped REST schemas. Arbitrary OS execution remains blocked.
+            Arbitrary host execution is disabled by default on native Windows. A verified sandbox integration is required before untrusted code can run.
           </p>
         </div>
       </div>

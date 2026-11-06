@@ -54,7 +54,7 @@ export default function DebugPanel() {
 
   const handleStartDebug = () => {
     setIsRunning(true);
-    addToast('Attached debugger to sandboxed process [PID: 28412]', 'info');
+    addToast('Debugger preview opened. No process was attached.', 'warning');
   };
 
   const handleStopDebug = () => {
@@ -65,7 +65,7 @@ export default function DebugPanel() {
 
   const handleStepOver = () => {
     setActiveStep((p) => p + 1);
-    addToast('Stepped to next instruction', 'info');
+    addToast('Preview only: no program instruction was executed.', 'warning');
   };
 
   const handleAddBreakpoint = (e) => {
@@ -129,7 +129,7 @@ export default function DebugPanel() {
                 <span>Step Over</span>
               </button>
               <button
-                onClick={() => addToast('Stepped into function', 'info')}
+                onClick={() => addToast('Preview only: no program instruction was executed.', 'warning')}
                 className="glass-btn-ghost flex items-center gap-2"
                 style={{ height: '36px', padding: '0 14px', fontSize: '14px', borderRadius: '6px' }}
                 title="Step Into (F11)"

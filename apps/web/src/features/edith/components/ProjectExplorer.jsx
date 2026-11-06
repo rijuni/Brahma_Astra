@@ -40,6 +40,7 @@ export default function ProjectExplorer({
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectDesc, setNewProjectDesc] = useState('');
+  const [newRootPath, setNewRootPath] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('python');
   const [menuOpenId, setMenuOpenId] = useState(null);
   const [deleteConfirmProject, setDeleteConfirmProject] = useState(null);
@@ -52,22 +53,25 @@ export default function ProjectExplorer({
     (p.techStack && p.techStack.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase())))
   );
 
-  const handleCreateSubmit = (e) => {
+  const handleCreateSubmit = async (e) => {
     e.preventDefault();
-    if (!newProjectName.trim()) return;
+    if (!newProjectName.trim() || !newRootPath.trim()) return;
 
     const chosenTemplate = TEMPLATE_OPTIONS.find((t) => t.id === selectedTemplate);
 
+    let created = true;
     if (onCreateProject) {
-      onCreateProject({
+      created = await onCreateProject({
         name: newProjectName.trim(),
         description: newProjectDesc.trim(),
+        rootPath: newRootPath.trim(),
         template: chosenTemplate
       });
     }
-    addToast(`Created project "${newProjectName}"`, 'success');
+    if (!created) return;
     setNewProjectName('');
     setNewProjectDesc('');
+    setNewRootPath('');
     setIsCreateOpen(false);
   };
 
@@ -177,11 +181,17 @@ export default function ProjectExplorer({
           >
             <FolderKanban size={28} color="var(--text-muted)" style={{ marginBottom: '10px', opacity: 0.5 }} />
             <p className="body-regular text-muted" style={{ fontSize: '14px', marginBottom: '10px' }}>
-              No workspaces matching "{searchTerm}"
+              {projects.length === 0 ? 'No workspace connected yet.' : `No workspaces matching "${searchTerm}"`}
             </p>
-            <Button variant="ghost" size="small" onClick={() => setSearchTerm('')} style={{ fontSize: '14px' }}>
-              Clear Filter
-            </Button>
+            {projects.length > 0 ? (
+              <Button variant="ghost" size="small" onClick={() => setSearchTerm('')} style={{ fontSize: '14px' }}>
+                Clear Filter
+              </Button>
+            ) : (
+              <span className="body-small text-muted" style={{ fontSize: '12px', lineHeight: 1.45 }}>
+                Add a directory inside your configured workspace root to begin.
+              </span>
+            )}
           </div>
         ) : (
           filtered.map((proj) => {
@@ -298,7 +308,7 @@ export default function ProjectExplorer({
                   <div className="flex items-center gap-2.5" style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
                     <span>{proj.files ? proj.files.length : (proj.stats?.files || 0)} files</span>
                     <span>•</span>
-                    <span>{proj.stats?.commits || 1} commits</span>
+                    <span>{proj.stats?.commits ?? '—'} commits</span>
                   </div>
 
                   <div className="flex flex-wrap gap-1.5">
@@ -371,6 +381,16 @@ export default function ProjectExplorer({
             value={newProjectDesc}
             onChange={(e) => setNewProjectDesc(e.target.value)}
           />
+          <Input
+            label="Workspace directory"
+            placeholder="C:\\FridayEdithWorkspaces\\my-project"
+            value={newRootPath}
+            onChange={(e) => setNewRootPath(e.target.value)}
+            required
+          />
+          <p className="body-small text-muted" style={{ marginTop: '-8px', lineHeight: 1.45 }}>
+            Choose an existing directory inside the workspace root configured by your API operator.
+          </p>
 
           <div>
             <label className="body-small text-muted" style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '15px' }}>

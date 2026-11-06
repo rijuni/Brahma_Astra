@@ -123,7 +123,7 @@ test('Milestone 6 — Developer Tools Components Exist & Implement Production Fe
     { file: 'DebugPanel.jsx', checks: [/breakpoints/i, /callStack/i, /variables/i] },
     { file: 'GitPanel.jsx', checks: [/branch/i, /handleCommit/i, /staged/i] },
     { file: 'ApiClientPanel.jsx', checks: [/url/i, /handleSend/i, /HTTP/i] },
-    { file: 'DatabasePanel.jsx', checks: [/SQLite/i, /PostgreSQL/i, /handleExecute/i] },
+    { file: 'DatabasePanel.jsx', checks: [/SQLite/i, /No workspace database found/i, /handleExecute/i] },
     { file: 'DeployPanel.jsx', checks: [/docker/i, /production/i, /handleDeploy/i] },
     { file: 'PipelinesPanel.jsx', checks: [/stages/i, /Pipeline/i] },
     { file: 'ProjectSummaryPanel.jsx', checks: [/techStack/i, /metrics/i] },
@@ -149,7 +149,7 @@ test('Milestone 7 — Safe Execution Boundary Blocks Host Arbitrary Code Executi
   assert.ok(fs.existsSync(runnerPath), 'edith-runner-service.js must exist');
 
   const content = fs.readFileSync(runnerPath, 'utf8');
-  assert.match(content, /Available built-in safe commands/i, 'Must define built-in safe diagnostic commands');
+  assert.match(content, /This preview does not execute commands/i, 'Must disclose that terminal commands are not executed');
   assert.match(content, /Arbitrary shell execution is disabled/i, 'Must disclose disabled arbitrary shell execution');
   assert.match(content, /runSafeCommand/i, 'Must export runSafeCommand function');
 });

@@ -5,6 +5,10 @@ const { FilesystemSecurityGuard } = require('./edith.fs.security');
 const { AppError } = require('../middleware/errorHandler');
 
 class GitSecurityGuard {
+  static isRestrictedPath(filePath) {
+    return FilesystemSecurityGuard.isRestricted(filePath);
+  }
+
   /**
    * Validates a Git branch name to prevent flag injection, directory traversal, and malformed refs.
    * @param {string} branchName

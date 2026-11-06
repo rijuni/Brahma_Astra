@@ -1126,7 +1126,7 @@
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  filter: drop-shadow(0 0 16px rgba(246, 200, 122, 0.35)) !important;
+  filter: drop-shadow(0 0 6px rgba(246, 200, 122, 0.22)) !important;
   margin-bottom: 4px !important;
 }
 
@@ -1194,5 +1194,54 @@
   background: rgba(246, 200, 122, 0.08) !important;
   box-shadow: 0 0 32px rgba(246, 200, 122, 0.2), inset 0 0 24px rgba(246, 200, 122, 0.08) !important;
   transform: translateY(-2px);
+}
+
+.friday-section-kicker {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: var(--brand-gold-light);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.friday-storage-note {
+  padding: 14px 16px;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(246, 200, 122, 0.045);
+  border: 1px solid rgba(246, 200, 122, 0.18);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.friday-storage-note > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--brand-gold-light);
+}
+
+.friday-storage-note strong {
+  color: #fff;
+}
+
+.friday-storage-note__detail {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .friday-page-title {
+    font-size: 21px !important;
+    letter-spacing: 0.015em !important;
+  }
+
+  .friday-storage-note {
+    padding: 12px;
+  }
 }
 

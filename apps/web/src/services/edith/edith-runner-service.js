@@ -12,56 +12,51 @@ export const edithRunnerService = {
     };
   },
 
-  // Simulated safe diagnostic runner
+  // Preview-only commands. These strings are generated locally and never execute commands.
   async runSafeCommand(cmd = '') {
     const trimmed = cmd.trim();
     const ts = new Date().toLocaleTimeString();
 
     if (trimmed === 'help') {
       return [
-        `[${ts}] EDITH Safe Diagnostic Console v1.0`,
-        'Available built-in safe commands:',
-        '  status   - Display microservice health and port status',
-        '  health   - Inspect database and execution boundary',
-        '  clear    - Clear terminal stream',
-        '  build    - Run frontend and module dry-run checks',
-        '  test     - Run simulated test runner'
+        `[${ts}] EDITH Terminal Preview`,
+        'This preview does not execute commands or query service health.',
+        '  status   - Show configured local service endpoints (no live check)',
+        '  health   - Explain current execution policy',
+        '  clear    - Clear the preview output',
+        '  build    - Show preview-only build output',
+        '  test     - Show sample test output'
       ].join('\n');
     }
 
     if (trimmed === 'status') {
       return [
-        `[${ts}] [SYSTEM STATUS]`,
-        '  Node.js Application API : Port 3000 (ONLINE)',
-        '  FRIDAY Core FastAPI     : Port 8001 (ONLINE)',
-        '  EDITH Engine FastAPI    : Port 8002 (ONLINE)',
-        '  EDITH Runner Boundary   : Port 8003 (ONLINE, Execution: Disabled)'
+        `[${ts}] [PREVIEW ONLY]`,
+        '  API endpoints are configured for local development.',
+        '  No live health checks were performed by this terminal preview.',
+        '  Use EDITH Settings to request service health checks.'
       ].join('\n');
     }
 
     if (trimmed === 'health') {
-      return `[${ts}] Database: Connected (SQLite dev.db) • Runner: Secure Host Guard Active`;
+      return `[${ts}] [PREVIEW ONLY] Live database and runner health were not queried. Arbitrary execution remains disabled by default.`;
     }
 
     if (trimmed === 'build') {
       return [
-        `[${ts}] Executing build simulation...`,
-        '✓ Validating AST syntax tree',
-        '✓ Checking import specifiers',
-        '✓ Build completed with 0 errors.'
+        `[${ts}] [SAMPLE OUTPUT] No build was started.`,
+        'Run the repository build from a trusted developer terminal to get a real result.'
       ].join('\n');
     }
 
     if (trimmed === 'test') {
       return [
-        `[${ts}] Running EDITH test suite...`,
-        'PASS tests/unit/clinical.test.py (0.24s)',
-        'PASS tests/unit/models.test.py (0.18s)',
-        '12 passed, 0 failed. Coverage: 92%'
+        `[${ts}] [SAMPLE OUTPUT] No tests were started.`,
+        'Run the project test suite from a trusted developer terminal to get real results.'
       ].join('\n');
     }
 
-    return `[${ts}] Command unrecognized: "${cmd}". Type "help" for safe diagnostic commands.`;
+    return `[${ts}] Command execution is disabled in this preview. Type "help" for display-only commands.`;
   }
 };
 

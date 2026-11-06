@@ -145,10 +145,12 @@ test('BRAHMA Phase 1 Defects — Global Search performs real-time filtering', ()
   assert.ok(appContent.includes('No matching pages or tools found'), 'App.jsx must show empty state for search');
 });
 
-test('BRAHMA Phase 1 Defects — Files Workspace triggers real browser file downloads', () => {
+test('BRAHMA Phase 1 Defects — Files Workspace uses the shared real download service', () => {
   const filesContent = fs.readFileSync(path.join(webRoot, 'src', 'features', 'files', 'FilesWorkspace.jsx'), 'utf8');
-  assert.ok(filesContent.includes('URL.createObjectURL'), 'FilesWorkspace must use URL.createObjectURL for downloads');
-  assert.ok(filesContent.includes('a.download ='), 'FilesWorkspace must trigger real anchor download');
+  const serviceContent = fs.readFileSync(path.join(webRoot, 'src', 'services', 'file-service.js'), 'utf8');
+  assert.ok(filesContent.includes('fileService.download('), 'FilesWorkspace must use the shared file download service');
+  assert.ok(serviceContent.includes('URL.createObjectURL'), 'The shared download service must create a browser download URL');
+  assert.ok(serviceContent.includes('a.download ='), 'The shared download service must trigger a browser download');
 });
 
 test('BRAHMA Phase 1 Defects — Forgot Password uses glass card notice instead of window.alert', () => {

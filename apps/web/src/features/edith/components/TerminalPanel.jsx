@@ -26,20 +26,15 @@ export default function TerminalPanel({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [commandHistory, setCommandHistory] = useState(['help', 'status', 'test']);
   const [logHistory, setLogHistory] = useState([
-    '(venv) user@edith:~/workspace$ edith-runner --version',
-    'EDITH Runner Execution Boundary v1.0.0 (Windows Native Sandboxed)',
-    'Execution Mode: "disabled" (Zero Arbitrary Host Execution Guard)',
-    '(venv) user@edith:~/workspace$ uvicorn app.main:app --port 8000',
-    'INFO:     Started server process in sandbox [PID: 28412]',
-    'INFO:     Waiting for application startup...',
-    'INFO:     Application startup complete. Uvicorn running on http://127.0.0.1:8000',
-    'INFO:     127.0.0.1:54320 - "GET /health HTTP/1.1" 200 OK'
+    'EDITH terminal preview',
+    'Commands entered here are not executed on the host.',
+    'Use the configured service health panels for live status.'
   ]);
 
   const [diagnostics, setDiagnostics] = useState([
     { id: 1, type: 'warning', file: 'src/app.py', line: 12, msg: 'Unused import `HTTPException` from fastapi' },
     { id: 2, type: 'info', file: 'src/controllers/user.js', line: 45, msg: 'Missing JSDoc comment for exported function' },
-    { id: 3, type: 'warning', file: 'config/settings.py', line: 28, msg: 'Secret key is using default development fallback' }
+    { id: 3, type: 'warning', file: 'config/settings.py', line: 28, msg: 'Sample diagnostic: secret key uses a development fallback' }
   ]);
 
   const terminalBodyRef = useRef(null);
@@ -66,7 +61,7 @@ export default function TerminalPanel({
       return;
     }
 
-    setLogHistory((prev) => [...prev, `(venv) user@edith:~/workspace$ ${cmd}`]);
+    setLogHistory((prev) => [...prev, `preview> ${cmd}`]);
     setInputCmd('');
 
     const output = await edithRunnerService.runSafeCommand(cmd);
@@ -205,7 +200,7 @@ export default function TerminalPanel({
               fontSize: '16px'
             }}
           >
-            <span style={{ color: '#00D2FF', fontWeight: 500, fontSize: '16px' }}>(venv) user@edith:~$</span>
+            <span style={{ color: '#00D2FF', fontWeight: 500, fontSize: '16px' }}>preview&gt;</span>
             <input
               ref={inputRef}
               type="text"

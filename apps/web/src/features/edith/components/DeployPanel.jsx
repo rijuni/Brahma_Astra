@@ -35,11 +35,9 @@ export default function DeployPanel() {
   const [showSecrets, setShowSecrets] = useState({});
 
   const [deployLogs, setDeployLogs] = useState([
-    '[BUILD] Compiling TypeScript AST modules... Done in 1.4s',
-    '[TEST] Running automated test suites... 27 passed, 0 failed',
-    '[CONTAINER] Generating OCI container image edith/microservice:latest',
-    '[DEPLOY] Routing traffic to blue-green container instances on port 8000',
-    '[HEALTH] Live health check returned HTTP 200 OK (22ms). Ready.'
+    '[SAMPLE] Deployment preview. No build or tests were started.',
+    '[SAMPLE] No container image was created.',
+    '[SAMPLE] No service was deployed and no health check was performed.'
   ]);
 
   const { addToast } = useToast();
@@ -48,14 +46,14 @@ export default function DeployPanel() {
     setIsDeploying(true);
     setShowLogs(true);
     setActiveDeployStep(1);
-    addToast(`Triggering deployment to ${environment.toUpperCase()}...`, 'info');
+    addToast(`Showing a deployment preview for ${environment.toUpperCase()}; no service will be changed.`, 'info');
 
     const interval = setInterval(() => {
       setActiveDeployStep((prev) => {
         if (prev >= 4) {
           clearInterval(interval);
           setIsDeploying(false);
-          addToast(`Successfully deployed to ${environment.toUpperCase()} on port ${port}`, 'success');
+          addToast('Deployment preview completed. No service was changed.', 'info');
           return 4;
         }
         return prev + 1;
@@ -142,10 +140,10 @@ export default function DeployPanel() {
           <div className="flex items-center justify-between p-3.5 rounded-md" style={{ background: 'rgba(7, 10, 24, 0.45)', border: '1px solid var(--glass-border)' }}>
             <div>
               <div style={{ fontSize: '15px', fontWeight: 600 }}>Execute Deployment Pipeline</div>
-              <div className="body-regular text-muted" style={{ fontSize: '13.5px' }}>Applies pre-flight health checks and initiates release.</div>
+              <div className="body-regular text-muted" style={{ fontSize: '13.5px' }}>Preview only. No health checks or release actions are performed.</div>
             </div>
             <Button variant="cyan" icon={Rocket} onClick={handleDeploy} isLoading={isDeploying} style={{ height: '38px', padding: '0 18px', fontSize: '15px', fontWeight: 600 }}>
-              Deploy
+              Preview release
             </Button>
           </div>
 

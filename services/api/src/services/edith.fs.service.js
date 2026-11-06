@@ -6,27 +6,40 @@ const { FilesystemSecurityGuard, MAX_FILE_SIZE_BYTES } = require('./edith.fs.sec
 const { AppError } = require('../middleware/errorHandler');
 
 class EdithFsService {
+  containsRestrictedDescendant(directoryPath) {
+    let entries;
+    try {
+      entries = fs.readdirSync(directoryPath, { withFileTypes: true });
+    } catch {
+      return true;
+    }
+    for (const entry of entries) {
+      if (FilesystemSecurityGuard.isRestricted(entry.name)) return true;
+      if (entry.isDirectory() && this.containsRestrictedDescendant(path.join(directoryPath, entry.name))) return true;
+    }
+    return false;
+  }
+
   /**
    * Helper: Resolves and validates the project workspace and its registered canonical root.
    */
-  async getProjectRoot(userId, projectId) {
+  async getProjectRoot(userId, projectId, { requireWrite = false } = {}) {
     if (!projectId) {
       throw new AppError('projectId is required.', 400, 'INVALID_PROJECT_ID');
     }
 
     // Find workspace for this project accessible to this user
+    const projectAccess = requireWrite
+      ? { OR: [{ ownerId: userId }, { members: { some: { userId, role: { in: ['owner', 'admin'] } } } }] }
+      : { OR: [{ ownerId: userId }, { members: { some: { userId } } }] };
+
     let workspace = await prisma.edithWorkspace.findFirst({
       where: {
         OR: [
           { id: projectId },
           { projectId: projectId }
         ],
-        project: {
-          OR: [
-            { ownerId: userId },
-            { members: { some: { userId } } }
-          ]
-        }
+        project: projectAccess
       },
       include: {
         project: true
@@ -34,34 +47,20 @@ class EdithFsService {
     });
 
     if (!workspace) {
-      // If user owns a project with this ID, auto-create a workspace if needed
+      // Distinguish a missing workspace from a missing or unauthorized project.
       const project = await prisma.project.findFirst({
-        where: {
-          id: projectId,
-          OR: [
-            { ownerId: userId },
-            { members: { some: { userId } } }
-          ]
-        }
+        where: { id: projectId, ...projectAccess }
       });
 
       if (!project) {
         throw new AppError(`Project "${projectId}" not found or unauthorized.`, 404, 'PROJECT_NOT_FOUND');
       }
 
-      // Check if root directory can default to current working directory if available
-      const defaultRoot = process.env.EDITH_DEFAULT_WORKSPACE_ROOT || process.cwd();
-      const canonicalDefault = FilesystemSecurityGuard.validateAndCanonicalizeRoot(defaultRoot);
-
-      workspace = await prisma.edithWorkspace.create({
-        data: {
-          projectId: project.id,
-          name: `${project.name} Workspace`,
-          rootPath: canonicalDefault,
-          status: 'active'
-        },
-        include: { project: true }
-      });
+      throw new AppError(
+        `Project "${project.name}" has no registered workspace. Register a directory inside EDITH_WORKSPACE_BASE_DIR first.`,
+        409,
+        'WORKSPACE_NOT_REGISTERED'
+      );
     }
 
     if (!workspace.rootPath) {
@@ -102,7 +101,6 @@ class EdithFsService {
       projectId: ws.projectId,
       projectName: ws.project?.name || ws.name,
       name: ws.name,
-      rootPath: ws.rootPath,
       status: ws.status,
       createdAt: ws.createdAt,
       updatedAt: ws.updatedAt
@@ -131,10 +129,13 @@ class EdithFsService {
           ]
         }
       });
+      if (!project) {
+        throw new AppError('Project not found or you do not have permission to register its workspace.', 404, 'PROJECT_NOT_FOUND');
+      }
     }
 
     if (!project) {
-      // Auto-create a project if no valid projectId was passed
+      // Create a new project only when the caller omitted projectId.
       const projName = name || path.basename(canonicalRoot) || 'Workspace Project';
       project = await prisma.project.create({
         data: {
@@ -179,7 +180,6 @@ class EdithFsService {
       projectId: project.id,
       projectName: project.name,
       name: workspace.name,
-      rootPath: workspace.rootPath,
       status: workspace.status
     };
   }
@@ -306,7 +306,7 @@ class EdithFsService {
       );
     }
 
-    const { canonicalRoot } = await this.getProjectRoot(userId, projectId);
+    const { canonicalRoot } = await this.getProjectRoot(userId, projectId, { requireWrite: true });
     const resolved = FilesystemSecurityGuard.resolveAndVerify(canonicalRoot, filePath, {
       allowMissing: true,
       disallowRoot: true
@@ -343,7 +343,7 @@ class EdithFsService {
    * Create a new file or directory.
    */
   async createItem(userId, projectId, itemPath, type = 'file') {
-    const { canonicalRoot } = await this.getProjectRoot(userId, projectId);
+    const { canonicalRoot } = await this.getProjectRoot(userId, projectId, { requireWrite: true });
     const resolved = FilesystemSecurityGuard.resolveAndVerify(canonicalRoot, itemPath, {
       allowMissing: true,
       disallowRoot: true
@@ -383,7 +383,7 @@ class EdithFsService {
       throw new AppError('Both oldPath and newPath are required.', 400, 'MISSING_PATH_ARG');
     }
 
-    const { canonicalRoot } = await this.getProjectRoot(userId, projectId);
+    const { canonicalRoot } = await this.getProjectRoot(userId, projectId, { requireWrite: true });
     const oldResolved = FilesystemSecurityGuard.resolveAndVerify(canonicalRoot, oldPath, { disallowRoot: true });
     const newResolved = FilesystemSecurityGuard.resolveAndVerify(canonicalRoot, newPath, {
       allowMissing: true,
@@ -392,6 +392,10 @@ class EdithFsService {
 
     if (newResolved.exists) {
       throw new AppError(`Destination "${newPath}" already exists.`, 409, 'DESTINATION_EXISTS');
+    }
+
+    if (fs.statSync(oldResolved.absolutePath).isDirectory() && this.containsRestrictedDescendant(oldResolved.absolutePath)) {
+      throw new AppError('Cannot move a directory that contains restricted files.', 403, 'RESTRICTED_CONTENT');
     }
 
     await fs.promises.mkdir(path.dirname(newResolved.absolutePath), { recursive: true });
@@ -415,11 +419,14 @@ class EdithFsService {
    * Delete a file or directory.
    */
   async deleteItem(userId, projectId, targetPath) {
-    const { canonicalRoot } = await this.getProjectRoot(userId, projectId);
+    const { canonicalRoot } = await this.getProjectRoot(userId, projectId, { requireWrite: true });
     const resolved = FilesystemSecurityGuard.resolveAndVerify(canonicalRoot, targetPath, { disallowRoot: true });
 
     const stats = await fs.promises.stat(resolved.absolutePath);
     if (stats.isDirectory()) {
+      if (this.containsRestrictedDescendant(resolved.absolutePath)) {
+        throw new AppError('Cannot delete a directory that contains restricted files.', 403, 'RESTRICTED_CONTENT');
+      }
       await fs.promises.rm(resolved.absolutePath, { recursive: true, force: true });
     } else {
       await fs.promises.unlink(resolved.absolutePath);

@@ -56,6 +56,10 @@ Each technology is assigned the job it is best suited for:
 
 ## How to Run in Development (2-Terminal Setup)
 
+### EDITH Workspace Directory
+
+EDITH can access only directories inside the dedicated `EDITH_WORKSPACE_BASE_DIR` configured for the API. Create that directory and set the variable in the root `.env` before registering a workspace. For example, use `C:/FridayEdithWorkspaces` and place each project beneath it. The repository itself, user profile, and operating-system folders should not be used as the workspace root.
+
 You only need **two terminal windows** to run the complete platform:
 
 ### Terminal 1 — Frontend UI (Port 5173)

@@ -3,26 +3,12 @@ const path = require('path');
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit for text editor buffer
 
-// Prohibited sensitive directories and patterns
-const RESTRICTED_PATTERNS = [
-  /^\.git(\/|\\|$)/i,
-  /^\.env(\..+)?$/i,
-  /\.ssh(\/|\\|$)/i,
-  /node_modules(\/|\\|$)/i,
-  /\.venv(\/|\\|$)/i,
-  /^venv(\/|\\|$)/i,
-  /^env(\/|\\|$)/i,
-  /__pycache__(\/|\\|$)/i,
-  /\.pytest_cache(\/|\\|$)/i,
-  /\.ruff_cache(\/|\\|$)/i,
-  /\.mypy_cache(\/|\\|$)/i,
-  /\.pyc$/i,
-  /\.pyo$/i,
-  /\.pyd$/i,
-  /\.DS_Store$/i,
-  /Thumbs\.db$/i,
-  /id_rsa/i
-];
+// Restricted path components are enforced for every filesystem operation,
+// not only when building the visible file tree.
+const RESTRICTED_COMPONENTS = new Set([
+  '.git', '.ssh', 'node_modules', '.venv', 'venv', 'env', '__pycache__',
+  '.pytest_cache', '.ruff_cache', '.mypy_cache', '.ds_store', 'thumbs.db'
+]);
 
 // Block direct root access to entire drives or operating system folders
 const DISALLOWED_ROOTS = [
@@ -33,6 +19,36 @@ const DISALLOWED_ROOTS = [
 ];
 
 class FilesystemSecurityGuard {
+  static isPathWithin(parentPath, candidatePath) {
+    const relative = path.relative(parentPath, candidatePath);
+    return relative === '' || (!path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`));
+  }
+
+  static getConfiguredWorkspaceBase() {
+    const configuredBase = process.env.EDITH_WORKSPACE_BASE_DIR;
+    if (!configuredBase && process.env.NODE_ENV === 'test') return null;
+    if (!configuredBase) {
+      const err = new Error('EDITH_WORKSPACE_BASE_DIR must point to a dedicated workspace directory.');
+      err.status = 503;
+      throw err;
+    }
+    const resolvedBase = path.resolve(configuredBase);
+    if (!fs.existsSync(resolvedBase) || !fs.statSync(resolvedBase).isDirectory()) {
+      const err = new Error('EDITH_WORKSPACE_BASE_DIR must point to an existing directory.');
+      err.status = 500;
+      throw err;
+    }
+    return fs.realpathSync(resolvedBase);
+  }
+
+  static assertAllowedPath(relativePath) {
+    if (this.isRestricted(relativePath)) {
+      const err = new Error('Access denied: this path is restricted.');
+      err.status = 403;
+      throw err;
+    }
+  }
+
   /**
    * Validates and canonicalizes a proposed project root directory.
    * @param {string} rawRootPath 
@@ -68,6 +84,16 @@ class FilesystemSecurityGuard {
         err.status = 403;
         throw err;
       }
+    }
+
+    const workspaceBase = this.getConfiguredWorkspaceBase();
+    if (workspaceBase && !this.isPathWithin(workspaceBase, canonicalRoot)) {
+      const err = new Error('Access denied: workspace roots must be inside EDITH_WORKSPACE_BASE_DIR.');
+      err.status = 403;
+      throw err;
+    }
+    if (workspaceBase) {
+      this.assertAllowedPath(path.relative(workspaceBase, canonicalRoot).replace(/\\/g, '/'));
     }
 
     return canonicalRoot;
@@ -111,6 +137,8 @@ class FilesystemSecurityGuard {
       err.status = 403;
       throw err;
     }
+
+    this.assertAllowedPath(path.relative(canonicalRoot, absoluteTarget).replace(/\\/g, '/'));
 
     if (disallowRoot && absoluteTarget === canonicalRoot) {
       const err = new Error('Action not permitted on the project root itself.');
@@ -162,6 +190,8 @@ class FilesystemSecurityGuard {
       throw err;
     }
 
+    this.assertAllowedPath(path.relative(canonicalRoot, realTarget).replace(/\\/g, '/'));
+
     if (checkSize) {
       const stat = fs.statSync(realTarget);
       if (stat.isFile() && stat.size > MAX_FILE_SIZE_BYTES) {
@@ -186,11 +216,12 @@ class FilesystemSecurityGuard {
    * @returns {boolean}
    */
   static isRestricted(relPath) {
-    const clean = (relPath || '').replace(/^[\\\/]+/, '');
-    for (const pattern of RESTRICTED_PATTERNS) {
-      if (pattern.test(clean)) return true;
-    }
-    return false;
+    const components = (relPath || '').split(/[\\/]+/).filter(Boolean);
+    return components.some((component) => {
+      const lower = component.toLowerCase();
+      return RESTRICTED_COMPONENTS.has(lower) || /^\.env(?:\..+)?$/i.test(component) ||
+        /\.(?:pyc|pyo|pyd)$/i.test(component) || /id_rsa/i.test(component);
+    });
   }
 }
 

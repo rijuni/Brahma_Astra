@@ -8,23 +8,12 @@ const { AppError } = require('../middleware/errorHandler');
 
 class EdithDbService {
   /**
-   * Discovers SQLite databases: system default database + any SQLite files in the project.
+   * Discovers SQLite databases contained in the authorized project workspace.
    */
   async getDatabases(userId, projectId) {
     const { canonicalRoot } = await edithFsService.getProjectRoot(userId, projectId);
 
-    const defaultDbPath = path.resolve(__dirname, '../../prisma/dev.db');
-    const databases = [
-      {
-        id: 'default',
-        name: 'System Database (dev.db)',
-        path: 'services/api/prisma/dev.db',
-        isDefault: true,
-        sizeBytes: fs.existsSync(defaultDbPath)
-          ? fs.statSync(defaultDbPath).size
-          : 0
-      }
-    ];
+    const databases = [];
 
     // Scan project directory for .db, .sqlite, .sqlite3 files (up to depth 3)
     const findDbs = (dir, depth = 0) => {

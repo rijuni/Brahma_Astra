@@ -129,7 +129,7 @@ class EdithGitService {
    */
   async createBranch(userId, projectId, { branchName, checkout = false }) {
     const sanitizedBranch = GitSecurityGuard.validateBranchName(branchName);
-    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId);
+    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId, { requireWrite: true });
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
     const args = checkout
@@ -157,7 +157,7 @@ class EdithGitService {
    */
   async checkoutBranch(userId, projectId, { branchName }) {
     const sanitizedBranch = GitSecurityGuard.validateBranchName(branchName);
-    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId);
+    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId, { requireWrite: true });
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
     await GitSecurityGuard.execGit(['checkout', sanitizedBranch], canonicalRoot);
@@ -179,13 +179,23 @@ class EdithGitService {
    * Stages file(s) or all changes into the Git index.
    */
   async stage(userId, projectId, { files, all = false }) {
-    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId);
+    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId, { requireWrite: true });
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
     let stagedCount = 0;
     if (all) {
-      await GitSecurityGuard.execGit(['add', '-A'], canonicalRoot);
-      stagedCount = 'all';
+      const { stdout } = await GitSecurityGuard.execGit(
+        ['ls-files', '--cached', '--others', '--exclude-standard', '-z'],
+        canonicalRoot
+      );
+      const paths = stdout.split('\0').filter((filePath) =>
+        filePath && !filePath.startsWith('-') && !GitSecurityGuard.isRestrictedPath(filePath)
+      );
+      for (let offset = 0; offset < paths.length; offset += 100) {
+        const verifiedPaths = GitSecurityGuard.validateRelativePaths(canonicalRoot, paths.slice(offset, offset + 100));
+        await GitSecurityGuard.execGit(['add', '-A', '--', ...verifiedPaths], canonicalRoot);
+      }
+      stagedCount = paths.length;
     } else {
       const verifiedPaths = GitSecurityGuard.validateRelativePaths(canonicalRoot, files);
       await GitSecurityGuard.execGit(['add', '--', ...verifiedPaths], canonicalRoot);
@@ -209,7 +219,7 @@ class EdithGitService {
    * Unstages file(s) or all changes from the Git index.
    */
   async unstage(userId, projectId, { files, all = false }) {
-    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId);
+    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId, { requireWrite: true });
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
     let unstagedCount = 0;
@@ -256,7 +266,7 @@ class EdithGitService {
       throw new AppError('Commit message is too long (max 2000 characters).', 400, 'INVALID_COMMIT_MESSAGE');
     }
 
-    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId);
+    const { canonicalRoot, workspace } = await edithFsService.getProjectRoot(userId, projectId, { requireWrite: true });
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
     // Check if anything is staged
@@ -270,6 +280,14 @@ class EdithGitService {
 
     if (!hasStaged) {
       throw new AppError('No changes are staged for commit. Please stage files first.', 400, 'NOTHING_TO_COMMIT');
+    }
+
+    const { stdout: stagedPathOutput } = await GitSecurityGuard.execGit(
+      ['diff', '--cached', '--name-only', '-z'],
+      canonicalRoot
+    );
+    if (stagedPathOutput.split('\0').some((filePath) => GitSecurityGuard.isRestrictedPath(filePath))) {
+      throw new AppError('Unstage restricted files before committing.', 403, 'RESTRICTED_CONTENT');
     }
 
     await GitSecurityGuard.execGit(['commit', '-m', cleanMessage], canonicalRoot);
@@ -299,19 +317,31 @@ class EdithGitService {
     const { canonicalRoot } = await edithFsService.getProjectRoot(userId, projectId);
     await GitSecurityGuard.ensureGitRepo(canonicalRoot);
 
-    const args = ['diff'];
-    if (staged) {
-      args.push('--cached');
-    }
-
-    if (file) {
-      const verifiedPaths = GitSecurityGuard.validateRelativePaths(canonicalRoot, [file]);
-      args.push('--', verifiedPaths[0]);
-    }
-
     try {
-      const { stdout } = await GitSecurityGuard.execGit(args, canonicalRoot);
-      return { diff: stdout || '' };
+      const diffArgs = staged ? ['--cached'] : [];
+      if (file) {
+        const [verifiedPath] = GitSecurityGuard.validateRelativePaths(canonicalRoot, [file]);
+        const { stdout } = await GitSecurityGuard.execGit(['diff', ...diffArgs, '--', verifiedPath], canonicalRoot);
+        return { diff: stdout || '' };
+      }
+
+      const { stdout: nameOutput } = await GitSecurityGuard.execGit(
+        ['diff', ...diffArgs, '--name-only', '-z'],
+        canonicalRoot
+      );
+      const changedPaths = nameOutput.split('\0').filter((filePath) =>
+        filePath && !filePath.startsWith('-') && !GitSecurityGuard.isRestrictedPath(filePath)
+      );
+      const diffs = [];
+      for (let offset = 0; offset < changedPaths.length; offset += 100) {
+        const verifiedPaths = GitSecurityGuard.validateRelativePaths(canonicalRoot, changedPaths.slice(offset, offset + 100));
+        const { stdout } = await GitSecurityGuard.execGit(
+          ['diff', ...diffArgs, '--', ...verifiedPaths],
+          canonicalRoot
+        );
+        if (stdout) diffs.push(stdout);
+      }
+      return { diff: diffs.join('') };
     } catch (err) {
       return { diff: '' };
     }

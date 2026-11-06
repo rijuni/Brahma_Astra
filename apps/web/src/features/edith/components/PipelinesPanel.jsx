@@ -60,10 +60,10 @@ export default function PipelinesPanel() {
 
   const handleRerun = () => {
     setIsRunning(true);
-    addToast('Triggered CI/CD Pipeline #143 run...', 'info');
+    addToast('Showing a sample pipeline run. No CI job was started.', 'info');
     setTimeout(() => {
       setIsRunning(false);
-      addToast('Pipeline #143 completed successfully in 2m 17s', 'success');
+      addToast('Sample pipeline preview finished. No CI job was run.', 'info');
     }, 1500);
   };
 
@@ -78,7 +78,7 @@ export default function PipelinesPanel() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>Pipeline #142 Passed</Badge>
+          <Badge variant="gold" style={{ padding: '4px 10px', fontSize: '13px' }}>Sample pipeline data</Badge>
           <Button
             variant="cyan"
             icon={isRunning ? RotateCw : Play}
@@ -86,7 +86,7 @@ export default function PipelinesPanel() {
             isLoading={isRunning}
             style={{ height: '36px', padding: '0 16px', fontSize: '15px', fontWeight: 600 }}
           >
-            {isRunning ? 'Running...' : 'Rerun Pipeline'}
+                {isRunning ? 'Previewing...' : 'Preview run'}
           </Button>
         </div>
       </div>

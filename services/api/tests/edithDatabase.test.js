@@ -79,7 +79,7 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
     expect(res.statusCode).toBe(401);
   });
 
-  it('discovers databases including system default and project workspace databases', async () => {
+  it('discovers only databases inside the project workspace', async () => {
     const res = await request(app)
       .get(`/api/v1/edith/database/databases?projectId=${projectId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -90,19 +90,16 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
     const dbs = res.body.data.databases;
     expect(Array.isArray(dbs)).toBe(true);
 
-    // Default dev.db should always be present
-    const defaultDb = dbs.find((d) => d.id === 'default');
-    expect(defaultDb).toBeDefined();
-    expect(defaultDb.isDefault).toBe(true);
+    expect(dbs.some((d) => d.id === 'default' || d.isDefault)).toBe(false);
 
     // Workspace database should also be discovered
     const workspaceDb = dbs.find((d) => d.name === 'workspace_data.db');
     expect(workspaceDb).toBeDefined();
   });
 
-  it('lists tables and views with row counts from default database', async () => {
+  it('lists tables and views with row counts from the project database', async () => {
     const res = await request(app)
-      .get(`/api/v1/edith/database/tables?projectId=${projectId}&database=default`)
+      .get(`/api/v1/edith/database/tables?projectId=${projectId}&database=workspace_data.db`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);
@@ -110,23 +107,21 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
     expect(Array.isArray(res.body.data.tables)).toBe(true);
 
     const tableNames = res.body.data.tables.map((t) => t.name);
-    expect(tableNames).toContain('users');
-    expect(tableNames).toContain('projects');
+    expect(tableNames).toContain('test_items');
   });
 
   it('inspects column schema, primary keys, and types for a table', async () => {
     const res = await request(app)
-      .get(`/api/v1/edith/database/schema/users?projectId=${projectId}&database=default`)
+      .get(`/api/v1/edith/database/schema/test_items?projectId=${projectId}&database=workspace_data.db`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.tableName).toBe('users');
+    expect(res.body.data.tableName).toBe('test_items');
 
     const colNames = res.body.data.columns.map((c) => c.name);
     expect(colNames).toContain('id');
-    expect(colNames).toContain('email');
-    expect(colNames).toContain('role');
+    expect(colNames).toContain('stock');
 
     const idCol = res.body.data.columns.find((c) => c.name === 'id');
     expect(idCol.pk).toBe(true);
@@ -134,7 +129,7 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
 
   it('retrieves paginated records from a table', async () => {
     const res = await request(app)
-      .get(`/api/v1/edith/database/records/users?projectId=${projectId}&database=default&page=1&limit=5`)
+      .get(`/api/v1/edith/database/records/test_items?projectId=${projectId}&database=workspace_data.db&page=1&limit=5`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);
@@ -152,14 +147,14 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         projectId,
-        database: 'default',
-        sql: 'SELECT id, email, role FROM users LIMIT 10'
+        database: 'workspace_data.db',
+        sql: 'SELECT id, name, stock FROM test_items LIMIT 10'
       });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.rowCount).toBeGreaterThanOrEqual(1);
-    expect(res.body.data.columns).toEqual(['id', 'email', 'role']);
+    expect(res.body.data.columns).toEqual(['id', 'name', 'stock']);
     expect(typeof res.body.data.executionTimeMs).toBe('number');
   });
 
@@ -186,8 +181,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: "INSERT INTO users (id, email, password_hash) VALUES ('hacked', 'hacked@evil.local', 'pass')"
+        database: 'workspace_data.db',
+        sql: "INSERT INTO test_items (name, stock) VALUES ('hacked', 0)"
         });
 
       expect(res.statusCode).toBe(403);
@@ -200,8 +195,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: "UPDATE users SET role = 'admin'"
+        database: 'workspace_data.db',
+        sql: "UPDATE test_items SET stock = 0"
         });
 
       expect(res.statusCode).toBe(403);
@@ -214,8 +209,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: 'DELETE FROM users'
+        database: 'workspace_data.db',
+        sql: 'DELETE FROM test_items'
         });
 
       expect(res.statusCode).toBe(403);
@@ -228,8 +223,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: 'DROP TABLE users'
+        database: 'workspace_data.db',
+        sql: 'DROP TABLE test_items'
         });
 
       expect(res.statusCode).toBe(403);
@@ -242,8 +237,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: 'ALTER TABLE users ADD COLUMN compromised INT'
+        database: 'workspace_data.db',
+        sql: 'ALTER TABLE test_items ADD COLUMN compromised INT'
         });
 
       expect(res.statusCode).toBe(403);
@@ -256,8 +251,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: 'SELECT * FROM users; DROP TABLE users'
+        database: 'workspace_data.db',
+        sql: 'SELECT * FROM test_items; DROP TABLE test_items'
         });
 
       expect(res.statusCode).toBe(400);
@@ -270,8 +265,8 @@ describe('EDITH Read-Only Database Explorer (/api/v1/edith/database)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           projectId,
-          database: 'default',
-          sql: 'SELECT * FROM users -- bypass check'
+        database: 'workspace_data.db',
+        sql: 'SELECT * FROM test_items -- bypass check'
         });
 
       expect(res.statusCode).toBe(400);

@@ -159,7 +159,7 @@ export default function EdithShell({
       <div className="flex flex-col flex-1" style={{ width: 'calc(100vw - 56px)', height: '100vh', overflow: 'hidden', minHeight: 0, minWidth: 0 }}>
         {/* Top Header Glass Bar */}
         <header
-          className="glass-panel flex items-center justify-between"
+          className="glass-panel flex items-center justify-between edith-shell-header"
           style={{
             width: '100%',
             height: 'var(--astra-header-height, 56px)',
@@ -172,7 +172,7 @@ export default function EdithShell({
           }}
         >
           {/* Breadcrumb Path */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 edith-shell-breadcrumb">
             <div className="flex items-center gap-2">
               <EdithArcReactor size={26} showHud={false} animated={false} />
               <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--edith-cyan, #00D2FF)', letterSpacing: '0.12em', fontFamily: "'Michroma', sans-serif" }}>
@@ -194,15 +194,15 @@ export default function EdithShell({
           </div>
 
           {/* Service & Sandbox Status Disclosures */}
-          <div className="flex items-center gap-3.5">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-              <span className="status-live-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--brand-cyan)' }} />
+          <div className="flex items-center gap-3.5 edith-shell-actions">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded edith-shell-service-status" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+              <span aria-hidden="true" style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--text-muted)' }} />
               <span style={{ fontSize: '13.5px', fontWeight: 500, color: 'var(--brand-cyan)' }} title="EDITH Engine :8002">
                 EDITH Engine :8002
               </span>
             </div>
 
-            <Badge variant="cyan" style={{ padding: '5px 12px', fontSize: '13.5px' }}>Sandboxed Runner :8003</Badge>
+            <Badge variant="cyan" className="edith-shell-service-status" style={{ padding: '5px 12px', fontSize: '13.5px' }}>Runner :8003</Badge>
 
             {/* Panel Visibility Toggles */}
             {onToggleSidebar && (
@@ -222,7 +222,7 @@ export default function EdithShell({
                 title={isSidebarOpen ? 'Collapse Explorer (Ctrl+E)' : 'Expand Explorer (Ctrl+E)'}
               >
                 <FolderTree size={16} />
-                <span>Explorer</span>
+                <span className="edith-shell-action-label">Explorer</span>
               </button>
             )}
 
@@ -243,7 +243,7 @@ export default function EdithShell({
                 title={isAssistantOpen ? 'Hide AI Assistant (Ctrl+J)' : 'Show AI Assistant (Ctrl+J)'}
               >
                 <Bot size={16} />
-                <span>AI Assistant</span>
+                <span className="edith-shell-action-label">AI Assistant</span>
               </button>
             )}
 
@@ -264,7 +264,7 @@ export default function EdithShell({
                 title={isZenMode ? 'Exit Zen Mode (Ctrl+B)' : 'Zen Editor Mode (Ctrl+B)'}
               >
                 <Maximize2 size={15} />
-                <span>{isZenMode ? 'Exit Zen' : 'Zen'}</span>
+                <span className="edith-shell-action-label">{isZenMode ? 'Exit Zen' : 'Zen'}</span>
               </button>
             )}
 
@@ -284,7 +284,7 @@ export default function EdithShell({
               title="Return to FRIDAY Dashboard"
             >
               <ArrowLeft size={15} />
-              <span>FRIDAY Home</span>
+              <span className="edith-shell-action-label">FRIDAY Home</span>
             </button>
           </div>
         </header>

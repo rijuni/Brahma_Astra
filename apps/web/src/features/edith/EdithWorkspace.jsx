@@ -39,19 +39,18 @@ import EdithSettingsPanel from './components/EdithSettingsPanel';
 import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import Button from '../../components/common/Button';
-import { EDITH_SAMPLE_PROJECTS } from '../../config/edith-sample-projects';
 import { edithService } from '../../services/edith/edith-service';
 import { edithFsService } from '../../services/edith/edith-fs-service';
 import { useToast } from '../../components/feedback/Toast';
 
 export default function EdithWorkspace({ onBackToFriday }) {
-  const [projects, setProjects] = useState(EDITH_SAMPLE_PROJECTS);
-  const [activeProjectId, setActiveProjectId] = useState(EDITH_SAMPLE_PROJECTS[0].id);
-  const activeProject = projects.find((p) => p.id === activeProjectId) || projects[0];
+  const [projects, setProjects] = useState([]);
+  const [activeProjectId, setActiveProjectId] = useState('');
+  const activeProject = projects.find((p) => p.id === activeProjectId) || { id: '', name: '', files: [] };
 
   // Editor Tabs & Files
-  const [openFiles, setOpenFiles] = useState(activeProject.files.slice(0, 3));
-  const [activeFilePath, setActiveFilePath] = useState(activeProject.files[0]?.path || '');
+  const [openFiles, setOpenFiles] = useState([]);
+  const [activeFilePath, setActiveFilePath] = useState('');
   const [dirtyFilePaths, setDirtyFilePaths] = useState(new Set());
   const [isSaving, setIsSaving] = useState(false);
   const [unsavedConfirmFile, setUnsavedConfirmFile] = useState(null);
@@ -241,8 +240,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
             id: ws.projectId || ws.id,
             workspaceId: ws.id,
             name: ws.projectName || ws.name,
-            rootPath: ws.rootPath,
-            description: `Host Root: ${ws.rootPath}`,
+            description: ws.description || 'Connected workspace',
             files: []
           }));
           setProjects(remoteProjects);
@@ -253,41 +251,22 @@ export default function EdithWorkspace({ onBackToFriday }) {
               flat.find((f) => /^(readme\.md|package\.json|src\/app|main\.)/i.test(f.name || f.path)) ||
               flat.find((f) => /\.(jsx?|tsx?|py|json|md|html|css)$/i.test(f.name || f.path)) ||
               flat[0];
-            handleOpenFile(preferred);
+            handleOpenFile(preferred, remoteProjects[0].id);
           }
-        } else {
-          // Auto-register default workspace root for Friday-Edith
-          try {
-            const reg = await edithFsService.registerProject({
-              name: 'Friday-Edith Workspace',
-              rootPath: 'M:\\Friday-Edith'
-            });
-            if (mounted && reg) {
-              const defaultProj = {
-                id: reg.projectId || reg.id,
-                workspaceId: reg.id,
-                name: reg.projectName || reg.name,
-                rootPath: reg.rootPath,
-                description: `Host Root: ${reg.rootPath}`,
-                files: []
-              };
-              setProjects([defaultProj]);
-              setActiveProjectId(defaultProj.id);
-              const flat = await reloadWorkspaceTree(defaultProj.id);
-              if (flat && flat.length > 0 && mounted) {
-                const preferred =
-                  flat.find((f) => /^(readme\.md|package\.json|src\/app|main\.)/i.test(f.name || f.path)) ||
-                  flat.find((f) => /\.(jsx?|tsx?|py|json|md|html|css)$/i.test(f.name || f.path)) ||
-                  flat[0];
-                handleOpenFile(preferred);
-              }
-            }
-          } catch (autoErr) {
-            console.warn('Auto-registering default root failed, using sample projects:', autoErr);
-          }
+        } else if (mounted) {
+          setProjects([]);
+          setActiveProjectId('');
+          setOpenFiles([]);
+          setActiveFilePath('');
         }
       } catch (err) {
         console.warn('Could not query real workspace projects:', err);
+        if (mounted) {
+          setProjects([]);
+          setActiveProjectId('');
+          setOpenFiles([]);
+          setActiveFilePath('');
+        }
       }
     }
 
@@ -298,12 +277,14 @@ export default function EdithWorkspace({ onBackToFriday }) {
   // Project selection handler
   const handleSelectProject = async (projectId) => {
     setActiveProjectId(projectId);
+    setOpenFiles([]);
+    setActiveFilePath('');
+    setDirtyFilePaths(new Set());
     const flat = await reloadWorkspaceTree(projectId);
     const target = projects.find((p) => p.id === projectId);
     const availableFiles = (flat && flat.length > 0) ? flat : (target?.files || []);
     if (availableFiles.length > 0) {
-      handleOpenFile(availableFiles[0]);
-      setDirtyFilePaths(new Set());
+      handleOpenFile(availableFiles[0], projectId);
     }
   };
 
@@ -312,35 +293,36 @@ export default function EdithWorkspace({ onBackToFriday }) {
     try {
       const reg = await edithFsService.registerProject({
         name: newProj.name,
-        rootPath: newProj.rootPath || 'M:\\Friday-Edith'
+        rootPath: newProj.rootPath
       });
       const created = {
         id: reg.projectId || reg.id,
         name: reg.name,
-        rootPath: reg.rootPath,
-        description: `Host Root: ${reg.rootPath}`,
+        description: newProj.description || 'Connected workspace',
         files: []
       };
       setProjects((prev) => [created, ...prev]);
       handleSelectProject(created.id);
       addToast(`Registered workspace "${created.name}"`, 'success');
+      return true;
     } catch (err) {
       addToast(`Failed to register workspace: ${err.message}`, 'error');
+      return false;
     }
   };
 
   // Open / select a file tab with live disk read
-  const handleOpenFile = async (file) => {
+  const handleOpenFile = async (file, projectId = activeProjectId) => {
     const exists = openFiles.find((f) => f.path === file.path);
     if (!exists) {
       let fileWithContent = { ...file };
       if (fileWithContent.content === undefined) {
         try {
-          const res = await edithFsService.readFile(activeProjectId, file.path);
+          const res = await edithFsService.readFile(projectId, file.path);
           fileWithContent.content = res.content;
         } catch (err) {
-          console.warn('Could not read real file from disk:', err);
-          fileWithContent.content = file.content || `// File: ${file.name}\n`;
+          addToast(`Could not open file: ${err.message}`, 'error');
+          return;
         }
       }
       setOpenFiles((prev) => [...prev, fileWithContent]);
@@ -511,12 +493,17 @@ export default function EdithWorkspace({ onBackToFriday }) {
 
   // Submit coding task to EDITH Assistant & backend
   const handleGenerateTask = async ({ instruction, taskType, targetFile }) => {
+    const taskWorkspaceId = activeProject.workspaceId || activeProject.id;
+    if (!taskWorkspaceId) {
+      addToast('Connect a workspace before creating a coding task.', 'warning');
+      return;
+    }
     setIsGenerating(true);
     addToast('EDITH Assistant analyzing task...', 'info');
 
     try {
       const created = await edithService.createCodingTask(
-        activeProject.id,
+        taskWorkspaceId,
         instruction,
         `Task: ${instruction.slice(0, 30)}`
       );
@@ -527,9 +514,15 @@ export default function EdithWorkspace({ onBackToFriday }) {
       } else {
         // Poll for patch proposal
         setTimeout(async () => {
-          const polled = await edithService.getCodingTask(created.id);
-          if (polled?.patchProposal) {
-            setPatchProposal(polled.patchProposal);
+          try {
+            const polled = await edithService.getCodingTask(created.id);
+            if (polled?.patchProposal) {
+              setPatchProposal(polled.patchProposal);
+            } else {
+              addToast('Task created; its proposal is not ready yet.', 'info');
+            }
+          } catch (err) {
+            addToast(`Could not load the task proposal: ${err.message}`, 'error');
           }
         }, 1000);
       }
@@ -545,7 +538,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
         ...prev
       ]);
     } catch (err) {
-      console.error(err);
+      addToast(`Could not create coding task: ${err.message}`, 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -559,16 +552,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
         await edithService.approveCodingTask(activeTask.id);
       }
 
-      // If patch modifies active file, apply changes
-      if (patchProposal?.files) {
-        for (const f of patchProposal.files) {
-          if (f.content && activeFile && f.file_path === activeFile.path) {
-            handleFileChange(activeFile.path, activeFile.content + '\\n' + f.content);
-          }
-        }
-      }
-
-      addToast('Patch approved & applied successfully!', 'success');
+      addToast('Patch approved and queued for execution.', 'success');
       setPatchProposal(null);
       if (activeTask) setActiveTask((prev) => ({ ...prev, status: 'approved' }));
     } catch (err) {
@@ -588,7 +572,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       setPatchProposal(null);
       if (activeTask) setActiveTask((prev) => ({ ...prev, status: 'cancelled' }));
     } catch (err) {
-      console.error(err);
+      addToast(`Could not reject patch: ${err.message}`, 'error');
     }
   };
 
@@ -743,7 +727,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       onToggleAssistant={() => setIsAssistantOpen((p) => !p)}
     >
       <div
-        className="flex h-full w-full"
+        className="flex h-full w-full edith-workspace-layout"
         style={{
           padding: 0,
           margin: 0,
@@ -759,7 +743,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
         {/* Left Secondary Rail (Projects + File Tree) - hidden in Zen Mode or when collapsed */}
         {!isZenMode && isSidebarOpen && (
           <div
-            className="flex flex-col"
+            className="flex flex-col edith-workspace-sidebar"
             style={{
               width: `${sidebarWidth}px`,
               height: '100%',
@@ -893,7 +877,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
 
           {/* Bottom Half: Unified Single-Tier Dock Panels (Reclaims 38px vertical height) */}
           <div
-            className="flex flex-col"
+            className="flex flex-col edith-workspace-assistant"
             style={{
               width: '100%',
               height:
@@ -1048,7 +1032,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
         {/* Right Side Pane: Assistant AI Panel - hidden in Zen Mode or when collapsed */}
         {!isZenMode && isAssistantOpen && (
           <div
-            className="flex flex-col"
+            className="flex flex-col edith-workspace-assistant-pane"
             style={{
               width: `${assistantWidth}px`,
               height: '100%',

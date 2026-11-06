@@ -117,19 +117,15 @@ class SqlReadOnlyGuard {
 
   /**
    * Resolves and verifies the target SQLite database path.
-   * Allows either the system dev.db or a project-internal .db / .sqlite file.
+   * Allows only a project-internal .db / .sqlite file.
    * @param {string} canonicalRoot
    * @param {string} [customDbPath]
    * @returns {string} Canonical absolute database file path
    */
   static resolveDatabasePath(canonicalRoot, customDbPath) {
-    // If not specified or requested 'default', resolve to services/api/prisma/dev.db
+    // Never allow project-scoped explorer requests to select the global API database.
     if (!customDbPath || customDbPath === 'default' || customDbPath === 'system') {
-      const defaultDbPath = path.resolve(__dirname, '../../prisma/dev.db');
-      if (!fs.existsSync(defaultDbPath)) {
-        throw new AppError(`Default database file not found at: ${defaultDbPath}`, 404, 'DB_FILE_NOT_FOUND');
-      }
-      return fs.realpathSync(defaultDbPath);
+      throw new AppError('Select a SQLite database inside this workspace.', 400, 'DATABASE_REQUIRED');
     }
 
     // Check allowed extension

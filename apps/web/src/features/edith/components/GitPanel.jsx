@@ -22,7 +22,7 @@ import Input from '../../../components/common/Input';
 import { useToast } from '../../../components/feedback/Toast';
 import { edithGitService } from '../../../services/edith/edith-git-service';
 
-export default function GitPanel({ projectId = 'default', activeProject = null }) {
+export default function GitPanel({ projectId = null, activeProject = null }) {
   const [branches, setBranches] = useState(['main']);
   const [activeBranch, setActiveBranch] = useState('main');
   const [trackingInfo, setTrackingInfo] = useState({ tracking: null, ahead: 0, behind: 0 });
@@ -55,7 +55,7 @@ export default function GitPanel({ projectId = 'default', activeProject = null }
 
   const { addToast } = useToast();
 
-  const effectiveProjectId = projectId || activeProject?.id || 'default';
+  const effectiveProjectId = projectId || activeProject?.id || '';
 
   const loadGitState = useCallback(async (silent = false) => {
     if (!effectiveProjectId) return;
@@ -101,6 +101,18 @@ export default function GitPanel({ projectId = 'default', activeProject = null }
   useEffect(() => {
     loadGitState();
   }, [loadGitState]);
+
+  if (!effectiveProjectId) {
+    return (
+      <div className="edith-db-empty-state" role="status">
+        <GitBranch size={24} aria-hidden="true" />
+        <div>
+          <strong>Select a workspace</strong>
+          <p>Connect a workspace to view its local Git repository.</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleStage = async (fileObj) => {
     const filePath = typeof fileObj === 'string' ? fileObj : fileObj.path;

@@ -12,12 +12,19 @@ describe('EDITH Filesystem Integration & Security (/api/v1/edith/fs)', () => {
   let otherToken;
   let userId;
   let otherUserId;
+  let workspaceBase;
   let tempRoot;
+  let outOfBaseRoot;
   let projectId;
+  const originalWorkspaceBase = process.env.EDITH_WORKSPACE_BASE_DIR;
 
   beforeAll(async () => {
     // 1. Create temporary directory for real filesystem operations
-    tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'edith-test-root-'));
+    workspaceBase = fs.mkdtempSync(path.join(os.tmpdir(), 'edith-workspaces-'));
+    tempRoot = path.join(workspaceBase, 'project');
+    fs.mkdirSync(tempRoot);
+    outOfBaseRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'edith-outside-base-'));
+    process.env.EDITH_WORKSPACE_BASE_DIR = workspaceBase;
     fs.mkdirSync(path.join(tempRoot, 'src'), { recursive: true });
     fs.writeFileSync(path.join(tempRoot, 'src', 'main.js'), 'console.log("EDITH FS Live");\n', 'utf8');
     fs.writeFileSync(path.join(tempRoot, 'README.md'), '# Test Project\n', 'utf8');
@@ -40,10 +47,13 @@ describe('EDITH Filesystem Integration & Security (/api/v1/edith/fs)', () => {
   afterAll(async () => {
     // Clean up temporary disk files
     try {
-      if (tempRoot && fs.existsSync(tempRoot)) {
-        fs.rmSync(tempRoot, { recursive: true, force: true });
+      if (workspaceBase && fs.existsSync(workspaceBase)) {
+        fs.rmSync(workspaceBase, { recursive: true, force: true });
       }
+      if (outOfBaseRoot && fs.existsSync(outOfBaseRoot)) fs.rmSync(outOfBaseRoot, { recursive: true, force: true });
     } catch {}
+    if (originalWorkspaceBase === undefined) delete process.env.EDITH_WORKSPACE_BASE_DIR;
+    else process.env.EDITH_WORKSPACE_BASE_DIR = originalWorkspaceBase;
 
     // Clean up test database records
     await prisma.edithWorkspace.deleteMany({
@@ -74,8 +84,18 @@ describe('EDITH Filesystem Integration & Security (/api/v1/edith/fs)', () => {
 
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.rootPath).toBe(fs.realpathSync(tempRoot));
     projectId = res.body.data.projectId;
+    expect(projectId).toBeTruthy();
+    expect(res.body.data).not.toHaveProperty('rootPath');
+  });
+
+  it('rejects an existing directory outside the configured workspace base', async () => {
+    const res = await request(app)
+      .post('/api/v1/edith/fs/projects')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Outside Workspace', rootPath: outOfBaseRoot });
+
+    expect(res.statusCode).toBe(403);
   });
 
   it('rejects registering non-existent directory with 404', async () => {
@@ -213,6 +233,32 @@ describe('EDITH Filesystem Integration & Security (/api/v1/edith/fs)', () => {
 
     expect(res.statusCode).toBe(403);
     expect(res.body.success).toBe(false);
+  });
+
+  it('SECURITY: rejects direct reads of restricted files', async () => {
+    const secretPath = path.join(tempRoot, '.env');
+    fs.writeFileSync(secretPath, 'EXAMPLE_SECRET=do-not-read');
+    const res = await request(app)
+      .get(`/api/v1/edith/fs/read?projectId=${projectId}&path=.env`)
+      .set('Authorization', `Bearer ${token}`);
+    fs.unlinkSync(secretPath);
+
+    expect(res.statusCode).toBe(403);
+  });
+
+  it('SECURITY: refuses to delete a directory containing restricted files', async () => {
+    const protectedDir = path.join(tempRoot, 'src', 'protected-config');
+    fs.mkdirSync(protectedDir, { recursive: true });
+    fs.writeFileSync(path.join(protectedDir, '.env'), 'EXAMPLE_SECRET=do-not-delete');
+
+    const res = await request(app)
+      .delete('/api/v1/edith/fs/delete')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ projectId, path: 'src/protected-config' });
+
+    expect(res.statusCode).toBe(403);
+    expect(fs.existsSync(path.join(protectedDir, '.env'))).toBe(true);
+    fs.rmSync(protectedDir, { recursive: true, force: true });
   });
 
   it('SECURITY: rejects deleting root directory itself with 400', async () => {

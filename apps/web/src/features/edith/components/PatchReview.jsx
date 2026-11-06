@@ -164,7 +164,7 @@ export default function PatchReview({
             isLoading={isApplying}
             style={{ height: '38px', padding: '0 18px', fontSize: '15px', fontWeight: 600 }}
           >
-            Approve & Apply Patch
+            Approve & Queue
           </Button>
         </div>
       </div>

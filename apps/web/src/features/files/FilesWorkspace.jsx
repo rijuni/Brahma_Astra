@@ -2,18 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Upload,
   FileText,
-  FileCode,
   Trash2,
   Download,
-  AlertCircle,
-  CheckCircle2,
   HardDrive,
   Info,
   Loader2
 } from 'lucide-react';
-import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
-import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import EmptyState from '../../components/common/EmptyState';
 import { fileService } from '../../services/file-service';
@@ -28,6 +23,7 @@ function formatFileSize(bytes) {
 
 export default function FilesWorkspace() {
   const [files, setFiles] = useState([]);
+  const [loadError, setLoadError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -42,8 +38,9 @@ export default function FilesWorkspace() {
       if (Array.isArray(data)) {
         setFiles(data);
       }
+      setLoadError('');
     } catch (err) {
-      console.error('Failed to load files:', err);
+      setLoadError(err.message || 'Unable to load files from the server.');
     } finally {
       setIsLoading(false);
     }
@@ -120,21 +117,7 @@ export default function FilesWorkspace() {
   const handleDownload = async (file) => {
     try {
       addToast(`Initiating download for "${file.filename || file.name}"...`, 'info');
-      const token = typeof localStorage !== 'undefined' ? localStorage.getItem('friday_token') : null;
-      const response = await fetch(`/api/v1/files/${file.id}/download`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
-      const blob = response.ok
-        ? await response.blob()
-        : new Blob([`FRIDAY Staged File: ${file.filename || file.name}`], { type: file.mimeType || 'text/plain' });
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = file.filename || file.name || 'download';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(downloadUrl);
-      document.body.removeChild(a);
+      await fileService.download(file.id, file.filename || file.name || 'download');
       addToast(`Downloaded "${file.filename || file.name}"`, 'success');
     } catch (err) {
       addToast(`Download failed: ${err.message}`, 'error');
@@ -146,30 +129,8 @@ export default function FilesWorkspace() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(0, 0, 0, 0.45)',
-              border: '1px solid rgba(246, 200, 122, 0.3)',
-              borderRadius: '9999px',
-              padding: '2px 12px',
-              marginBottom: '6px'
-            }}
-          >
-            <span className="telemetry-beacon-online" />
-            <span
-              style={{
-                fontSize: '9.5px',
-                letterSpacing: '0.2em',
-                color: 'var(--brand-gold-light)',
-                textTransform: 'uppercase',
-                fontWeight: 700
-              }}
-            >
-              QUANTUM-SAFE ENCLAVE // FILE VAULT
-            </span>
+          <div className="friday-section-kicker">
+            FILE STORAGE
           </div>
           <h1 className="friday-page-title">
             Document & File Management
@@ -192,20 +153,14 @@ export default function FilesWorkspace() {
 
       {/* Backend Status Notice */}
       <div
-        className="friday-workspace-panel flex items-center justify-between"
-        style={{
-          padding: '12px 18px',
-          borderColor: 'rgba(246, 200, 122, 0.35)',
-          background: 'rgba(18, 14, 8, 0.65)'
-        }}
+        className="friday-storage-note flex items-start gap-3"
       >
-        <div className="flex items-center gap-3">
-          <CheckCircle2 size={18} color="#FAD982" />
-          <span className="body-regular" style={{ fontSize: '13px', color: '#FFFFFF' }}>
-            <strong style={{ color: '#FAD982' }}>Persistent Storage Active:</strong> Files are stored securely on disk with SHA-256 integrity verification and SQLite metadata tracking.
-          </span>
+        <Info size={18} aria-hidden="true" />
+        <div className="body-regular">
+          <strong>Stored on this application server.</strong>
+          <span> Checksums help verify file integrity; they do not encrypt files.</span>
+          <span className="friday-storage-note__detail">Files are private to your account in this workspace.</span>
         </div>
-        <Badge variant="gold">Persistent Vault</Badge>
       </div>
 
       {/* Drag & Drop Zone with Caliper Brackets */}
@@ -226,6 +181,7 @@ export default function FilesWorkspace() {
           onChange={handleFileInputChange}
           style={{ display: 'none' }}
           multiple
+          onClick={(event) => event.stopPropagation()}
         />
 
         <div
@@ -290,8 +246,10 @@ export default function FilesWorkspace() {
         {files.length === 0 ? (
           <EmptyState
             icon={FileText}
-            title={isLoading ? 'Loading file vault...' : 'No files stored'}
-            description={isLoading ? 'Connecting to storage engine...' : 'Upload documents to feed project contexts and conversation attachments.'}
+            title={isLoading ? 'Loading files...' : loadError ? 'Could not load files' : 'No files stored'}
+            description={isLoading
+              ? 'Connecting to file storage.'
+              : loadError || 'Upload documents to make them available in your account.'}
           />
         ) : (
           <div style={{ overflowX: 'auto' }}>

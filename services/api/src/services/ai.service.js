@@ -2,6 +2,7 @@ const prisma = require('../repositories/prisma');
 const fridayCoreClient = require('../clients/fridayCore.client');
 const { AppError } = require('../middleware/errorHandler');
 const auditService = require('./audit.service');
+const logger = require('../observability/logger');
 
 class AiService {
   async createTask(userId, { prompt, conversationId = null, taskType = 'general', context = {} }) {
@@ -34,17 +35,20 @@ class AiService {
     });
 
     // Asynchronously or background dispatch to FRIDAY Core
-    this.dispatchToFridayCore(task.id, prompt, taskType, context);
+    this.dispatchToFridayCore(task.id, prompt, taskType, context).catch((err) => {
+      logger.error('Background FRIDAY Core task dispatch failed', err);
+    });
 
     return task;
   }
 
   async dispatchToFridayCore(taskId, prompt, taskType, context) {
     try {
-      await prisma.aiTask.update({
+      const statusUpdate = await prisma.aiTask.updateMany({
         where: { id: taskId },
         data: { status: 'running' }
       });
+      if (statusUpdate.count === 0) return;
 
       const response = await fridayCoreClient.executeTask({
         taskId,
@@ -53,7 +57,7 @@ class AiService {
         context
       });
 
-      await prisma.aiTask.update({
+      await prisma.aiTask.updateMany({
         where: { id: taskId },
         data: {
           status: 'completed',

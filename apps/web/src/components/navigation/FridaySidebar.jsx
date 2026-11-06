@@ -187,7 +187,7 @@ export default function FridaySidebar({
 
       {/* Bottom Area: Telemetry + Controls Strip + User Profile */}
       <div className="flex flex-col gap-3" style={{ marginTop: 'auto', paddingTop: '16px' }}>
-        {/* Stark HUD Telemetry Monitor */}
+        {/* Service health summary */}
         <div className="friday-sidebar-telemetry flex flex-col gap-1.5" style={{ padding: '10px 12px' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
@@ -202,19 +202,13 @@ export default function FridaySidebar({
                   textTransform: 'uppercase'
                 }}
               >
-                STARK TELEMETRY
+                SERVICE HEALTH
               </span>
             </div>
-            <span className="telemetry-beacon-online" />
           </div>
 
-          <div className="flex items-center justify-between" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.65)' }}>
-            <span>ENCLAVE</span>
-            <span style={{ color: '#10B981', fontWeight: 600 }}>ARMED // 99.98%</span>
-          </div>
-
-          <div className="friday-metric-track" style={{ height: '3px', marginTop: '2px' }}>
-            <div className="friday-metric-fill" style={{ width: '92%' }} />
+          <div style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.68)', lineHeight: 1.5 }}>
+            Open Settings to check live service connectivity.
           </div>
         </div>
 
