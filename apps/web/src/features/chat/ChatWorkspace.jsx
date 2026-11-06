@@ -9,7 +9,8 @@ import {
   User,
   Sparkles,
   AlertCircle,
-  Trash2
+  Trash2,
+  Menu
 } from 'lucide-react';
 import PromptComposer from './PromptComposer';
 import CodeBlock from './CodeBlock';
@@ -24,6 +25,8 @@ import { aiService } from '../../services/ai-service';
 import { useToast } from '../../components/feedback/Toast';
 
 export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
+  const [isCompact, setIsCompact] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+  const [isHistoryRailOpen, setIsHistoryRailOpen] = useState(() => !window.matchMedia('(max-width: 760px)').matches);
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -38,6 +41,16 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
   const { addToast } = useToast();
   const messagesEndRef = useRef(null);
   const processedPromptRef = useRef(null);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 760px)');
+    const handleChange = (event) => {
+      setIsCompact(event.matches);
+      setIsHistoryRailOpen(!event.matches);
+    };
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
 
   // Auto-send initial prompt if transferred from Dashboard
   useEffect(() => {
@@ -106,6 +119,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
       setConversations((prev) => [newConv, ...prev]);
       setActiveConversationId(newConv.id);
       setMessages([]);
+      if (isCompact) setIsHistoryRailOpen(false);
       addToast('New conversation initialized', 'info');
     } catch (err) {
       addToast('Failed to create new chat', 'error');
@@ -297,7 +311,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
 
   return (
     <div
-      className="flex gap-4 animate-entrance"
+      className="flex gap-4 animate-entrance friday-chat-layout"
       style={{
         height: '100%',
         width: '100%',
@@ -309,7 +323,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
     >
       {/* Left Conversations Rail */}
       <div
-        className="friday-workspace-panel friday-caliper-box flex flex-col"
+        className={`friday-workspace-panel friday-caliper-box flex flex-col friday-chat-rail ${isHistoryRailOpen ? 'is-open' : ''}`}
         style={{
           width: '280px',
           padding: '18px 16px',
@@ -331,6 +345,7 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           <Search size={14} color="#F6C87A" />
           <input
             type="text"
+            aria-label="Search conversations"
             placeholder="Search chats..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -352,7 +367,6 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
               return (
                 <div
                   key={conv.id}
-                  onClick={() => setActiveConversationId(conv.id)}
                   className="flex items-center justify-between w-full text-left group"
                   style={{
                     padding: '8px 10px',
@@ -365,7 +379,16 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                     position: 'relative'
                   }}
                 >
-                  <div className="flex items-center gap-2.5 overflow-hidden" style={{ flex: 1, minWidth: 0, paddingRight: '6px' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveConversationId(conv.id);
+                      if (isCompact) setIsHistoryRailOpen(false);
+                    }}
+                    aria-current={isActive ? 'true' : undefined}
+                    className="flex items-center gap-2.5 overflow-hidden text-left"
+                    style={{ flex: 1, minWidth: 0, padding: 0, paddingRight: '6px', background: 'transparent', border: 0, color: 'inherit' }}
+                  >
                     <MessageSquare size={14} color={isActive ? '#FAD982' : 'rgba(255, 255, 255, 0.5)'} style={{ flexShrink: 0 }} />
                     <span
                       style={{
@@ -379,9 +402,10 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
                     >
                       {conv.title || 'Untitled Chat'}
                     </span>
-                  </div>
+                  </button>
 
-                  <button
+                    <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       setConvToDelete(conv);
@@ -419,9 +443,18 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
         </div>
       </div>
 
+      {isCompact && isHistoryRailOpen && (
+        <button
+          type="button"
+          className="friday-chat-scrim"
+          aria-label="Close conversation history"
+          onClick={() => setIsHistoryRailOpen(false)}
+        />
+      )}
+
       {/* Main Chat Thread & Composer Area */}
       <div
-        className="friday-workspace-panel friday-caliper-box flex flex-col flex-1"
+        className="friday-workspace-panel friday-caliper-box flex flex-col flex-1 friday-chat-main"
         style={{
           padding: '20px 24px',
           overflow: 'hidden'
@@ -437,6 +470,15 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
           }}
         >
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="friday-chat-list-toggle"
+              aria-label={isHistoryRailOpen ? 'Hide conversation history' : 'Show conversation history'}
+              aria-expanded={isHistoryRailOpen}
+              onClick={() => setIsHistoryRailOpen((open) => !open)}
+            >
+              <Menu size={18} />
+            </button>
             <div style={{ flexShrink: 0 }}>
               <FridayArcReactor size={28} />
             </div>
@@ -493,9 +535,8 @@ export default function ChatWorkspace({ initialPrompt, onResetInitialPrompt }) {
               </button>
             )}
             <div className="flex items-center gap-2">
-              <span className="telemetry-beacon-online" />
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--brand-gold-light)', letterSpacing: '0.04em' }}>
-                NEURAL CORE ONLINE
+                FRIDAY AI CHAT
               </span>
             </div>
           </div>

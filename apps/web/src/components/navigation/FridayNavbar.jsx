@@ -47,6 +47,8 @@ export default function FridayNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
               padding: 0
             }}
             title={isSidebarCollapsed ? "Show Sidebar (Ctrl+B)" : "Hide Sidebar (Ctrl+B)"}
+            aria-label={isSidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'}
+            aria-expanded={!isSidebarCollapsed}
           >
             <Menu size={18} />
           </button>
@@ -54,6 +56,13 @@ export default function FridayNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
 
         <div
           onClick={onOpenSearch}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onOpenSearch?.();
+            }
+          }}
+          aria-label="Open search"
           className="glass-input flex items-center gap-3 cursor-pointer"
           style={{
             maxWidth: '380px',
@@ -85,34 +94,30 @@ export default function FridayNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
           className="glass-btn-ghost flex items-center justify-center"
           style={{ width: '38px', height: '38px', borderRadius: '50%', border: 'none', cursor: 'pointer', padding: 0 }}
           title={isDark ? "Switch to Ethereal Light theme" : "Switch to Cosmic Dark theme"}
+          aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
         >
           {isDark ? <Sun size={18} color="var(--brand-gold)" /> : <Moon size={18} color="var(--brand-violet)" />}
         </button>
 
         <button
+          type="button"
           onClick={() => addToast('No unread notifications at this time.', 'info')}
           className="glass-btn-ghost"
           style={{ padding: '8px', borderRadius: '50%', border: 'none', cursor: 'pointer', position: 'relative' }}
-          title="Notifications"
+          title="Notifications — none unread"
+          aria-label="Notifications, none unread"
         >
           <Bell size={18} color="var(--text-secondary)" />
-          <span
-            style={{
-              position: 'absolute',
-              top: '6px',
-              right: '6px',
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--brand-cyan)'
-            }}
-          />
         </button>
 
         {/* User Profile Pill */}
         <div style={{ position: 'relative' }}>
           <button
+            type="button"
             onClick={() => setShowProfileMenu((prev) => !prev)}
+            aria-expanded={showProfileMenu}
+            aria-haspopup="menu"
+            aria-label={`Account menu for ${user?.name || user?.email || 'user'}`}
             className="glass-btn-secondary flex items-center gap-2"
             style={{
               padding: '5px 12px 5px 6px',
@@ -121,6 +126,8 @@ export default function FridayNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
             }}
           >
             <div
+              role="menu"
+              aria-label="Account menu"
               style={{
                 width: '28px',
                 height: '28px',
@@ -137,7 +144,7 @@ export default function FridayNavbar({ onOpenSearch, isSidebarCollapsed, onToggl
               {user?.name ? user.name.charAt(0).toUpperCase() : 'F'}
             </div>
             <span className="body-regular" style={{ fontSize: '13px', fontWeight: 500, maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {user?.name || user?.email || 'Amlan'}
+              {user?.name || user?.email || 'User'}
             </span>
             <ChevronDown size={14} color="var(--text-muted)" />
           </button>

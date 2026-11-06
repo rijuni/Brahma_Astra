@@ -558,6 +558,7 @@ export default function HomeDashboard({ onNavigate, onStartChat }) {
           <Search size={18} color="#F6C87A" style={{ flexShrink: 0 }} />
           <input
             type="text"
+            aria-label="Ask FRIDAY a question or request"
             className="body-regular"
             placeholder="Ask FRIDAY anything, build code with EDITH, or analyze your files..."
             value={prompt}

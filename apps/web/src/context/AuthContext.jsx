@@ -29,16 +29,6 @@ export function AuthProvider({ children }) {
       setUser(currentUser);
       return currentUser;
     } catch {
-      if (token === 'demo-session-token' || token === 'demo-token') {
-        const demoUser = {
-          id: 'demo-user-amlan',
-          email: 'amlan.nanda@friday.ai',
-          name: 'Amlan Nanda',
-          role: 'admin'
-        };
-        setUser(demoUser);
-        return demoUser;
-      }
       setUser(null);
       apiClient.setToken(null);
       return null;
@@ -67,33 +57,21 @@ export function AuthProvider({ children }) {
   };
 
   const quickDemoLogin = async () => {
+    if (!import.meta.env.DEV) {
+      throw new Error('Demo sign-in is available only in development.');
+    }
+
     setIsLoading(true);
     try {
-      const res = await authService.login({
-        email: 'developer@friday-edith.local',
-        password: 'DevPassword123!'
-      });
-      setUser(res.user);
-      return res;
-    } catch {
       try {
-        const regRes = await authService.register({
-          email: 'amlan@friday-edith.local',
-          password: 'DevPassword123!',
-          name: 'Amlan Nanda'
+        const result = await authService.login({
+          email: 'developer@friday-edith.local',
+          password: 'DevPassword123!'
         });
-        setUser(regRes.user);
-        return regRes;
-      } catch {
-        const demoUser = {
-          id: 'demo-user-amlan',
-          email: 'amlan.nanda@friday.ai',
-          name: 'Amlan Nanda',
-          role: 'admin'
-        };
-        apiClient.setToken('demo-session-token');
-        setUser(demoUser);
-        return { user: demoUser, token: 'demo-session-token' };
+        setUser(result.user);
+        return result;
+      } catch (error) {
+        throw new Error(`Demo account sign-in failed: ${error.message}`);
       }
     } finally {
       setIsLoading(false);

@@ -92,6 +92,176 @@ html, body {
 .text-cyan { color: var(--brand-cyan-light); }
 .text-muted { color: var(--text-muted); }
 
+/* Keep the cinematic sign-in usable when the form is taller than the viewport. */
+.friday-auth-canvas.justify-center {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100dvh;
+  justify-content: flex-start;
+  padding-block: clamp(20px, 5vh, 48px) !important;
+  overscroll-behavior-y: contain;
+}
+
+.friday-auth-brand,
+.friday-auth-pod {
+  flex-shrink: 0;
+}
+
+.auth-method-note {
+  margin: 10px 0 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.friday-auth-error {
+  position: relative;
+  z-index: 3;
+}
+
+@media (max-width: 480px) {
+  .friday-auth-canvas.justify-center {
+    padding-inline: 12px !important;
+  }
+
+  .friday-auth-pod {
+    border-radius: 22px;
+    padding-inline: 18px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .friday-settings-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .friday-settings-profile,
+  .friday-settings-diagnostics {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-height: 720px) {
+  .friday-auth-canvas.justify-center {
+    padding-block: 16px !important;
+  }
+
+  .friday-auth-brand {
+    margin-bottom: 8px !important;
+  }
+
+  .friday-auth-brand > div.relative {
+    width: 68px !important;
+    height: 68px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .friday-auth-canvas > .hidden-mobile {
+    display: none !important;
+  }
+}
+
+.friday-chat-list-toggle { display: none; }
+
+@media (max-width: 760px) {
+  .friday-sidebar {
+    width: min(84vw, 300px) !important;
+  }
+
+  .friday-shell-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .friday-shell-page {
+    padding: 12px !important;
+  }
+
+  .friday-sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: block;
+    background: rgba(2, 6, 18, 0.68);
+    backdrop-filter: blur(2px);
+  }
+
+  .friday-caliper-box {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    padding: 14px !important;
+  }
+
+  .edith-shell-header {
+    min-height: 52px;
+  }
+
+  .friday-chat-layout {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .friday-chat-rail {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: min(320px, calc(100vw - 72px)) !important;
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform 0.2s ease, visibility 0.2s ease;
+  }
+
+  .friday-chat-rail.is-open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .friday-chat-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    background: rgba(2, 6, 18, 0.68);
+    backdrop-filter: blur(2px);
+  }
+
+  .friday-chat-main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 12px !important;
+  }
+
+  .friday-chat-list-toggle {
+    display: inline-flex;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(246, 200, 122, 0.28);
+    border-radius: 10px;
+    color: var(--brand-gold-light);
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+@media (max-width: 480px) {
+  .friday-page-title {
+    font-size: 22px !important;
+  }
+
+  .friday-caliper-box {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .edith-shell-breadcrumb {
+    max-width: 36vw;
+  }
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

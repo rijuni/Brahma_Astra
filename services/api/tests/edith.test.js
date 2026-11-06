@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../src/app');
 const prisma = require('../src/repositories/prisma');
+const edithEngineClient = require('../src/clients/edithEngine.client');
+const edithService = require('../src/services/edith.service');
 
 describe('EDITH Coding Workspace Endpoints', () => {
   const userEmail = `edith_test_${Date.now()}@friday-edith.local`;
@@ -11,6 +13,15 @@ describe('EDITH Coding Workspace Endpoints', () => {
   let taskId;
 
   beforeAll(async () => {
+    jest.spyOn(edithEngineClient, 'planTask').mockResolvedValue({
+      patch_proposal: {
+        summary: 'Test proposal',
+        files: [{ file_path: 'src/example.js', operation: 'modify', diff: '@@ test @@', content: 'test' }],
+        risk_level: 'low'
+      }
+    });
+    jest.spyOn(edithService, 'dispatchExecution').mockResolvedValue(undefined);
+
     const res = await request(app)
       .post('/api/v1/auth/register')
       .send({ email: userEmail, password: 'Password123!' });
@@ -26,6 +37,7 @@ describe('EDITH Coding Workspace Endpoints', () => {
   });
 
   afterAll(async () => {
+    jest.restoreAllMocks();
     await prisma.codingTask.deleteMany({
       where: { workspaceId }
     }).catch(() => {});

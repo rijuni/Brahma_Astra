@@ -43,6 +43,16 @@ import { edithService } from '../../services/edith/edith-service';
 import { edithFsService } from '../../services/edith/edith-fs-service';
 import { useToast } from '../../components/feedback/Toast';
 
+function readPanelSize(key, fallback, min, max) {
+  try {
+    const saved = Number(localStorage.getItem(key));
+    if (!Number.isFinite(saved) || saved <= 0) return fallback;
+    return Math.min(max, Math.max(min, saved));
+  } catch {
+    return fallback;
+  }
+}
+
 export default function EdithWorkspace({ onBackToFriday }) {
   const [projects, setProjects] = useState([]);
   const [activeProjectId, setActiveProjectId] = useState('');
@@ -77,31 +87,23 @@ export default function EdithWorkspace({ onBackToFriday }) {
   const { addToast } = useToast();
 
   // Resizable panel dimensions (Calibrated for Large Typography)
-  const [sidebarWidth, setSidebarWidth] = useState(() => {
-    const saved = localStorage.getItem('edith_sidebar_width');
-    return saved ? parseInt(saved, 10) : 290;
-  });
-  const [assistantWidth, setAssistantWidth] = useState(() => {
-    const saved = localStorage.getItem('edith_assistant_width');
-    return saved ? parseInt(saved, 10) : 400;
-  });
-  const [dockHeight, setDockHeight] = useState(() => {
-    const saved = localStorage.getItem('edith_dock_height');
-    return saved ? parseInt(saved, 10) : 290;
-  });
+  const [sidebarWidth, setSidebarWidth] = useState(() => readPanelSize('edith_sidebar_width', 290, 220, 450));
+  const [assistantWidth, setAssistantWidth] = useState(() => readPanelSize('edith_assistant_width', 400, 300, 520));
+  const [dockHeight, setDockHeight] = useState(() => readPanelSize('edith_dock_height', 290, 160, 550));
 
   // Resizing handlers
   const handleSidebarResizeStart = (e) => {
     e.preventDefault();
     const startX = e.clientX;
     const startWidth = sidebarWidth;
+    let nextWidth = startWidth;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
 
     const onMouseMove = (moveEvent) => {
       const delta = moveEvent.clientX - startX;
-      const newWidth = Math.min(Math.max(startWidth + delta, 220), 450);
-      setSidebarWidth(newWidth);
+      nextWidth = Math.min(Math.max(startWidth + delta, 220), 450);
+      setSidebarWidth(nextWidth);
     };
 
     const onMouseUp = () => {
@@ -109,7 +111,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       document.body.style.userSelect = '';
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
-      localStorage.setItem('edith_sidebar_width', sidebarWidth.toString());
+      localStorage.setItem('edith_sidebar_width', nextWidth.toString());
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -120,13 +122,14 @@ export default function EdithWorkspace({ onBackToFriday }) {
     e.preventDefault();
     const startX = e.clientX;
     const startWidth = assistantWidth;
+    let nextWidth = startWidth;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
 
     const onMouseMove = (moveEvent) => {
       const delta = startX - moveEvent.clientX;
-      const newWidth = Math.min(Math.max(startWidth + delta, 300), 520);
-      setAssistantWidth(newWidth);
+      nextWidth = Math.min(Math.max(startWidth + delta, 300), 520);
+      setAssistantWidth(nextWidth);
     };
 
     const onMouseUp = () => {
@@ -134,7 +137,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       document.body.style.userSelect = '';
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
-      localStorage.setItem('edith_assistant_width', assistantWidth.toString());
+      localStorage.setItem('edith_assistant_width', nextWidth.toString());
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -145,13 +148,14 @@ export default function EdithWorkspace({ onBackToFriday }) {
     e.preventDefault();
     const startY = e.clientY;
     const startHeight = dockHeight;
+    let nextHeight = startHeight;
     document.body.style.cursor = 'row-resize';
     document.body.style.userSelect = 'none';
 
     const onMouseMove = (moveEvent) => {
       const delta = startY - moveEvent.clientY;
-      const newHeight = Math.min(Math.max(startHeight + delta, 160), 550);
-      setDockHeight(newHeight);
+      nextHeight = Math.min(Math.max(startHeight + delta, 160), 550);
+      setDockHeight(nextHeight);
       if (dockState === 'minimized') setDockState('standard');
     };
 
@@ -160,7 +164,7 @@ export default function EdithWorkspace({ onBackToFriday }) {
       document.body.style.userSelect = '';
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
-      localStorage.setItem('edith_dock_height', dockHeight.toString());
+      localStorage.setItem('edith_dock_height', nextHeight.toString());
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -170,6 +174,12 @@ export default function EdithWorkspace({ onBackToFriday }) {
   // Keyboard shortcuts: Ctrl+B (Zen), Ctrl+E (Explorer), Ctrl+J (Assistant), Ctrl+` (Dock)
   React.useEffect(() => {
     function handleKeyDown(e) {
+      const target = e.target;
+      const isEditing = target instanceof HTMLElement && (
+        target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+      );
+      if (isEditing) return;
+
       if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
         e.preventDefault();
         setIsZenMode((prev) => !prev);
@@ -518,6 +528,9 @@ export default function EdithWorkspace({ onBackToFriday }) {
             const polled = await edithService.getCodingTask(created.id);
             if (polled?.patchProposal) {
               setPatchProposal(polled.patchProposal);
+            } else if (polled?.status === 'failed') {
+              setTaskHistory((prev) => prev.map((task) => task.id === created.id ? { ...task, status: 'failed' } : task));
+              addToast('EDITH could not generate a patch proposal. No files were changed.', 'warning');
             } else {
               addToast('Task created; its proposal is not ready yet.', 'info');
             }

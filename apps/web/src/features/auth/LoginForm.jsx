@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, X, ArrowRight } from 'lucide-react';
 import Input from '../../components/common/Input';
-import Button from '../../components/common/Button';
 
 export default function LoginForm({ onSubmit, isLoading, error }) {
   const [email, setEmail] = useState('');
@@ -35,7 +34,9 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
     <form onSubmit={handleSubmit} noValidate>
       {error && (
         <div
-          className="glass-card animate-entrance"
+          className="glass-card animate-entrance friday-auth-error"
+          role="alert"
+          aria-live="assertive"
           style={{
             padding: '10px 14px',
             marginBottom: '16px',
@@ -52,6 +53,8 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
       {showForgotNotice && (
         <div
           className="glass-card flex items-start justify-between gap-3 animate-entrance"
+          role="status"
+          aria-live="polite"
           style={{
             padding: '12px 14px',
             marginBottom: '16px',
@@ -64,7 +67,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
             <strong style={{ color: 'var(--brand-gold-light)', display: 'block', marginBottom: '2px' }}>
               Password Reset Notice
             </strong>
-            Self-service password recovery is disabled in this environment (SMTP email service not configured). Please contact your administrator or use the demo credentials below.
+            Self-service password recovery is not available yet. Please contact your administrator to regain access.
           </div>
           <button
             type="button"
@@ -83,6 +86,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         type="email"
         icon={Mail}
         placeholder="Email address"
+        required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={formErrors.email}
@@ -98,6 +102,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         type={showPassword ? 'text' : 'password'}
         icon={Lock}
         placeholder="Password"
+        required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={formErrors.password}
@@ -111,6 +116,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
             title={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -118,11 +124,7 @@ export default function LoginForm({ onSubmit, isLoading, error }) {
         }
       />
 
-      <div className="flex items-center justify-between" style={{ marginBottom: '10px', marginTop: '2px' }}>
-        <label className="flex items-center gap-2 cursor-pointer" style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-          <input type="checkbox" style={{ accentColor: 'var(--brand-gold)', borderRadius: '4px' }} />
-          <span>Remember Me</span>
-        </label>
+      <div className="flex items-center justify-end" style={{ marginBottom: '10px', marginTop: '2px' }}>
         <button
           type="button"
           className="body-small text-muted"

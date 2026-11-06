@@ -151,6 +151,10 @@ export default function DebugPanel() {
         </div>
       </div>
 
+      <div role="note" className="edith-preview-note">
+        Sample debugger state only. No process is attached and no code is being stepped through.
+      </div>
+
       {/* Grid: Breakpoints + Watch + Call Stack + Variables */}
       <div className="grid grid-cols-4 gap-4 flex-1 overflow-y-auto">
         {/* 1. Breakpoints */}

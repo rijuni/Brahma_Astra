@@ -925,6 +925,17 @@
   animation: telemetryBeacon 2s ease-in-out infinite;
 }
 
+.telemetry-beacon-warning,
+.telemetry-beacon-offline {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.telemetry-beacon-warning { background: #F59E0B; }
+.telemetry-beacon-offline { background: #EF4444; }
+
 /* ==========================================================================
    FRIDAY BOLD COCKPIT & SIDEBAR DESIGN SYSTEM
    ========================================================================== */

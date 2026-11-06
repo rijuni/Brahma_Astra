@@ -52,7 +52,7 @@ export default function FridaySidebar({
         left: 0,
         bottom: 0,
         width: 'var(--sidebar-width)',
-        height: '100vh',
+        height: '100dvh',
         flexShrink: 0,
         borderTop: 'none',
         borderBottom: 'none',
@@ -79,15 +79,17 @@ export default function FridaySidebar({
             borderBottom: '1px solid rgba(246, 200, 122, 0.15)'
           }}
         >
-          <div
-            className="flex items-center gap-2.5 cursor-pointer"
+          <button
+            type="button"
+            className="flex items-center gap-2.5 cursor-pointer friday-brand-home"
             onClick={() => onNavigate('dashboard')}
             title="FRIDAY Cockpit Dashboard"
+            aria-label="Open FRIDAY dashboard"
           >
-            <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <FridayArcReactor size={34} />
-            </div>
-            <div className="flex flex-col">
+            </span>
+            <span className="flex flex-col">
               <span
                 style={{
                   fontFamily: "'Michroma', 'Syncopate', sans-serif",
@@ -105,8 +107,8 @@ export default function FridaySidebar({
               <span style={{ fontSize: '8px', letterSpacing: '0.16em', color: 'var(--brand-gold-light)', opacity: 0.9, textTransform: 'uppercase', fontWeight: 600 }}>
                 PERSONAL AI PLATFORM
               </span>
-            </div>
-          </div>
+            </span>
+          </button>
 
           {/* Hideout Close Button */}
           {onToggleHideout && (
@@ -125,6 +127,7 @@ export default function FridaySidebar({
                 padding: 0
               }}
               title="Hide sidebar to hideout (Ctrl+B)"
+              aria-label="Hide navigation sidebar"
             >
               <PanelLeftClose size={16} />
             </button>
@@ -132,7 +135,7 @@ export default function FridaySidebar({
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex flex-col gap-1.5" style={{ marginBottom: '16px' }}>
+        <nav className="flex flex-col gap-1.5" aria-label="Primary navigation" style={{ marginBottom: '16px' }}>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentRoute === item.id;
@@ -141,7 +144,9 @@ export default function FridaySidebar({
             return (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => onNavigate(item.id)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`friday-sidebar-item ${isActive ? 'active' : ''}`}
                 style={{
                   padding: '10px 14px',
@@ -253,22 +258,11 @@ export default function FridaySidebar({
               fontSize: '11.5px',
               fontWeight: 600
             }}
-            title="Notifications"
+            title="Notifications — none unread"
+            aria-label="Notifications, none unread"
           >
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <Bell size={15} />
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '-2px',
-                  right: '-3px',
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: '#22D3EE',
-                  boxShadow: '0 0 6px #22D3EE'
-                }}
-              />
             </div>
             <span>Alerts</span>
           </button>
@@ -340,7 +334,7 @@ export default function FridaySidebar({
                   whiteSpace: 'nowrap'
                 }}
               >
-                {user?.name || 'Amlan Nanda'}
+                {user?.name || 'User'}
               </span>
               <span
                 style={{
@@ -351,7 +345,7 @@ export default function FridaySidebar({
                   whiteSpace: 'nowrap'
                 }}
               >
-                {user?.email || 'Lead Developer'}
+                {user?.email || 'No email on profile'}
               </span>
             </div>
           </div>

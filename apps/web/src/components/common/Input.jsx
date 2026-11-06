@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 export default function Input({
   label,
@@ -13,12 +13,15 @@ export default function Input({
   labelStyle,
   ...props
 }) {
-  const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+  const generatedId = useId();
+  const inputSlug = label ? label.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'input';
+  const resolvedInputId = id || `${inputSlug}-${generatedId.replace(/:/g, '')}`;
+  const errorId = `${resolvedInputId}-error`;
 
   return (
     <div className="flex flex-col gap-1 w-full" style={{ marginBottom: wrapperMargin || '10px' }}>
       {label && (
-        <label htmlFor={inputId} className="body-small" style={{ color: 'var(--text-secondary)', fontWeight: 500, fontSize: '12px', ...labelStyle }}>
+        <label htmlFor={resolvedInputId} className="body-small" style={{ color: 'var(--text-secondary)', fontWeight: 500, fontSize: '12px', ...labelStyle }}>
           {label}
         </label>
       )}
@@ -29,10 +32,12 @@ export default function Input({
           </div>
         )}
         <input
-          id={inputId}
+          id={resolvedInputId}
           type={type}
           className={`glass-input ${className}`}
           {...props}
+          aria-invalid={error ? 'true' : props['aria-invalid']}
+          aria-describedby={[props['aria-describedby'], error ? errorId : null].filter(Boolean).join(' ') || undefined}
           style={{
             ...style,
             paddingLeft: Icon ? '40px' : (style.paddingLeft || '14px'),
@@ -47,7 +52,7 @@ export default function Input({
         )}
       </div>
       {error && (
-        <span className="body-small" style={{ color: 'var(--status-error)', marginTop: '2px' }}>
+        <span id={errorId} className="body-small" role="alert" style={{ color: 'var(--status-error)', marginTop: '2px' }}>
           {error}
         </span>
       )}

@@ -144,6 +144,7 @@ export default function ProjectExplorer({
         <Search size={16} color="var(--text-muted)" />
         <input
           type="text"
+          aria-label="Filter workspaces"
           placeholder="Filter workspaces..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

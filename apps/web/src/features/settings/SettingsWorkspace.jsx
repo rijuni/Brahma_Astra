@@ -68,7 +68,7 @@ export default function SettingsWorkspace() {
             marginBottom: '6px'
           }}
         >
-          <span className="telemetry-beacon-online" />
+          <span className={isLoadingHealth ? 'telemetry-beacon-warning' : liveHealth?.status === 'ok' ? 'telemetry-beacon-online' : 'telemetry-beacon-offline'} />
           <span
             style={{
               fontSize: '9.5px',
@@ -89,9 +89,9 @@ export default function SettingsWorkspace() {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px' }}>
+      <div className="friday-settings-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px' }}>
         {/* Profile Card */}
-        <div style={{ gridColumn: 'span 7' }}>
+        <div className="friday-settings-profile" style={{ gridColumn: 'span 7' }}>
           <div className="friday-workspace-panel friday-caliper-box" style={{ padding: '28px' }}>
             <div className="flex items-center gap-4" style={{ marginBottom: '24px' }}>
               <div
@@ -109,7 +109,7 @@ export default function SettingsWorkspace() {
                   boxShadow: '0 0 20px rgba(246, 200, 122, 0.4)'
                 }}
               >
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'B'}
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
               <div>
                 <h2
@@ -122,9 +122,9 @@ export default function SettingsWorkspace() {
                     marginBottom: '4px'
                   }}
                 >
-                  {user?.name || 'Amlan Nanda'}
+                  {user?.name || 'User'}
                 </h2>
-                <span className="body-regular" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>{user?.email}</span>
+                <span className="body-regular" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>{user?.email || 'No email on profile'}</span>
                 <div style={{ marginTop: '8px' }}>
                   <span
                     style={{
@@ -139,7 +139,7 @@ export default function SettingsWorkspace() {
                       color: '#FAD982'
                     }}
                   >
-                    PRO PLAN // ACTIVE
+                    FRIDAY ACCOUNT
                   </span>
                 </div>
               </div>
@@ -149,19 +149,19 @@ export default function SettingsWorkspace() {
               <div className="flex justify-between items-center">
                 <span className="body-regular" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>User ID</span>
                 <span className="code-inline" style={{ fontSize: '12px', color: 'var(--brand-gold-light)', border: '1px solid rgba(246, 200, 122, 0.25)', background: 'rgba(0, 0, 0, 0.4)' }}>
-                  {user?.id || 'usr-local-session'}
+                  {user?.id || 'Not provided'}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="body-regular" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Role</span>
                 <span className="body-regular" style={{ fontWeight: 600, color: '#FFFFFF', textTransform: 'capitalize' }}>
-                  {user?.role || 'Lead Developer'}
+                  {user?.role || 'Member'}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="body-regular" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Account Created</span>
                 <span className="body-regular" style={{ color: '#FFFFFF' }}>
-                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Active'}
+                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Not provided'}
                 </span>
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function SettingsWorkspace() {
         </div>
 
         {/* System & Backend Diagnostics Card */}
-        <div style={{ gridColumn: 'span 5' }}>
+        <div className="friday-settings-diagnostics" style={{ gridColumn: 'span 5' }}>
           <div className="friday-workspace-panel friday-caliper-box" style={{ padding: '24px' }}>
             <div className="flex items-center gap-2" style={{ marginBottom: '18px' }}>
               <Activity size={18} color="var(--brand-gold-light)" />
@@ -280,11 +280,9 @@ export default function SettingsWorkspace() {
                     <span className="body-small text-muted" style={{ fontSize: '11px' }}>Port 3000</span>
                   </div>
                 </div>
-                {liveHealth?.status === 'ok' ? (
-                  <Badge variant="cyan">Live (200 OK)</Badge>
-                ) : (
-                  <Badge variant="default">Checking...</Badge>
-                )}
+                <Badge variant={liveHealth?.status === 'ok' ? 'cyan' : 'default'}>
+                  {isLoadingHealth ? 'Checking…' : liveHealth?.status === 'ok' ? 'Available' : 'Unavailable'}
+                </Badge>
               </div>
 
               <div
@@ -295,15 +293,15 @@ export default function SettingsWorkspace() {
                   <Database size={16} color="var(--brand-gold-light)" />
                   <div>
                     <span className="body-regular" style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', display: 'block' }}>
-                      SQLite (Prisma ORM)
+                      Application database
                     </span>
-                    <span className="body-small text-muted" style={{ fontSize: '11px' }}>dev.db verified</span>
+                    <span className="body-small text-muted" style={{ fontSize: '11px' }}>Connection status</span>
                   </div>
                 </div>
                 {readyHealth?.status === 'ready' ? (
                   <Badge variant="gold">Ready</Badge>
                 ) : (
-                  <Badge variant="default">Verified</Badge>
+                  <Badge variant="default">{isLoadingHealth ? 'Checking…' : 'Unavailable'}</Badge>
                 )}
               </div>
 

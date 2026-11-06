@@ -29,7 +29,7 @@ export default function ProjectSummaryPanel({ project, onNavigateTab }) {
         <div className="flex items-center gap-3">
           <FolderKanban size={20} color="#38BDF8" />
           <span style={{ fontSize: '18px', fontWeight: 600 }}>{project.name}</span>
-          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>{project.status || 'active'}</Badge>
+          <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>{project.status || 'Unknown status'}</Badge>
         </div>
               {project.path && <span className="code-inline" style={{ fontSize: '13.5px', padding: '3px 10px' }}>{project.path}</span>}
       </div>

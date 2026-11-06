@@ -97,7 +97,6 @@ export default function ProjectsWorkspace({ onNavigate }) {
               marginBottom: '6px'
             }}
           >
-            <span className="telemetry-beacon-online" />
             <span
               style={{
                 fontSize: '9.5px',
@@ -107,7 +106,7 @@ export default function ProjectsWorkspace({ onNavigate }) {
                 fontWeight: 700
               }}
             >
-              AUTONOMOUS PIPELINES // STATEFUL MEMORY
+              PROJECT MANAGEMENT // ORGANIZED WORKSPACES
             </span>
           </div>
           <h1 className="friday-page-title">
@@ -134,6 +133,7 @@ export default function ProjectsWorkspace({ onNavigate }) {
           <Search size={16} color="#F6C87A" />
           <input
             type="text"
+            aria-label="Search projects"
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -153,6 +153,8 @@ export default function ProjectsWorkspace({ onNavigate }) {
           {['all', 'active', 'completed'].map((tab) => (
             <button
               key={tab}
+              type="button"
+              aria-pressed={filterTab === tab}
               onClick={() => setFilterTab(tab)}
               className="flex items-center justify-center"
               style={{

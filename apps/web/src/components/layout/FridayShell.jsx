@@ -8,11 +8,33 @@ export default function FridayShell({
   currentRoute,
   onNavigate
 }) {
-  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const [isCompact, setIsCompact] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+  const [isSidebarHidden, setIsSidebarHidden] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 760px)');
+    const handleChange = (event) => {
+      setIsCompact(event.matches);
+      setIsSidebarHidden(event.matches);
+    };
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
+
+  const handleNavigate = (route) => {
+    onNavigate(route);
+    if (isCompact) setIsSidebarHidden(true);
+  };
 
   // Keyboard shortcut Ctrl+B or Cmd+B to toggle sidebar hideout mode
   useEffect(() => {
     function handleKeyDown(e) {
+      const target = e.target;
+      const isEditing = target instanceof HTMLElement && (
+        target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+      );
+      if (isEditing) return;
+
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault();
         setIsSidebarHidden((prev) => !prev);
@@ -26,9 +48,9 @@ export default function FridayShell({
     <div
       className="cosmic-canvas"
       style={{
-        height: '100vh',
-        width: '100vw',
-        maxWidth: '100vw',
+        height: '100dvh',
+        width: '100%',
+        maxWidth: '100%',
         overflow: 'hidden',
         position: 'relative',
         display: 'flex'
@@ -37,16 +59,26 @@ export default function FridayShell({
       {/* 1. Stationary Left Sidebar: Slides in/out of Hideout Mode */}
       <FridaySidebar
         currentRoute={currentRoute}
-        onNavigate={onNavigate}
+        onNavigate={handleNavigate}
         isHidden={isSidebarHidden}
         onToggleHideout={() => setIsSidebarHidden((prev) => !prev)}
       />
 
+      {isCompact && !isSidebarHidden && (
+        <button
+          type="button"
+          className="friday-sidebar-scrim"
+          aria-label="Close navigation menu"
+          onClick={() => setIsSidebarHidden(true)}
+        />
+      )}
+
       {/* 2. Main Content Area: Fits full screen, auto-expands to 100vw when sidebar is in hideout */}
       <div
+        className="friday-shell-content"
         style={{
           marginLeft: isSidebarHidden ? 0 : 'var(--sidebar-width)',
-          height: '100vh',
+          height: '100dvh',
           width: isSidebarHidden ? '100vw' : 'calc(100vw - var(--sidebar-width))',
           flex: 1,
           minWidth: 0,
@@ -97,7 +129,7 @@ export default function FridayShell({
         <main
           style={{
             flex: 1,
-            height: isSidebarHidden ? 'calc(100vh - 42px)' : '100vh',
+              height: isSidebarHidden ? 'calc(100dvh - 42px)' : '100dvh',
             width: '100%',
             overflowY: currentRoute === 'chat' ? 'hidden' : 'auto',
             overflowX: 'hidden',
@@ -107,6 +139,7 @@ export default function FridayShell({
           }}
         >
           <div
+            className="friday-shell-page"
             style={{
               width: '100%',
               height: currentRoute === 'chat' ? '100%' : 'auto',

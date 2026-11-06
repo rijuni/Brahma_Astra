@@ -300,6 +300,7 @@ export default function EdithLauncher({ onEnterWorkspace, onBackToFriday }) {
 
           {/* 4 Pillars of EDITH in sleek glass cards */}
           <div
+            className="edith-launcher-pillars"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',

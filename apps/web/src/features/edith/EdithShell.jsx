@@ -156,7 +156,7 @@ export default function EdithShell({
       </nav>
 
       {/* Main Workspace Frame */}
-      <div className="flex flex-col flex-1" style={{ width: 'calc(100vw - 56px)', height: '100vh', overflow: 'hidden', minHeight: 0, minWidth: 0 }}>
+      <div className="edith-main-frame flex flex-col flex-1" style={{ width: 'calc(100vw - 56px)', height: '100dvh', overflow: 'hidden', minHeight: 0, minWidth: 0 }}>
         {/* Top Header Glass Bar */}
         <header
           className="glass-panel flex items-center justify-between edith-shell-header"
@@ -207,7 +207,10 @@ export default function EdithShell({
             {/* Panel Visibility Toggles */}
             {onToggleSidebar && (
               <button
+                type="button"
                 onClick={onToggleSidebar}
+                aria-expanded={isSidebarOpen}
+                aria-label={isSidebarOpen ? 'Hide workspace explorer' : 'Show workspace explorer'}
                 className="glass-btn-ghost flex items-center gap-2"
                 style={{
                   height: '38px',
@@ -228,7 +231,10 @@ export default function EdithShell({
 
             {onToggleAssistant && (
               <button
+                type="button"
                 onClick={onToggleAssistant}
+                aria-expanded={isAssistantOpen}
+                aria-label={isAssistantOpen ? 'Hide EDITH assistant' : 'Show EDITH assistant'}
                 className="glass-btn-ghost flex items-center gap-2"
                 style={{
                   height: '38px',

@@ -339,6 +339,7 @@ export default function DatabasePanel({ projectId = null, activeProject = null }
             <Search size={15} color="var(--text-muted)" />
             <input
               type="text"
+              aria-label="Filter database tables"
               placeholder="Filter tables..."
               value={tableSearch}
               onChange={(e) => setTableSearch(e.target.value)}

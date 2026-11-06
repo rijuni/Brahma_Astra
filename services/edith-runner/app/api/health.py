@@ -15,7 +15,7 @@ async def health_live():
 @router.get("/health/ready")
 async def health_ready():
     return {
-        "status": "ready",
+        "status": "ready" if settings.execution_mode == "disabled" else "degraded",
         "service": "edith-runner",
         "execution_mode": settings.execution_mode,
         "timestamp": datetime.now(timezone.utc).isoformat()

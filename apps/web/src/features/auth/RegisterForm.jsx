@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import Input from '../../components/common/Input';
-import Button from '../../components/common/Button';
 
 export default function RegisterForm({ onSubmit, isLoading, error }) {
   const [name, setName] = useState('');
@@ -44,7 +43,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
     <form onSubmit={handleSubmit} noValidate>
       {error && (
         <div
-          className="glass-card animate-entrance"
+          className="glass-card animate-entrance friday-auth-error"
+          role="alert"
+          aria-live="assertive"
           style={{
             padding: '10px 14px',
             marginBottom: '16px',
@@ -62,7 +63,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         label="Full Name"
         type="text"
         icon={User}
-        placeholder="Amlan Nanda"
+        placeholder="Your name"
+        required
+        autoComplete="name"
         value={name}
         onChange={(e) => setName(e.target.value)}
         error={formErrors.name}
@@ -77,6 +80,8 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         type="email"
         icon={Mail}
         placeholder="name@example.com"
+        required
+        autoComplete="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={formErrors.email}
@@ -91,6 +96,9 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         type={showPassword ? 'text' : 'password'}
         icon={Lock}
         placeholder="Minimum 8 characters"
+        required
+        minLength={8}
+        autoComplete="new-password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={formErrors.password}
@@ -101,6 +109,7 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         rightElement={
           <button
             type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
             onClick={() => setShowPassword((prev) => !prev)}
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
           >
@@ -114,6 +123,8 @@ export default function RegisterForm({ onSubmit, isLoading, error }) {
         type={showPassword ? 'text' : 'password'}
         icon={Lock}
         placeholder="Re-enter your password"
+        required
+        autoComplete="new-password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         error={formErrors.confirmPassword}

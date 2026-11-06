@@ -109,7 +109,16 @@ class EdithService {
         });
       }
     } catch (err) {
-      // EDITH Engine might be offline; task remains proposed
+      await prisma.codingTask.update({
+        where: { id: taskId },
+        data: { status: 'failed' }
+      }).catch(() => { });
+      await auditService.record({
+        action: 'EDITH_TASK_PLANNING_FAILED',
+        resourceType: 'CodingTask',
+        resourceId: taskId,
+        details: { workspaceId, reason: err.message }
+      }).catch(() => { });
     }
   }
 
@@ -136,6 +145,10 @@ class EdithService {
 
     if (task.status !== 'proposed') {
       throw new AppError(`Cannot approve task with status '${task.status}'. Only 'proposed' tasks can be approved.`, 400, 'BAD_REQUEST');
+    }
+
+    if (!task.patchProposal) {
+      throw new AppError('Cannot approve this task because no patch proposal is available.', 409, 'CONFLICT');
     }
 
     // Update status to approved
@@ -186,9 +199,9 @@ class EdithService {
       await prisma.executionJob.update({
         where: { id: executionJobId },
         data: {
-          status: result.status || 'succeeded',
-          output: result.output || 'Execution completed successfully',
-          exitCode: result.exit_code !== undefined ? result.exit_code : 0,
+          status: result.status || 'failed',
+          output: result.output || 'Execution returned no output.',
+          exitCode: result.exit_code !== undefined ? result.exit_code : 1,
           completedAt: new Date()
         }
       });
@@ -196,7 +209,7 @@ class EdithService {
       await prisma.codingTask.update({
         where: { id: taskId },
         data: {
-          status: result.status === 'failed' ? 'failed' : 'completed'
+          status: ['succeeded', 'completed'].includes(result.status) ? 'completed' : 'failed'
         }
       });
     } catch (err) {

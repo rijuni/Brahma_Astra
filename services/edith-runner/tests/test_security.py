@@ -3,7 +3,6 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.config import settings
 from app.security.sanitizer import sanitize_environment
-from app.security.policy import validate_command_safety
 
 client = TestClient(app)
 
@@ -30,8 +29,8 @@ def test_runner_execution_disabled_by_default():
     assert "Execution unavailable" in data["stderr"]
     assert data["sandboxed"] is False
 
-def test_runner_rejects_dangerous_command():
-    # Temporarily enable execution mode to test command policy filter
+def test_runner_stays_disabled_when_non_sandbox_mode_is_configured():
+    # A configuration value must not enable subprocess execution without a sandbox adapter.
     orig_mode = settings.execution_mode
     try:
         settings.execution_mode = "restricted_subprocess"
@@ -42,8 +41,8 @@ def test_runner_rejects_dangerous_command():
         )
         assert res.status_code == 200
         data = res.json()
-        assert data["status"] == "blocked"
-        assert "Policy violation" in data["stderr"]
+        assert data["status"] == "disabled"
+        assert "no verified sandbox runtime adapter" in data["stderr"]
     finally:
         settings.execution_mode = orig_mode
 
@@ -57,11 +56,11 @@ def test_runner_sanitizes_environment():
     assert "OPENAI_API_KEY" not in sanitized
     assert sanitized.get("CUSTOM_VAR") == "safe_value"
 
-def test_runner_timeout_and_execution_when_mode_enabled():
+def test_runner_does_not_execute_when_non_sandbox_mode_is_configured():
     orig_mode = settings.execution_mode
     try:
         settings.execution_mode = "restricted_subprocess"
-        # Test safe execution
+        # A normal child process is not considered a secure sandbox.
         res = client.post(
             "/api/v1/execute",
             headers={"x-internal-service-key": settings.internal_service_key},
@@ -72,10 +71,10 @@ def test_runner_timeout_and_execution_when_mode_enabled():
             }
         )
         assert res.status_code == 200
-        assert res.json()["status"] == "succeeded"
-        assert "TEST_OUTPUT_EXECUTION" in res.json()["stdout"]
+        assert res.json()["status"] == "disabled"
+        assert res.json()["sandboxed"] is False
 
-        # Test timeout enforcement
+        # Timeout parameters do not bypass the missing sandbox runtime.
         res_timeout = client.post(
             "/api/v1/execute",
             headers={"x-internal-service-key": settings.internal_service_key},
@@ -87,6 +86,6 @@ def test_runner_timeout_and_execution_when_mode_enabled():
             }
         )
         assert res_timeout.status_code == 200
-        assert res_timeout.json()["status"] == "timed_out"
+        assert res_timeout.json()["status"] == "disabled"
     finally:
         settings.execution_mode = orig_mode

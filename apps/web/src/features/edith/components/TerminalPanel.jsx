@@ -224,6 +224,9 @@ export default function TerminalPanel({
 
       {activeTab === 'problems' && (
         <div className="flex-1 overflow-y-auto p-4">
+          <div role="note" className="edith-preview-note">
+            Sample diagnostics only. These findings were not produced by a project scan.
+          </div>
           <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
             <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)' }}>
               WORKSPACE DIAGNOSTICS
@@ -261,6 +264,7 @@ export default function TerminalPanel({
 
       {activeTab === 'output' && (
         <div className="flex-1 overflow-y-auto p-4 font-mono text-muted" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+          <div role="note" className="edith-preview-note">Sample output only. No workspace processes are running.</div>
           <div>[EDITH Background Daemon] Initialized local event listeners.</div>
           <div>[EDITH Sandboxed File Watcher] Monitoring 4 active project files.</div>
           <div>[Prisma SQLite Engine] dev.db connection pool healthy.</div>
@@ -269,7 +273,7 @@ export default function TerminalPanel({
 
       {activeTab === 'debug_console' && (
         <div className="flex-1 overflow-y-auto p-4 font-mono" style={{ fontSize: '15px', lineHeight: '1.6' }}>
-          <div className="text-muted mb-2">EDITH Debug Console (REPL) - Evaluate expressions in active execution boundary:</div>
+          <div role="note" className="edith-preview-note">Sample debug console. Expressions are displayed only; no process is attached.</div>
           <div style={{ color: 'var(--brand-cyan)' }}>&gt; process.env.NODE_ENV</div>
           <div style={{ color: '#34D399', marginBottom: '8px' }}>"development"</div>
           <div style={{ color: 'var(--brand-cyan)' }}>&gt; edith.activeWorkspace.status</div>

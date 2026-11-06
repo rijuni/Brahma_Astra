@@ -14,7 +14,7 @@ def test_engine_rejects_unauthenticated():
     })
     assert res.status_code == 403
 
-def test_engine_plan_coding_task():
+def test_engine_reports_planning_unavailable_until_provider_is_configured():
     res = client.post(
         "/api/v1/tasks",
         headers={"x-internal-service-key": settings.internal_service_key},
@@ -24,12 +24,8 @@ def test_engine_plan_coding_task():
             "instruction": "Implement user authentication in python"
         }
     )
-    assert res.status_code == 200
-    data = res.json()
-    assert data["task_id"] == "task-test-plan"
-    assert data["status"] == "proposed"
-    assert "patch_proposal" in data
-    assert len(data["patch_proposal"]["files"]) > 0
+    assert res.status_code == 503
+    assert "no workspace-aware coding planner is configured" in res.json()["detail"]
 
 @patch("app.api.tasks.runner_client.execute", new_callable=AsyncMock)
 def test_engine_execute_task(mock_execute):

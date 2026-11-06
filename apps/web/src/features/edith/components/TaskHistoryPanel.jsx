@@ -17,31 +17,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
   const [searchTerm, setSearchTerm] = useState('');
   const { addToast } = useToast();
 
-  const sampleHistory = [
-    {
-      id: 'task-101',
-      title: 'FastAPI Patient ID Endpoint',
-      instruction: 'Create a FastAPI endpoint to get patient details by ID with proper error handling and response model.',
-      status: 'completed',
-      timestamp: 'Today, 2:15 PM'
-    },
-    {
-      id: 'task-102',
-      title: 'Vitals Pydantic Schema',
-      instruction: 'Add Pydantic schema for patient vital signs with systolic and diastolic validation.',
-      status: 'completed',
-      timestamp: 'Today, 1:40 PM'
-    },
-    {
-      id: 'task-103',
-      title: 'PostgreSQL Audit Migration',
-      instruction: 'Generate schema migration adding indexes on audit log created_at timestamp.',
-      status: 'approved',
-      timestamp: 'Yesterday, 5:30 PM'
-    }
-  ];
-
-  const allTasks = tasks.length > 0 ? tasks : sampleHistory;
+  const allTasks = tasks;
 
   const filtered = allTasks.filter((t) =>
     (t.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -86,6 +62,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
         <Search size={16} color="var(--text-muted)" />
         <input
           type="text"
+          aria-label="Search EDITH task history"
           placeholder="Search past instructions or tasks..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -102,7 +79,7 @@ export default function TaskHistoryPanel({ tasks = [], onRestoreTask }) {
       <div className="flex flex-col gap-3 flex-1 overflow-y-auto">
         {filtered.length === 0 ? (
           <div className="p-4 text-center text-muted body-regular" style={{ fontSize: '14px' }}>
-            No sessions match "{searchTerm}"
+            {searchTerm ? `No sessions match "${searchTerm}".` : 'No EDITH sessions yet. Completed tasks will appear here.'}
           </div>
         ) : (
           filtered.map((t) => (

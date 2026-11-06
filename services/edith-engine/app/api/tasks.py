@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Header, HTTPException, status
 from app.config import settings
 from app.schemas.tasks import PlanTaskRequest, PlanTaskResponse, ExecuteTaskResponse
-from app.workflows.planner import planner
+from app.workflows.planner import planner, PlanningUnavailableError
 from app.runner_client.client import runner_client
 
 router = APIRouter(prefix="/api/v1/tasks", tags=["tasks"])
@@ -20,12 +20,15 @@ async def plan_task(
 ):
     verify_internal_key(x_internal_service_key)
 
-    patch_proposal = planner.plan_coding_task(
-        task_id=payload.task_id,
-        workspace_id=payload.workspace_id,
-        instruction=payload.instruction,
-        files=payload.files
-    )
+    try:
+        patch_proposal = planner.plan_coding_task(
+            task_id=payload.task_id,
+            workspace_id=payload.workspace_id,
+            instruction=payload.instruction,
+            files=payload.files
+        )
+    except PlanningUnavailableError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
 
     return PlanTaskResponse(
         task_id=payload.task_id,
@@ -44,7 +47,6 @@ async def execute_task(
     # Dispatch to isolated runner
     runner_result = await runner_client.execute(
         job_id=f"job_{task_id}",
-        code="print('ASTRA workspace patch verification executed successfully.')",
         language="python"
     )
 

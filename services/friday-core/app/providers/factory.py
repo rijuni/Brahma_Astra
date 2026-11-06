@@ -17,5 +17,4 @@ def get_provider(provider_name: str = None) -> BaseProvider:
     elif name == "gemini":
         return GeminiProvider()
     else:
-        # Default fallback to mock provider with a warning
-        return MockProvider()
+        raise ValueError(f"Unsupported AI provider '{name}'. Configure mock, openai, anthropic, or gemini.")

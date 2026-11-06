@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # Arbitrary code execution is disabled unless a verified hardware/container sandbox is active.
     execution_mode: str = Field(
         default="disabled",
-        description="Execution mode: disabled (default), restricted_subprocess, or verified_sandbox"
+        description="Execution remains disabled until a verified sandbox adapter is installed"
     )
     max_timeout_seconds: int = 15
     max_memory_mb: int = 256

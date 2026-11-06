@@ -14,14 +14,9 @@ def verify_internal_key(x_internal_service_key: str = Header(None)):
 
 @router.get("/security-status", response_model=SecurityStatusResponse)
 async def get_security_status():
-    is_disabled = settings.execution_mode == "disabled"
-
     notes = (
-        "Native Windows development: Arbitrary code execution is strictly DISABLED because a verified "
-        "hardware or container sandbox isolation mechanism is not active. Arbitrary code execution is blocked "
-        "to prevent host environment compromise."
-        if is_disabled
-        else f"Running with execution mode '{settings.execution_mode}'. Standard subprocesses are not treated as secure sandboxes."
+        f"Execution is unavailable in mode '{settings.execution_mode}': "
+        "no verified sandbox adapter is installed."
     )
 
     return SecurityStatusResponse(
@@ -30,9 +25,9 @@ async def get_security_status():
         max_timeout_seconds=settings.max_timeout_seconds,
         max_memory_mb=settings.max_memory_mb,
         max_output_bytes=settings.max_output_bytes,
-        host_env_sanitized=True,
-        ephemeral_cleanup=True,
-        verified=True,
+        host_env_sanitized=False,
+        ephemeral_cleanup=False,
+        verified=False,
         notes=notes
     )
 

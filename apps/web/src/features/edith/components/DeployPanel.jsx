@@ -5,7 +5,6 @@ import {
   Clock,
   RotateCcw,
   AlertTriangle,
-  ExternalLink,
   Plus,
   Trash2,
   Eye,
@@ -24,14 +23,7 @@ export default function DeployPanel() {
   const [isDeploying, setIsDeploying] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [activeDeployStep, setActiveDeployStep] = useState(0);
-  const [deployedUrl, setDeployedUrl] = useState('https://edith-preview.friday-ai.local');
-
-  const [envVars, setEnvVars] = useState([
-    { key: 'NODE_ENV', value: 'production', isSecret: false },
-    { key: 'SERVICE_PORT', value: '8000', isSecret: false },
-    { key: 'DATABASE_URL', value: 'sqlite:///data/dev.db', isSecret: true },
-    { key: 'JWT_SIGNING_KEY', value: 'edith_cosmic_jwt_secret_key_v1', isSecret: true }
-  ]);
+  const [envVars, setEnvVars] = useState([]);
   const [showSecrets, setShowSecrets] = useState({});
 
   const [deployLogs, setDeployLogs] = useState([
@@ -74,20 +66,10 @@ export default function DeployPanel() {
           <span style={{ fontSize: '16px', fontWeight: 600 }}>Deployment Orchestrator</span>
           <Badge variant="cyan" style={{ padding: '4px 10px', fontSize: '13px' }}>SIMULATED CLOUD DEPLOY</Badge>
         </div>
-        <div className="flex items-center gap-2">
-          {deployedUrl && (
-            <a
-              href={deployedUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 text-muted hover:text-white"
-              style={{ fontSize: '13.5px' }}
-            >
-              <span>{deployedUrl}</span>
-              <ExternalLink size={14} />
-            </a>
-          )}
-        </div>
+      </div>
+
+      <div role="note" className="edith-preview-note">
+        Preview mode only. No deployment target, secrets, or live URL are configured.
       </div>
 
       {/* Configuration Controls */}
